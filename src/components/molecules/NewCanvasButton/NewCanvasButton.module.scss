@@ -1,0 +1,16 @@
+@use "../../scss/forwards" as *;
+
+.wrapper {
+  @include flexCenterRow;
+  width: 100%;
+  padding-left: 20px;
+  box-sizing: border-box;
+}
+
+.wrapper__icon {
+  width: 20px;
+  height: 20px;
+  background: url("../../../../public/assets/icon-canvas.svg") center no-repeat;
+  background-size: 11px 15px;
+  margin-right: 10px;
+}

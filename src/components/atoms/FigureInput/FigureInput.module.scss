@@ -1,0 +1,43 @@
+@use "../../scss/forwards" as *;
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.wrapper {
+  @include flexCenterRow;
+  width: 100%;
+}
+
+.label {
+  font-family: "Fira Mono", monospace;
+  font-size: $regular-font-size;
+  color: $text-guide;
+  margin: 10px 15px 10px 20px;
+}
+
+.input {
+  font-size: $regular-font-size;
+  border: none;
+  height: 30px;
+  width: 50px;
+  margin-left: 2px;
+  padding: 0 10px;
+  box-sizing: border-box;
+
+  &:hover {
+    border: 1px solid $object-line;
+    margin-left: 1px;
+  }
+
+  &:focus {
+    outline: none;
+    border: 1px solid $object-selected-tool-stroke;
+    border-style: double;
+    border-radius: 2px;
+    border-width: 2px;
+    margin-left: 0px;
+  }
+}

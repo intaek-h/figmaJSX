@@ -1,0 +1,13 @@
+@use "../../scss/forwards" as *;
+
+.wrapper {
+  padding-left: 20px;
+  box-sizing: border-box;
+
+  & > span {
+    font-size: $regular-font-size;
+    font-weight: $medium-font-weight;
+    display: inline-block;
+    margin-bottom: 15px;
+  }
+}

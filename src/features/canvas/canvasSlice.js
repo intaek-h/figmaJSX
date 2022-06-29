@@ -23,7 +23,7 @@ const canvasSlice = createSlice({
       const newCanvas = {
         ...generateSampleCanvas(width, height),
         top: lastCanvas.top,
-        left: lastCanvas.left + 30,
+        left: lastCanvas.left + lastCanvas.width + 30,
         canvasName: `canvas_${state.length}`,
       };
 

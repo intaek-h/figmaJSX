@@ -1,8 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  projectTitle: "untitled_project",
   isSelectorActivated: true,
   tools: ["rectangle", "ellipse", "line", "seletor", "text"],
+  workingCanvas: {},
+  selectedShapes: [],
 };
 
 const utilitySlice = createSlice({

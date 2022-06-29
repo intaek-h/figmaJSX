@@ -1,0 +1,6 @@
+@use "../../scss/forwards" as *;
+
+.wrapper {
+  @include flexCenterColumn;
+  width: 100%;
+}

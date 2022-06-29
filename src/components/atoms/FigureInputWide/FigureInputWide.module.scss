@@ -1,0 +1,23 @@
+@use "../../scss/forwards" as *;
+
+.input {
+  font-size: $regular-font-size;
+  border: none;
+  height: 30px;
+  width: 200px;
+  padding: 0 10px;
+  border: 2px solid white;
+  box-sizing: border-box;
+
+  &:hover {
+    border: 2px solid $object-line;
+  }
+
+  &:focus {
+    outline: none;
+    border: 2px solid $object-selected-tool-stroke;
+    border-style: double;
+    border-radius: 2px;
+    border-width: 2px;
+  }
+}

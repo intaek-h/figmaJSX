@@ -1,0 +1,10 @@
+@use "../../scss/forwards" as *;
+
+.sidebar {
+  @include flexCenterColumn;
+  background-color: $object-sidebar-bg;
+  width: 240px;
+  height: calc(100vh - 60px);
+  padding-top: 20px;
+  box-sizing: border-box;
+}

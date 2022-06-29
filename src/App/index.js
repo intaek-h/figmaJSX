@@ -1,9 +1,7 @@
+import WorkbenchPage from "../components/pages/WorkbenchPage";
+
 function App() {
-  return (
-    <div>
-      <span>hello</span>
-    </div>
-  );
+  return <WorkbenchPage />;
 }
 
 export default App;
