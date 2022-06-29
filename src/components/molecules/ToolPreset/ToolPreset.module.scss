@@ -1,0 +1,5 @@
+@use "../../scss/forwards" as *;
+
+.preset {
+  @include flexCenter;
+}
