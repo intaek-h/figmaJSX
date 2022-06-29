@@ -1,0 +1,22 @@
+@use "../../scss/forwards" as *;
+
+.button {
+  @include flexCenter;
+  width: 80%;
+  height: 40px;
+  background-color: $object-button-bg;
+  color: $text-white;
+  font-size: $regular-font-size;
+  font-weight: $medium-font-weight;
+  border-radius: 4px;
+  user-select: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: lighten($color: $object-button-bg, $amount: 2%);
+  }
+
+  &:active {
+    background-color: darken($color: $object-button-bg, $amount: 10%);
+  }
+}

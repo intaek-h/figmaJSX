@@ -1,0 +1,13 @@
+@use "../../scss/forwards" as *;
+
+.text {
+  color: $text-highlight;
+  font-size: $regular-font-size;
+  text-decoration: underline;
+  user-select: none;
+  cursor: pointer;
+
+  &:active {
+    opacity: 0.8;
+  }
+}

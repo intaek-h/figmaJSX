@@ -1,0 +1,24 @@
+@use "./variables" as *;
+
+@mixin flexCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flexCenterRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+@mixin flexCenterColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@mixin artboardSize {
+  width: $artboard-width;
+  height: $artboard-height;
+}

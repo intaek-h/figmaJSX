@@ -1,0 +1,15 @@
+@use "../../scss/forwards" as *;
+
+.header {
+  @include flexCenterRow;
+  background-color: $object-header-bg;
+  width: 100%;
+  height: 60px;
+}
+
+.header__title {
+  color: $text-white;
+  font-size: $emphasized-font-size;
+  font-weight: $medium-font-weight;
+  margin-left: 20px;
+}

@@ -21,6 +21,8 @@
     "react/prop-types": 0,
     "react/react-in-jsx-scope": 0,
     "prettier/prettier": "error",
-    "no-unused-vars": "warn"
+    "no-unused-vars": "warn",
+    "jsx-a11y/click-events-have-key-events": 0,
+    "jsx-a11y/no-static-element-interactions": 0
   }
 }

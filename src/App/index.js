@@ -1,7 +1,11 @@
+import Header from "../components/atoms/Header";
+import WorkbenchPage from "../components/pages/WorkbenchPage";
+
 function App() {
   return (
     <div>
-      <span>hello</span>
+      <Header />
+      <WorkbenchPage />
     </div>
   );
 }

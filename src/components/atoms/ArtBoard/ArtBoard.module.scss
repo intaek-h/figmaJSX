@@ -1,0 +1,16 @@
+@use "../../scss/forwards" as *;
+
+.artboard-wrapper {
+  width: calc(100% - 480px);
+  height: calc(100vh - 60px);
+  overflow: scroll;
+}
+
+.artboard-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.artboard {
+  @include artboardSize;
+  background-color: $object-artboard-bg;
+}
