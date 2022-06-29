@@ -1,45 +1,30 @@
+import { useSelector } from "react-redux";
+
 import styles from "./WorkbenchPage.module.scss";
-import SideBar from "../../atoms/SideBar";
 import ArtBoard from "../../atoms/ArtBoard";
-import HorizontalLine from "../../atoms/HorizontalLine";
-import ColorPicker from "../../atoms/ColorPicker";
-import FigureInputWide from "../../atoms/FigureInputWide";
-import CompileButton from "../../atoms/CompileButton";
-import TitleText from "../../atoms/TitleText";
-import ToolPreset from "../../molecules/ToolPreset";
-import NewCanvasButton from "../../molecules/NewCanvasButton";
-import ShapeFigures from "../../molecules/ShapeFigures";
-import WideInputBox from "../../molecules/WideInputBox";
-import CanvasLayers from "../../molecules/CanvasLayers";
+import LeftSideBar from "../../organisms/LeftSideBar";
+import RightSideBar from "../../organisms/RightSideBar";
+import Header from "../../atoms/Header";
+import { selectAllCanvas } from "../../../features/canvas/canvasSlice";
+import Shape from "../../atoms/Shape";
 
 function WorkbenchPage() {
+  const canvases = useSelector(selectAllCanvas);
+
+  const { top, left, width } = canvases[canvases.length - 1];
+
   return (
-    <div className={styles.workbench}>
-      <SideBar>
-        <TitleText text="Layers" />
-        <HorizontalLine />
-        <CanvasLayers />
-      </SideBar>
-      <ArtBoard></ArtBoard>
-      <SideBar>
-        <ToolPreset />
-        <HorizontalLine />
-        <NewCanvasButton />
-        <HorizontalLine />
-        <ShapeFigures />
-        <HorizontalLine />
-        <ColorPicker currentColor="#fafafa" />
-        <HorizontalLine />
-        <WideInputBox title="Font Size">
-          <FigureInputWide />
-        </WideInputBox>
-        <HorizontalLine />
-        <WideInputBox title="Thickness">
-          <FigureInputWide />
-        </WideInputBox>
-        <HorizontalLine />
-        <CompileButton />
-      </SideBar>
+    <div>
+      <Header />
+      <div className={styles.workbench}>
+        <LeftSideBar />
+        <ArtBoard lastCanvasCoords={{ top, left, width }}>
+          {canvases.map((canvas, i) => (
+            <Shape {...canvas} key={i} />
+          ))}
+        </ArtBoard>
+        <RightSideBar />
+      </div>
     </div>
   );
 }
