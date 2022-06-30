@@ -1,0 +1,61 @@
+@use "../../scss/forwards" as *;
+
+.container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-right: 20px;
+}
+
+.box {
+  position: relative;
+}
+
+.button {
+  font-family: "Inter", sans-serif;
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 2px;
+  background: $object-header-bg;
+  color: #fff;
+  font-size: $regular-font-size;
+  outline: none;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.dropdown {
+  display: none;
+  position: absolute;
+  top: 50px;
+  right: 10px;
+  background-color: $object-header-bg;
+}
+
+.dropdown ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  width: 100px;
+}
+
+.dropdown ul li {
+  font-size: $regular-font-size;
+  color: $text-white;
+  padding: 8px 20px;
+  text-align: center;
+  cursor: pointer;
+
+  &:hover {
+    background-color: darken($color: $object-header-bg, $amount: 10%);
+  }
+}
+
+.dropdown.is-open {
+  display: block;
+}

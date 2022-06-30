@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const generateSampleCanvas = (width = 390, height = 800) => ({
   canvasName: "canvas_0",
-  top: 500,
-  left: 600,
+  top: 1000,
+  left: 1000,
   width,
   height,
   xAxisSnap: [0, width / 2, width],

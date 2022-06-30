@@ -26,7 +26,7 @@ module.exports = {
         },
       },
       {
-        test: /\.scss?$/,
+        test: /\.s[ac]ss$/i,
         exclude: /node_module/,
         use: [
           MiniCssExtractPlugin.loader,
@@ -54,7 +54,7 @@ module.exports = {
   ],
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "index.[hash].js",
+    filename: "index.[fullhash].js",
   },
   devServer: {
     port: 3000,
