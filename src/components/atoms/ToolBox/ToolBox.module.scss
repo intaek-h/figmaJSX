@@ -82,3 +82,8 @@
   background-color: $object-selected-tool-bg;
   border: 1px solid $object-selected-tool-stroke;
 }
+
+.mock {
+  @include toolBox;
+  background-color: $object-toolbox-bg;
+}
