@@ -1,0 +1,36 @@
+@use "../../scss/forwards" as *;
+
+.field {
+  font-family: "Inter", sans-serif;
+  color: $text-white;
+  font-size: $emphasized-font-size;
+  font-weight: $medium-font-weight;
+  border: none;
+  background-color: transparent;
+  height: 30px;
+  width: 200px;
+  padding: 0 10px;
+  border: 2px solid $object-header-bg;
+  box-sizing: border-box;
+  margin-left: 8px;
+
+  &:hover {
+    border: 2px solid $object-line;
+    border-style: double;
+    border-radius: 2px;
+  }
+
+  &:focus {
+    outline: none;
+    border: 2px solid $object-selected-tool-stroke-bright;
+    border-style: double;
+    border-radius: 2px;
+  }
+}
+
+.unfocused {
+  color: $text-white;
+  font-size: $emphasized-font-size;
+  font-weight: $medium-font-weight;
+  margin-left: 20px;
+}

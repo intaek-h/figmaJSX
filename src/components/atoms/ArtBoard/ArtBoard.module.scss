@@ -14,4 +14,5 @@
   @include artboardSize;
   background-color: $object-artboard-bg;
   position: relative;
+  transform-origin: 0 0;
 }

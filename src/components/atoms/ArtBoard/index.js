@@ -1,26 +1,39 @@
 import { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 
 import styles from "./ArtBoard.module.scss";
 import useDragScroll from "../../../hooks/useDragScroll";
+import { selectAllCanvas } from "../../../features/canvas/canvasSlice";
+import Shape from "../Shape";
+import useMockZoom from "../../../hooks/useMockZoom";
 
-function ArtBoard({ children, lastCanvasCoords }) {
+function ArtBoard() {
   const boardRef = useRef();
+  const innerBoardRef = useRef();
+
+  const canvases = useSelector(selectAllCanvas);
 
   useDragScroll(boardRef);
+
+  useMockZoom(boardRef, innerBoardRef);
 
   useEffect(() => {
     if (!boardRef.current) return;
 
-    boardRef.current.scrollTop = lastCanvasCoords.top - 100;
+    const { top, left, width } = canvases[canvases.length - 1];
+
+    boardRef.current.scrollTop = top - 100;
     boardRef.current.scrollLeft =
-      lastCanvasCoords.left -
-      boardRef.current.clientWidth / 2 +
-      lastCanvasCoords.width / 2;
-  }, [lastCanvasCoords.left, lastCanvasCoords.top, lastCanvasCoords.width]);
+      left - boardRef.current.clientWidth / 2 + width / 2;
+  }, [canvases]);
 
   return (
     <div ref={boardRef} className={styles["artboard-wrapper"]}>
-      <div className={styles.artboard}>{children}</div>
+      <div ref={innerBoardRef} className={styles.artboard}>
+        {canvases.map((canvas, i) => (
+          <Shape {...canvas} key={i} />
+        ))}
+      </div>
     </div>
   );
 }
