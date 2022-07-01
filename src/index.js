@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 
 import App from "./App";
 import store from "./store/configureStore";
+import "./utilities/defaultEventListeners";
 
 const root = document.querySelector("#root");
 

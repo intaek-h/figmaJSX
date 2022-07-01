@@ -1,0 +1,22 @@
+@use "../../scss/forwards" as *;
+
+.name {
+  font-size: $regular-font-size;
+  color: $text-canvas-title;
+  position: absolute;
+  transform: translateY(-100%);
+  user-select: none;
+}
+
+.input {
+  font-family: "Inter", sans-serif;
+  font-size: $regular-font-size;
+  color: $text-highlight;
+  position: absolute;
+  transform: translateY(-100%);
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+  border: none;
+  outline: none;
+}

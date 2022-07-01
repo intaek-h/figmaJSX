@@ -1,4 +1,8 @@
-export const customizeZoom = (element, event, prevScale) => {
+const SCALE_FACTOR = 0.1;
+const MAX_SCALE = 4;
+const MINIMUM_ZOOM_OUT = 0.9;
+
+export const calculateMockZoom = (element, event, prevScale) => {
   if (typeof event.wheelDelta !== "number") {
     if (event.which === 107 || event.which === 61 || event.which === 187) {
       event.wheelDelta = 1;
@@ -8,9 +12,6 @@ export const customizeZoom = (element, event, prevScale) => {
     event.pageX = element.offsetParent.offsetWidth / 2;
     event.pageY = element.offsetParent.offsetHeight / 2;
   }
-
-  const SCALE_FACTOR = 0.1;
-  const MAX_SCALE = 4;
   const scrollDirection = Math.sign(event.wheelDelta);
 
   const innerBoardPositionFromOuterBoard = {
@@ -32,7 +33,7 @@ export const customizeZoom = (element, event, prevScale) => {
   let scale;
 
   if (requestedScale < 1) {
-    scale = Math.max(0.9, Math.min(MAX_SCALE, requestedScale));
+    scale = Math.max(MINIMUM_ZOOM_OUT, requestedScale);
   } else {
     scale = Math.max(1, Math.min(MAX_SCALE, requestedScale));
   }

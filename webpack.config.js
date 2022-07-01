@@ -9,7 +9,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 module.exports = {
   name: "figmajsx",
   mode: process.env.NODE_ENV || "development",
-  devtool: process.env.NODE_ENV === "production" ? "hidden-source-map" : "eval",
+  devtool:
+    process.env.NODE_ENV === "production" ? false : "eval-cheap-source-map",
   entry: {
     app: "./src/index.js",
   },
