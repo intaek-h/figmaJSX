@@ -1,6 +1,6 @@
 @use "../../scss/forwards" as *;
 
-.text {
+.idle {
   color: $text-highlight;
   font-size: $regular-font-size;
   text-decoration: underline;
@@ -10,4 +10,10 @@
   &:active {
     opacity: 0.8;
   }
+}
+
+.selected {
+  color: rgb(207, 207, 207);
+  font-size: $regular-font-size;
+  user-select: none;
 }

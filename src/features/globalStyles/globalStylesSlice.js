@@ -1,8 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  tool: "selector",
-  color: "#ffffff",
+  color: "#000000",
   thickness: 1,
   fontSize: 12,
 };
@@ -11,33 +10,28 @@ const globalStylesSlice = createSlice({
   name: "globalStyles",
   initialState,
   reducers: {
-    setTool: (state, { payload }) => {
-      state.tool = payload;
-    },
-    setColor: (state, { payload }) => {
+    setGlobalColor: (state, { payload }) => {
       state.color = payload;
     },
-    setThickness: (state, { payload }) => {
+    setGlobalThickness: (state, { payload }) => {
       state.thickness = payload;
     },
-    setFontSize: (state, { payload }) => {
+    setGlobalFontSize: (state, { payload }) => {
       state.fontSize = payload;
     },
   },
 });
 
-export const selectTool = (state) => state.workbench.present.globalStyles.tool;
-
-export const selectColor = (state) =>
+export const selectGlobalColor = (state) =>
   state.workbench.present.globalStyles.color;
 
-export const selectThickness = (state) =>
+export const selectGlobalThickness = (state) =>
   state.workbench.present.globalStyles.thickness;
 
-export const selectFontSize = (state) =>
+export const selectGlobalFontSize = (state) =>
   state.workbench.present.globalStyles.fontSize;
 
-export const { setColor, setFontSize, setThickness, setTool } =
+export const { setGlobalColor, setGlobalFontSize, setGlobalThickness } =
   globalStylesSlice.actions;
 
 export default globalStylesSlice.reducer;

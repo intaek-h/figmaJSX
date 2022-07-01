@@ -1,17 +1,23 @@
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import {
+  selectCurrentTool,
+  setCurrentTool,
+} from "../../../features/utility/utilitySlice";
 import styles from "./ToolBox.module.scss";
 
 function ToolBox({ tool }) {
-  const [isClicked, setIsClicked] = useState(false);
+  const currentTool = useSelector(selectCurrentTool);
+  const dispatch = useDispatch();
 
   return (
     <div
       className={`${
-        isClicked
+        tool === currentTool
           ? `${styles[`box-${tool}`]} ${styles.selected}`
           : styles[`box-${tool}`]
       }`}
-      onClick={() => setIsClicked(!isClicked)}
+      onClick={() => dispatch(setCurrentTool(tool))}
     ></div>
   );
 }
