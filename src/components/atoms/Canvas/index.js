@@ -2,14 +2,19 @@ import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import { changeCanvasName } from "../../../features/canvas/canvasSlice";
+import useDrawShape from "../../../hooks/useDrawShape";
+import Shape from "../Shape";
 import cn from "./Canvas.module.scss";
 
 function Canvas({ index, ...canvas }) {
   const dispatch = useDispatch();
 
+  const canvasRef = useRef();
   const inputRef = useRef();
 
   const [isDoubleClicked, setIsDoubleClicked] = useState(false);
+
+  useDrawShape(canvasRef, index);
 
   return (
     <>
@@ -44,8 +49,13 @@ function Canvas({ index, ...canvas }) {
         </span>
       )}
       <div
+        ref={canvasRef}
         style={{ ...canvas, position: "absolute", backgroundColor: "white" }}
-      ></div>
+      >
+        {canvas.children.map((shape, i) => (
+          <Shape key={i} {...shape} />
+        ))}
+      </div>
     </>
   );
 }

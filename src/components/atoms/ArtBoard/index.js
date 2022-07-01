@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 
 import styles from "./ArtBoard.module.scss";
@@ -16,13 +16,11 @@ function ArtBoard() {
 
   const canvases = useSelector(selectAllCanvas);
 
-  const [isDragScrolling, setIsDragScrolling] = useState(false);
-
-  useDragScroll(boardRef, setIsDragScrolling);
+  useDragScroll(boardRef);
 
   useMockZoom(boardRef, innerBoardRef);
 
-  useDrawCanvas(innerBoardRef, isDragScrolling);
+  useDrawCanvas(innerBoardRef);
 
   useEffect(() => {
     if (!boardRef.current || !isFirstRender) return;

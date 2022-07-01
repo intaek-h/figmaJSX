@@ -1,13 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+import tools from "../../constants/tools";
+
 const initialState = {
   projectTitle: "untitled_project",
   isSelectorActivated: true,
-  tools: ["rectangle", "ellipse", "line", "selector", "text", "canvas"],
+  isDragScrolling: false,
+  tools: [
+    tools.RECTANGLE,
+    tools.ELLIPSE,
+    tools.LINE,
+    tools.SELECTOR,
+    tools.TEXT,
+    tools.CANVAS,
+  ],
   workingCanvas: {},
   selectedShapes: [],
   currentScale: 1,
-  currentTool: "selector",
+  currentTool: tools.SELECTOR,
 };
 
 const utilitySlice = createSlice({
@@ -29,6 +39,12 @@ const utilitySlice = createSlice({
     setCurrentTool: (state, { payload }) => {
       state.currentTool = payload;
     },
+    startDragScoll: (state) => {
+      state.isDragScrolling = true;
+    },
+    finishDragScroll: (state) => {
+      state.isDragScrolling = false;
+    },
   },
 });
 
@@ -40,12 +56,16 @@ export const selectProjectTitle = (state) => state.utility.projectTitle;
 
 export const selectCurrentTool = (state) => state.utility.currentTool;
 
+export const selectIsDragScrolling = (state) => state.utility.isDragScrolling;
+
 export const {
   activateSelector,
   deactivateSelector,
   setCurrentScale,
   setProjectTitle,
   setCurrentTool,
+  finishDragScroll,
+  startDragScoll,
 } = utilitySlice.actions;
 
 export default utilitySlice.reducer;

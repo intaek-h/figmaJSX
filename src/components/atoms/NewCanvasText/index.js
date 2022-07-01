@@ -5,6 +5,7 @@ import {
   setCurrentTool,
 } from "../../../features/utility/utilitySlice";
 import styles from "./NewCanvasText.module.scss";
+import tools from "../../../constants/tools";
 
 function NewCanvasText({ text }) {
   const currentTool = useSelector(selectCurrentTool);
@@ -12,8 +13,8 @@ function NewCanvasText({ text }) {
 
   return (
     <span
-      className={currentTool === "canvas" ? styles.selected : styles.idle}
-      onClick={() => dispatch(setCurrentTool("canvas"))}
+      className={currentTool === tools.CANVAS ? styles.selected : styles.idle}
+      onClick={() => dispatch(setCurrentTool(tools.CANVAS))}
     >
       {text}
     </span>
