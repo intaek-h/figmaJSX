@@ -1,11 +1,11 @@
 import styles from "./NewCanvasButton.module.scss";
-import HighlightedText from "../../atoms/HighlightedText";
+import NewCanvasText from "../../atoms/NewCanvasText";
 
 function NewCanvasButton() {
   return (
     <div className={styles.wrapper}>
       <div className={styles.wrapper__icon}></div>
-      <HighlightedText text="new canvas" />
+      <NewCanvasText text="create new canvas" />
     </div>
   );
 }
