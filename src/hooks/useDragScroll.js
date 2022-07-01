@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-function useDragScroll(boardRef) {
+function useDragScroll(boardRef, setIsDragScrolling) {
   useEffect(() => {
     if (!boardRef.current) return;
 
@@ -38,6 +38,7 @@ function useDragScroll(boardRef) {
     const handleSpaceKeyDown = (e) => {
       if (e.keyCode === 32) {
         e.preventDefault();
+        setIsDragScrolling(true);
         board.style.cursor = "grab";
         board.addEventListener("mousedown", handleMouseDown);
         document.addEventListener("keyup", handleSpaceKeyUp);
@@ -47,16 +48,17 @@ function useDragScroll(boardRef) {
     const handleSpaceKeyUp = (e) => {
       if (e.keyCode === 32) {
         e.preventDefault();
+        setIsDragScrolling(false);
         board.style.cursor = "default";
-        document.removeEventListener("keyup", handleSpaceKeyUp);
         board.removeEventListener("mousedown", handleMouseDown);
+        document.removeEventListener("keyup", handleSpaceKeyUp);
       }
     };
 
     document.addEventListener("keydown", handleSpaceKeyDown);
 
     return () => document.removeEventListener("keydown", handleSpaceKeyDown);
-  }, [boardRef]);
+  }, [boardRef, setIsDragScrolling]);
 }
 
 export default useDragScroll;
