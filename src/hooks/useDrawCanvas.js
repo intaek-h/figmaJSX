@@ -1,19 +1,24 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
+import tools from "../constants/tools";
 import { createCanvas } from "../features/canvas/canvasSlice";
 import {
   selectCurrentScale,
   selectCurrentTool,
+  selectIsDragScrolling,
 } from "../features/utility/utilitySlice";
 import computePreviewElement from "../utilities/computePreviewElement";
 
-function useDrawCanvas(elementRef, isDragScrolling) {
+function useDrawCanvas(elementRef) {
   const dispatch = useDispatch();
+
   const currentScale = useSelector(selectCurrentScale);
   const currentTool = useSelector(selectCurrentTool);
+  const isDragScrolling = useSelector(selectIsDragScrolling);
 
   useEffect(() => {
-    if (!elementRef.current || currentTool !== "canvas") return;
+    if (!elementRef.current || currentTool !== tools.CANVAS) return;
 
     const element = elementRef.current;
 
