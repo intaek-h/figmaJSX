@@ -5,7 +5,7 @@ import {
   selectCurrentScale,
   setCurrentScale,
 } from "../features/utility/utilitySlice";
-import { calculateMockZoom } from "../utilities/calculateMockZoom";
+import { computeMockZoom } from "../utilities/computeMockZoom";
 
 function useMockZoom(outerRef, innerRef) {
   const currentScale = useSelector(selectCurrentScale);
@@ -30,7 +30,7 @@ function useMockZoom(outerRef, innerRef) {
       ) {
         event.preventDefault();
 
-        const { adjustedScroll, scale } = calculateMockZoom(
+        const { adjustedScroll, scale } = computeMockZoom(
           outerBoard,
           event,
           currentScale
@@ -47,7 +47,7 @@ function useMockZoom(outerRef, innerRef) {
       if (event.ctrlKey || event.metaKey) {
         event.preventDefault();
 
-        const { adjustedScroll, scale } = calculateMockZoom(
+        const { adjustedScroll, scale } = computeMockZoom(
           outerBoard,
           event,
           currentScale

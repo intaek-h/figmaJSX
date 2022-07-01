@@ -1,8 +1,8 @@
 const SCALE_FACTOR = 0.1;
 const MAX_SCALE = 4;
-const MINIMUM_ZOOM_OUT = 0.9;
+const MINIMUM_ZOOM_OUT = 0.3;
 
-export const calculateMockZoom = (element, event, prevScale) => {
+export const computeMockZoom = (element, event, prevScale) => {
   if (typeof event.wheelDelta !== "number") {
     if (event.which === 107 || event.which === 61 || event.which === 187) {
       event.wheelDelta = 1;
