@@ -1,0 +1,18 @@
+@use "../../scss/forwards" as *;
+
+.input {
+  position: absolute;
+  background-color: transparent;
+  min-width: 10px;
+  border: none;
+  border-bottom: 1px solid $text-highlight;
+  margin: 0;
+  padding: 0;
+  outline: none;
+}
+
+.idle {
+  position: absolute;
+  white-space: pre-wrap;
+  user-select: none;
+}

@@ -1,20 +1,21 @@
 import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 
+import tools from "../../../constants/tools";
 import { changeCanvasName } from "../../../features/canvas/canvasSlice";
 import useDrawShape from "../../../hooks/useDrawShape";
 import Shape from "../Shape";
+import ShapeText from "../ShapeText";
 import cn from "./Canvas.module.scss";
 
-function Canvas({ index, ...canvas }) {
+function Canvas({ canvasIndex, ...canvas }) {
   const dispatch = useDispatch();
-
   const canvasRef = useRef();
   const inputRef = useRef();
 
   const [isDoubleClicked, setIsDoubleClicked] = useState(false);
 
-  useDrawShape(canvasRef, index);
+  useDrawShape(canvasRef, canvasIndex);
 
   return (
     <>
@@ -31,7 +32,9 @@ function Canvas({ index, ...canvas }) {
           autoFocus
           onBlur={() => {
             setIsDoubleClicked(false);
-            dispatch(changeCanvasName({ name: inputRef.current.value, index }));
+            dispatch(
+              changeCanvasName({ name: inputRef.current.value, canvasIndex })
+            );
           }}
         />
       ) : (
@@ -48,13 +51,24 @@ function Canvas({ index, ...canvas }) {
           {canvas.canvasName}
         </span>
       )}
-      <div
-        ref={canvasRef}
-        style={{ ...canvas, position: "absolute", backgroundColor: "white" }}
-      >
-        {canvas.children.map((shape, i) => (
-          <Shape key={i} {...shape} />
-        ))}
+      <div ref={canvasRef} className={cn.canvas} style={{ ...canvas }}>
+        {canvas.children.map((shape, i) =>
+          shape.type === tools.TEXT ? (
+            <ShapeText
+              key={i}
+              canvasIndex={canvasIndex}
+              shapeIndex={i}
+              {...shape}
+            />
+          ) : (
+            <Shape
+              key={i}
+              canvasIndex={canvasIndex}
+              shapeIndex={i}
+              {...shape}
+            />
+          )
+        )}
       </div>
     </>
   );

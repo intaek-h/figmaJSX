@@ -6,6 +6,7 @@ const initialState = {
   projectTitle: "untitled_project",
   isSelectorActivated: true,
   isDragScrolling: false,
+  isInputFieldFocused: false,
   tools: [
     tools.RECTANGLE,
     tools.ELLIPSE,
@@ -45,6 +46,12 @@ const utilitySlice = createSlice({
     finishDragScroll: (state) => {
       state.isDragScrolling = false;
     },
+    setInputFieldFocused: (state) => {
+      state.isInputFieldFocused = true;
+    },
+    setInputFieldBlurred: (state) => {
+      state.isInputFieldFocused = false;
+    },
   },
 });
 
@@ -58,6 +65,12 @@ export const selectCurrentTool = (state) => state.utility.currentTool;
 
 export const selectIsDragScrolling = (state) => state.utility.isDragScrolling;
 
+export const selectIsSelectorActivated = (state) =>
+  state.utility.isSelectorActivated;
+
+export const selectIsInputFieldFocused = (state) =>
+  state.utility.isInputFieldFocused;
+
 export const {
   activateSelector,
   deactivateSelector,
@@ -66,6 +79,8 @@ export const {
   setCurrentTool,
   finishDragScroll,
   startDragScoll,
+  setInputFieldBlurred,
+  setInputFieldFocused,
 } = utilitySlice.actions;
 
 export default utilitySlice.reducer;
