@@ -6,7 +6,7 @@ import {
   startDragScoll,
 } from "../features/utility/utilitySlice";
 
-function useDragScroll(boardRef) {
+function useDragToScroll(boardRef) {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -69,4 +69,4 @@ function useDragScroll(boardRef) {
   }, [boardRef, dispatch]);
 }
 
-export default useDragScroll;
+export default useDragToScroll;

@@ -2,23 +2,32 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { addShape } from "../features/canvas/canvasSlice";
-import { selectGlobalColor } from "../features/globalStyles/globalStylesSlice";
 import {
+  selectGlobalColor,
+  selectGlobalFontSize,
+} from "../features/globalStyles/globalStylesSlice";
+import {
+  setInputFieldBlurred,
+  setInputFieldFocused,
   selectCurrentScale,
   selectCurrentTool,
   selectIsDragScrolling,
+  setCurrentTool,
+  selectIsSelectorActivated,
 } from "../features/utility/utilitySlice";
 import computePreviewElement from "../utilities/computePreviewElement";
 import computePreviewLine from "../utilities/computePreviewLine";
 import tools from "../constants/tools";
 
-function useDrawShape(elementRef, index) {
+function useDrawShape(elementRef, canvasIndex) {
   const dispatch = useDispatch();
 
   const currentScale = useSelector(selectCurrentScale);
   const globalColor = useSelector(selectGlobalColor);
+  const globalFontSize = useSelector(selectGlobalFontSize);
   const currentTool = useSelector(selectCurrentTool);
   const isDragScrolling = useSelector(selectIsDragScrolling);
+  const isSelectorActivated = useSelector(selectIsSelectorActivated);
 
   useEffect(() => {
     if (!elementRef.current || isDragScrolling) return;
@@ -84,8 +93,8 @@ function useDrawShape(elementRef, index) {
 
       previewShape.style.top = startTop + "px";
       previewShape.style.left = startLeft + "px";
-      previewShape.style.backgroundColor = "#4faaff36";
-      previewShape.style.border = "1px solid #94beff";
+      previewShape.style.backgroundColor = globalColor;
+      previewShape.style.border = `1px solid #94beff`;
       previewShape.style.position = "absolute";
       previewShape.style.boxSizing = "border-box";
 
@@ -115,13 +124,13 @@ function useDrawShape(elementRef, index) {
         }
 
         const coordinates = {
-          shape: tools.RECTANGLE,
+          type: tools.RECTANGLE,
           top: previewShape.offsetTop,
           left: previewShape.offsetLeft,
           height: previewShape.offsetHeight,
           width: previewShape.offsetWidth,
           backgroundColor: globalColor,
-          index,
+          canvasIndex,
         };
 
         coordinates.height + coordinates.width > 4 &&
@@ -178,14 +187,14 @@ function useDrawShape(elementRef, index) {
         }
 
         const coordinates = {
-          shape: tools.ELLIPSE,
+          type: tools.ELLIPSE,
           top: previewShape.offsetTop,
           left: previewShape.offsetLeft,
           height: previewShape.offsetHeight,
           width: previewShape.offsetWidth,
           borderRadius: "50%",
           backgroundColor: globalColor,
-          index,
+          canvasIndex,
         };
 
         coordinates.height + coordinates.width > 4 &&
@@ -245,13 +254,13 @@ function useDrawShape(elementRef, index) {
         }
 
         const coordinates = {
-          shape: tools.LINE,
+          type: tools.LINE,
           top: previewShape.offsetTop,
           left: previewShape.offsetLeft,
           height: previewShape.offsetHeight,
           width: previewShape.offsetWidth,
           backgroundColor: globalColor,
-          index,
+          canvasIndex,
         };
 
         coordinates.height + coordinates.width > 4 &&
@@ -266,32 +275,97 @@ function useDrawShape(elementRef, index) {
       element.addEventListener("mouseup", handleMouseUp);
     };
 
+    const handleClickText = (e) => {
+      const form = document.createElement("form");
+      const previewText = document.createElement("div");
+      const elementFigures = element.getBoundingClientRect();
+      const elementTop = elementFigures.top;
+      const elementLeft = elementFigures.left;
+      const startTop = (e.clientY - elementTop) / currentScale;
+      const startLeft = (e.clientX - elementLeft) / currentScale;
+
+      previewText.contentEditable = "plaintext-only";
+      previewText.style.minWidth = "10px";
+      previewText.style.left = startLeft + "px";
+      previewText.style.position = "absolute";
+      previewText.style.fontSize = globalFontSize + "px";
+      previewText.style.backgroundColor = "transparent";
+      previewText.style.margin = 0;
+      previewText.style.padding = 0;
+      previewText.style.border = "none";
+      previewText.style.borderBottom = "1px dotted black";
+      previewText.style.outline = "none";
+
+      form.appendChild(previewText);
+      element.appendChild(form);
+
+      previewText.style.top = startTop - previewText.clientHeight + "px";
+
+      dispatch(setInputFieldFocused());
+      dispatch(setCurrentTool(tools.SELECTOR));
+
+      previewText.addEventListener("blur", handleBlur, { once: true });
+
+      function handleBlur() {
+        if (!previewText.innerText) {
+          dispatch(setInputFieldBlurred());
+          previewText.remove();
+          form.remove();
+          return;
+        }
+
+        const coordinates = {
+          type: tools.TEXT,
+          top: previewText.offsetTop,
+          left: previewText.offsetLeft,
+          text: previewText.innerText,
+          color: globalColor,
+          fontSize: globalFontSize,
+          canvasIndex,
+        };
+
+        dispatch(addShape(coordinates));
+        dispatch(setInputFieldBlurred());
+        previewText.remove();
+        form.remove();
+      }
+    };
+
     if (currentTool === tools.SELECTOR) {
+      if (!isSelectorActivated) return;
+
+      element.style.cursor = "default";
       element.addEventListener("mousedown", handleMouseDownSelector);
 
       return () =>
         element.removeEventListener("mousedown", handleMouseDownSelector);
     }
-
     if (currentTool === tools.RECTANGLE) {
+      element.style.cursor = "crosshair";
       element.addEventListener("mousedown", handleMouseDownRectangle);
 
       return () =>
         element.removeEventListener("mousedown", handleMouseDownRectangle);
     }
-
     if (currentTool === tools.ELLIPSE) {
+      element.style.cursor = "crosshair";
       element.addEventListener("mousedown", handleMouseDownEllipse);
 
       return () =>
         element.removeEventListener("mousedown", handleMouseDownEllipse);
     }
-
     if (currentTool === tools.LINE) {
+      element.style.cursor = "crosshair";
       element.addEventListener("mousedown", handleMouseDownLine);
 
       return () =>
         element.removeEventListener("mousedown", handleMouseDownLine);
+    }
+    if (currentTool === tools.TEXT) {
+      element.style.cursor = "text";
+      element.addEventListener("mousedown", handleClickText);
+
+      return () => element.removeEventListener("mousedown", handleClickText);
     }
   }, [
     currentScale,
@@ -299,8 +373,10 @@ function useDrawShape(elementRef, index) {
     dispatch,
     elementRef,
     globalColor,
-    index,
+    globalFontSize,
+    canvasIndex,
     isDragScrolling,
+    isSelectorActivated,
   ]);
 }
 
