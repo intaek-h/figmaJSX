@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 
 import styles from "./ArtBoard.module.scss";
-import useDragScroll from "../../../hooks/useDragScroll";
+import useDragToScroll from "../../../hooks/useDragToScroll";
 import { selectAllCanvas } from "../../../features/canvas/canvasSlice";
 import Canvas from "../Canvas";
 import useMockZoom from "../../../hooks/useMockZoom";
@@ -16,7 +16,7 @@ function ArtBoard() {
 
   const canvases = useSelector(selectAllCanvas);
 
-  useDragScroll(boardRef);
+  useDragToScroll(boardRef);
 
   useMockZoom(boardRef, innerBoardRef);
 
@@ -37,7 +37,7 @@ function ArtBoard() {
     <div ref={boardRef} className={styles["artboard-wrapper"]}>
       <div ref={innerBoardRef} className={styles.artboard}>
         {canvases.map((canvas, i) => (
-          <Canvas {...canvas} index={i} key={i} />
+          <Canvas {...canvas} canvasIndex={i} key={i} />
         ))}
       </div>
     </div>

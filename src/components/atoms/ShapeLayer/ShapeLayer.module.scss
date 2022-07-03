@@ -2,6 +2,7 @@
 
 .layer {
   @include flexCenterRow;
+  font-family: "Fira Mono", monospace;
   width: 100%;
   height: 35px;
   padding-left: 20px;
@@ -13,4 +14,16 @@
     border: 1px solid $object-selected-tool-stroke;
     box-sizing: border-box;
   }
+}
+
+.layer.hovered {
+  border: 1px solid $object-selected-tool-stroke;
+}
+
+.layer.selected {
+  background-color: $object-selected-tool-bg;
+}
+
+.layer.grabbing {
+  background-color: darken($object-selected-tool-bg, 10%);
 }

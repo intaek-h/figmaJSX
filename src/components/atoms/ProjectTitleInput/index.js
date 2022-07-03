@@ -26,6 +26,7 @@ function ProjectTitleInput() {
           dispatch(setProjectTitle(title));
           setIsFocused(false);
         }}
+        autoFocus
       />
     );
   }

@@ -6,6 +6,7 @@
   height: 30px;
 
   & > span {
+    font-family: "Fira Mono", monospace;
     font-size: $regular-font-size;
     color: $text-guide;
     letter-spacing: 0.1em;
