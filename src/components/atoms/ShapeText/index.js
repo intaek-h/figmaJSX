@@ -67,11 +67,13 @@ function ShapeText({
           }}
           contentEditable="plaintext-only"
           suppressContentEditableWarning
-          onBlur={() => {
+          onBlur={(e) => {
             const newText = {
               text: inputRef.current.textContent,
               color: globalColor,
               fontSize: globalFontSize,
+              height: e.target.clientHeight,
+              width: e.target.clientWidth,
               canvasIndex: currentCanvasIndex,
               shapeIndex: currentShapeIndex,
             };

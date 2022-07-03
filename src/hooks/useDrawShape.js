@@ -5,6 +5,7 @@ import { addShape } from "../features/canvas/canvasSlice";
 import {
   selectGlobalColor,
   selectGlobalFontSize,
+  selectGlobalThickness,
 } from "../features/globalStyles/globalStylesSlice";
 import {
   setInputFieldBlurred,
@@ -25,6 +26,7 @@ function useDrawShape(elementRef, canvasIndex) {
   const currentScale = useSelector(selectCurrentScale);
   const globalColor = useSelector(selectGlobalColor);
   const globalFontSize = useSelector(selectGlobalFontSize);
+  const globalThickness = useSelector(selectGlobalThickness);
   const currentTool = useSelector(selectCurrentTool);
   const isDragScrolling = useSelector(selectIsDragScrolling);
   const isSelectorActivated = useSelector(selectIsSelectorActivated);
@@ -241,9 +243,9 @@ function useDrawShape(elementRef, canvasIndex) {
         previewShape.style.left = startLeft + "px";
 
         if (height < width) {
-          previewShape.style.height = 1 + "px";
+          previewShape.style.height = globalThickness + "px";
         } else {
-          previewShape.style.width = 1 + "px";
+          previewShape.style.width = globalThickness + "px";
         }
       };
 
@@ -322,6 +324,8 @@ function useDrawShape(elementRef, canvasIndex) {
           name: tools.TEXT,
           top: previewText.offsetTop,
           left: previewText.offsetLeft,
+          height: previewText.clientHeight,
+          width: previewText.clientWidth,
           text: previewText.innerText,
           color: globalColor,
           fontSize: globalFontSize,
@@ -381,6 +385,7 @@ function useDrawShape(elementRef, canvasIndex) {
     canvasIndex,
     isDragScrolling,
     isSelectorActivated,
+    globalThickness,
   ]);
 }
 

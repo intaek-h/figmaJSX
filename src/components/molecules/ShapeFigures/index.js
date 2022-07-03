@@ -1,13 +1,13 @@
 import styles from "./ShapeFigures.module.scss";
 import FigureInput from "../../atoms/FigureInput";
+import figures from "../../../constants/figures";
 
 function ShapeFigures() {
   return (
     <div className={styles.wrapper}>
-      <FigureInput figure="X" />
-      <FigureInput figure="Y" />
-      <FigureInput figure="W" />
-      <FigureInput figure="H" />
+      {figures.map((figure) => (
+        <FigureInput figure={figure} key={figure} />
+      ))}
     </div>
   );
 }

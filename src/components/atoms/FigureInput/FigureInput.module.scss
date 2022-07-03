@@ -18,7 +18,24 @@ input[type="number"]::-webkit-inner-spin-button {
   margin: 10px 15px 10px 20px;
 }
 
+.disabled {
+  font-size: $regular-font-size;
+  border: none;
+  height: 30px;
+  width: 50px;
+  margin-left: 2px;
+  padding: 0 10px;
+  box-sizing: border-box;
+  pointer-events: none;
+
+  &:disabled {
+    font-family: "Fira Mono", monospace;
+    background-color: transparent;
+  }
+}
+
 .input {
+  font-family: "Fira Mono", monospace;
   font-size: $regular-font-size;
   border: none;
   height: 30px;
