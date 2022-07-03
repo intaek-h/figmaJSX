@@ -37,6 +37,7 @@ const canvasSlice = createSlice({
     addShape: (state, { payload }) => {
       const index = payload.canvasIndex;
       delete payload.canvasIndex;
+      payload.name = `${payload.type} ${state[index].children.length}`;
       state[index].children.push(payload);
     },
     modifyShape: (state, { payload }) => {
@@ -49,12 +50,22 @@ const canvasSlice = createSlice({
         ...payload,
       };
     },
+    changeShapeIndex: (state, { payload: { canvasIdx, fromIdx, toIdx } }) => {
+      const shape = state[canvasIdx].children[fromIdx];
+      state[canvasIdx].children.splice(fromIdx, 1);
+      state[canvasIdx].children.splice(toIdx, 0, shape);
+    },
   },
 });
 
 export const selectAllCanvas = (state) => state.workbench.present.canvas;
 
-export const { createCanvas, changeCanvasName, addShape, modifyShape } =
-  canvasSlice.actions;
+export const {
+  createCanvas,
+  changeCanvasName,
+  addShape,
+  modifyShape,
+  changeShapeIndex,
+} = canvasSlice.actions;
 
 export default canvasSlice.reducer;

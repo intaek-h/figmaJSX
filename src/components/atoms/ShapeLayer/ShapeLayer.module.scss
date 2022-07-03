@@ -14,3 +14,15 @@
     box-sizing: border-box;
   }
 }
+
+.layer.hovered {
+  border: 1px solid $object-selected-tool-stroke;
+}
+
+.layer.selected {
+  background-color: $object-selected-tool-bg;
+}
+
+.layer.grabbing {
+  background-color: darken($object-selected-tool-bg, 10%);
+}

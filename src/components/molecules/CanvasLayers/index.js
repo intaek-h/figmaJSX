@@ -1,10 +1,16 @@
 import ShapeLayer from "../../atoms/ShapeLayer";
 
-function CanvasLayers() {
+function CanvasLayers({ currentCanvasIndex, shapes }) {
   return (
     <>
-      <ShapeLayer shape="Rectangle 1" />
-      <ShapeLayer shape="Rectangle 2" />
+      {shapes.map((shape, i) => (
+        <ShapeLayer
+          name={shape.name}
+          currentCanvasIndex={currentCanvasIndex}
+          currentShapeIndex={i}
+          key={i}
+        />
+      ))}
     </>
   );
 }
