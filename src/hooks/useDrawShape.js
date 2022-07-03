@@ -125,6 +125,7 @@ function useDrawShape(elementRef, canvasIndex) {
 
         const coordinates = {
           type: tools.RECTANGLE,
+          name: tools.RECTANGLE,
           top: previewShape.offsetTop,
           left: previewShape.offsetLeft,
           height: previewShape.offsetHeight,
@@ -188,6 +189,7 @@ function useDrawShape(elementRef, canvasIndex) {
 
         const coordinates = {
           type: tools.ELLIPSE,
+          name: tools.ELLIPSE,
           top: previewShape.offsetTop,
           left: previewShape.offsetLeft,
           height: previewShape.offsetHeight,
@@ -255,6 +257,7 @@ function useDrawShape(elementRef, canvasIndex) {
 
         const coordinates = {
           type: tools.LINE,
+          name: tools.LINE,
           top: previewShape.offsetTop,
           left: previewShape.offsetLeft,
           height: previewShape.offsetHeight,
@@ -316,6 +319,7 @@ function useDrawShape(elementRef, canvasIndex) {
 
         const coordinates = {
           type: tools.TEXT,
+          name: tools.TEXT,
           top: previewText.offsetTop,
           left: previewText.offsetLeft,
           text: previewText.innerText,

@@ -1,5 +1,6 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import directions from "../../../constants/directions";
 
 import { modifyShape } from "../../../features/canvas/canvasSlice";
 import {
@@ -9,15 +10,29 @@ import {
 import {
   activateSelector,
   deactivateSelector,
+  replaceSelectedShapeIndexes,
+  selectCurrentWorkingCanvasIndex,
+  selectHoveredShape,
+  selectSelectedShapeIndexes,
+  setHoveredShape,
+  setWorkingCanvasIndex,
 } from "../../../features/utility/utilitySlice";
 import useDragShape from "../../../hooks/useDragShape";
+import EditPointer from "../EditPointer";
 import style from "./ShapeText.module.scss";
 
-function ShapeText({ canvasIndex, shapeIndex, ...canvas }) {
+function ShapeText({
+  canvasIndex: currentCanvasIndex,
+  shapeIndex: currentShapeIndex,
+  ...canvas
+}) {
   const dispatch = useDispatch();
 
   const globalColor = useSelector(selectGlobalColor);
   const globalFontSize = useSelector(selectGlobalFontSize);
+  const selectedShapeIndexes = useSelector(selectSelectedShapeIndexes);
+  const workingCanvasIndex = useSelector(selectCurrentWorkingCanvasIndex);
+  const { canvasIndex, shapeIndex } = useSelector(selectHoveredShape);
 
   const shapeRef = useRef();
   const inputRef = useRef();
@@ -25,7 +40,18 @@ function ShapeText({ canvasIndex, shapeIndex, ...canvas }) {
   const [isDoubleClicked, setIsDoubleClicked] = useState(false);
   const [isMouseHovered, setIsMouseHovered] = useState(false);
 
-  useDragShape(shapeRef, canvasIndex, shapeIndex);
+  useDragShape(shapeRef, currentCanvasIndex, currentShapeIndex);
+
+  useEffect(() => {
+    if (
+      canvasIndex === currentCanvasIndex &&
+      shapeIndex === currentShapeIndex
+    ) {
+      return setIsMouseHovered(true);
+    }
+
+    setIsMouseHovered(false);
+  }, [canvasIndex, currentShapeIndex, shapeIndex, currentCanvasIndex]);
 
   if (isDoubleClicked)
     return (
@@ -46,8 +72,8 @@ function ShapeText({ canvasIndex, shapeIndex, ...canvas }) {
               text: inputRef.current.textContent,
               color: globalColor,
               fontSize: globalFontSize,
-              canvasIndex,
-              shapeIndex,
+              canvasIndex: currentCanvasIndex,
+              shapeIndex: currentShapeIndex,
             };
 
             setIsDoubleClicked(false);
@@ -62,28 +88,63 @@ function ShapeText({ canvasIndex, shapeIndex, ...canvas }) {
     );
 
   return (
-    <div
-      ref={shapeRef}
-      className={style.idle}
-      style={{
-        ...canvas,
-        borderBottom: isMouseHovered ? "1px dotted black" : "none",
-      }}
-      onMouseEnter={() => {
-        console.log("entered");
-        dispatch(deactivateSelector());
-        setIsMouseHovered(true);
-      }}
-      onMouseLeave={() => {
-        dispatch(activateSelector());
-        setIsMouseHovered(false);
-      }}
-      onDoubleClick={() => {
-        setIsDoubleClicked(true);
-      }}
-    >
-      {canvas.text}
-    </div>
+    <>
+      <div
+        ref={shapeRef}
+        className={style.idle}
+        style={{
+          ...canvas,
+          borderBottom: isMouseHovered ? "1px dotted black" : "none",
+        }}
+        onMouseEnter={() => {
+          dispatch(deactivateSelector());
+          dispatch(
+            setHoveredShape({
+              canvasIndex: currentCanvasIndex,
+              shapeIndex: currentShapeIndex,
+            })
+          );
+          setIsMouseHovered(true);
+        }}
+        onMouseLeave={() => {
+          dispatch(activateSelector());
+          dispatch(
+            setHoveredShape({
+              canvasIndex: null,
+              shapeIndex: null,
+            })
+          );
+          setIsMouseHovered(false);
+        }}
+        onDoubleClick={() => {
+          setIsDoubleClicked(true);
+        }}
+        onClick={() => {
+          if (workingCanvasIndex === currentCanvasIndex) {
+            return dispatch(replaceSelectedShapeIndexes(currentShapeIndex));
+          }
+
+          dispatch(setWorkingCanvasIndex(currentCanvasIndex));
+          dispatch(replaceSelectedShapeIndexes(currentShapeIndex));
+        }}
+      >
+        {canvas.text}
+      </div>
+      {workingCanvasIndex === currentCanvasIndex &&
+        selectedShapeIndexes.includes(currentShapeIndex) &&
+        shapeRef.current &&
+        directions.map((direction) => (
+          <EditPointer
+            direction={direction}
+            key={direction}
+            {...{
+              height: shapeRef.current.clientHeight,
+              width: shapeRef.current.clientWidth,
+              ...canvas,
+            }}
+          />
+        ))}
+    </>
   );
 }
 
