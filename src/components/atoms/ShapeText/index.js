@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import { modifyShape } from "../../../features/canvas/canvasSlice";
 import {
   selectGlobalColor,
@@ -9,17 +10,22 @@ import {
   activateSelector,
   deactivateSelector,
 } from "../../../features/utility/utilitySlice";
+import useDragShape from "../../../hooks/useDragShape";
 import style from "./ShapeText.module.scss";
 
 function ShapeText({ canvasIndex, shapeIndex, ...canvas }) {
   const dispatch = useDispatch();
+
   const globalColor = useSelector(selectGlobalColor);
   const globalFontSize = useSelector(selectGlobalFontSize);
 
+  const shapeRef = useRef();
   const inputRef = useRef();
 
   const [isDoubleClicked, setIsDoubleClicked] = useState(false);
   const [isMouseHovered, setIsMouseHovered] = useState(false);
+
+  useDragShape(shapeRef, canvasIndex, shapeIndex);
 
   if (isDoubleClicked)
     return (
@@ -57,12 +63,14 @@ function ShapeText({ canvasIndex, shapeIndex, ...canvas }) {
 
   return (
     <div
+      ref={shapeRef}
       className={style.idle}
       style={{
         ...canvas,
         borderBottom: isMouseHovered ? "1px dotted black" : "none",
       }}
       onMouseEnter={() => {
+        console.log("entered");
         dispatch(deactivateSelector());
         setIsMouseHovered(true);
       }}

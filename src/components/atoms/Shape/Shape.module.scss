@@ -1,4 +1,9 @@
 .shape {
   position: absolute;
   box-sizing: border-box;
+  backface-visibility: hidden;
+}
+
+.dragging {
+  cursor: grab;
 }
