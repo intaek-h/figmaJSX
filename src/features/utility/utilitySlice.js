@@ -7,6 +7,14 @@ const initialState = {
   isSelectorActivated: true,
   isDragScrolling: false,
   isInputFieldFocused: false,
+  workingCanvasIndex: 0,
+  selectedShapeIndexes: [],
+  hoveredShape: {
+    canvasIndex: null,
+    shapeIndex: null,
+  },
+  currentScale: 1,
+  currentTool: tools.SELECTOR,
   tools: [
     tools.RECTANGLE,
     tools.ELLIPSE,
@@ -15,10 +23,6 @@ const initialState = {
     tools.TEXT,
     tools.CANVAS,
   ],
-  workingCanvas: {},
-  selectedShapes: [],
-  currentScale: 1,
-  currentTool: tools.SELECTOR,
 };
 
 const utilitySlice = createSlice({
@@ -52,6 +56,18 @@ const utilitySlice = createSlice({
     setInputFieldBlurred: (state) => {
       state.isInputFieldFocused = false;
     },
+    setWorkingCanvasIndex: (state, { payload }) => {
+      state.workingCanvasIndex = payload;
+    },
+    setHoveredShape: (state, { payload: { canvasIndex, shapeIndex } }) => {
+      state.hoveredShape = { canvasIndex, shapeIndex };
+    },
+    replaceSelectedShapeIndexes: (state, { payload }) => {
+      state.selectedShapeIndexes = [payload];
+    },
+    addSelectedShapeIndexes: (state, { payload }) => {
+      state.selectedShapeIndexes.push(payload);
+    },
   },
 });
 
@@ -65,11 +81,19 @@ export const selectCurrentTool = (state) => state.utility.currentTool;
 
 export const selectIsDragScrolling = (state) => state.utility.isDragScrolling;
 
+export const selectHoveredShape = (state) => state.utility.hoveredShape;
+
+export const selectCurrentWorkingCanvasIndex = (state) =>
+  state.utility.workingCanvasIndex;
+
 export const selectIsSelectorActivated = (state) =>
   state.utility.isSelectorActivated;
 
 export const selectIsInputFieldFocused = (state) =>
   state.utility.isInputFieldFocused;
+
+export const selectSelectedShapeIndexes = (state) =>
+  state.utility.selectedShapeIndexes;
 
 export const {
   activateSelector,
@@ -81,6 +105,10 @@ export const {
   startDragScoll,
   setInputFieldBlurred,
   setInputFieldFocused,
+  setWorkingCanvasIndex,
+  setHoveredShape,
+  addSelectedShapeIndexes,
+  replaceSelectedShapeIndexes,
 } = utilitySlice.actions;
 
 export default utilitySlice.reducer;
