@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import directions from "../../../constants/directions";
 
 import {
   activateSelector,
@@ -8,18 +7,15 @@ import {
   replaceSelectedShapeIndexes,
   selectCurrentWorkingCanvasIndex,
   selectHoveredShape,
-  selectSelectedShapeIndexes,
   setHoveredShape,
   setWorkingCanvasIndex,
 } from "../../../features/utility/utilitySlice";
 import useDragShape from "../../../hooks/useDragShape";
-import EditPointer from "../EditPointer";
 import styles from "./Shape.module.scss";
 
 function Shape({ currentCanvasIndex, currentShapeIndex, ...shape }) {
   const dispatch = useDispatch();
 
-  const selectedShapeIndexes = useSelector(selectSelectedShapeIndexes);
   const workingCanvasIndex = useSelector(selectCurrentWorkingCanvasIndex);
   const { canvasIndex, shapeIndex } = useSelector(selectHoveredShape);
 
@@ -75,11 +71,6 @@ function Shape({ currentCanvasIndex, currentShapeIndex, ...shape }) {
           dispatch(replaceSelectedShapeIndexes(currentShapeIndex));
         }}
       ></div>
-      {workingCanvasIndex === currentCanvasIndex &&
-        selectedShapeIndexes.includes(currentShapeIndex) &&
-        directions.map((direction) => (
-          <EditPointer direction={direction} key={direction} {...shape} />
-        ))}
     </>
   );
 }

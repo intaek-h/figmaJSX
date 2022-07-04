@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import tools from "../constants/tools";
-import { modifyShape, selectAllCanvas } from "../features/canvas/canvasSlice";
+import { modifyShape } from "../features/canvas/canvasSlice";
 import {
   selectCurrentScale,
   selectCurrentTool,
@@ -11,16 +11,20 @@ import {
 
 let selectionLocked = false;
 
-function useDragShape(shapeRef, canvasIndex, shapeIndex) {
+function useDragShape(shapeRef, canvasIndex, shapeIndex, isRendered = true) {
   const dispatch = useDispatch();
 
   const currentTool = useSelector(selectCurrentTool);
   const currentScale = useSelector(selectCurrentScale);
   const isDragScrolling = useSelector(selectIsDragScrolling);
-  const canvases = useSelector(selectAllCanvas);
 
   useEffect(() => {
-    if (!shapeRef.current || isDragScrolling || currentTool !== tools.SELECTOR)
+    if (
+      !shapeRef.current ||
+      isDragScrolling ||
+      currentTool !== tools.SELECTOR ||
+      !isRendered
+    )
       return;
 
     const shape = shapeRef.current;
@@ -85,9 +89,9 @@ function useDragShape(shapeRef, canvasIndex, shapeIndex) {
     currentTool,
     dispatch,
     isDragScrolling,
+    isRendered,
     shapeIndex,
     shapeRef,
-    canvases,
   ]);
 }
 

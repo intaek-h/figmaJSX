@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import directions from "../../../constants/directions";
 
 import { modifyShape } from "../../../features/canvas/canvasSlice";
 import {
@@ -13,12 +12,10 @@ import {
   replaceSelectedShapeIndexes,
   selectCurrentWorkingCanvasIndex,
   selectHoveredShape,
-  selectSelectedShapeIndexes,
   setHoveredShape,
   setWorkingCanvasIndex,
 } from "../../../features/utility/utilitySlice";
 import useDragShape from "../../../hooks/useDragShape";
-import EditPointer from "../EditPointer";
 import style from "./ShapeText.module.scss";
 
 function ShapeText({ currentCanvasIndex, currentShapeIndex, ...canvas }) {
@@ -26,7 +23,6 @@ function ShapeText({ currentCanvasIndex, currentShapeIndex, ...canvas }) {
 
   const globalColor = useSelector(selectGlobalColor);
   const globalFontSize = useSelector(selectGlobalFontSize);
-  const selectedShapeIndexes = useSelector(selectSelectedShapeIndexes);
   const workingCanvasIndex = useSelector(selectCurrentWorkingCanvasIndex);
   const { canvasIndex, shapeIndex } = useSelector(selectHoveredShape);
 
@@ -36,7 +32,12 @@ function ShapeText({ currentCanvasIndex, currentShapeIndex, ...canvas }) {
   const [isDoubleClicked, setIsDoubleClicked] = useState(false);
   const [isMouseHovered, setIsMouseHovered] = useState(false);
 
-  useDragShape(shapeRef, currentCanvasIndex, currentShapeIndex);
+  useDragShape(
+    shapeRef,
+    currentCanvasIndex,
+    currentShapeIndex,
+    !isDoubleClicked
+  );
 
   useEffect(() => {
     if (
@@ -128,20 +129,6 @@ function ShapeText({ currentCanvasIndex, currentShapeIndex, ...canvas }) {
       >
         {canvas.text}
       </div>
-      {workingCanvasIndex === currentCanvasIndex &&
-        selectedShapeIndexes.includes(currentShapeIndex) &&
-        shapeRef.current &&
-        directions.map((direction) => (
-          <EditPointer
-            direction={direction}
-            key={direction}
-            {...{
-              height: shapeRef.current.clientHeight,
-              width: shapeRef.current.clientWidth,
-              ...canvas,
-            }}
-          />
-        ))}
     </>
   );
 }
