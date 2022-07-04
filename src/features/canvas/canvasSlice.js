@@ -34,6 +34,14 @@ const canvasSlice = createSlice({
     changeCanvasName: (state, { payload: { name, canvasIndex } }) => {
       state[canvasIndex].canvasName = name;
     },
+    modifyCanvas: (state, { payload }) => {
+      const canvasIndex = payload.canvasIndex;
+      delete payload.canvasIndex;
+      state[canvasIndex] = {
+        ...state[canvasIndex],
+        ...payload,
+      };
+    },
     addShape: (state, { payload }) => {
       const index = payload.canvasIndex;
       delete payload.canvasIndex;
@@ -66,6 +74,7 @@ export const {
   addShape,
   modifyShape,
   changeShapeIndex,
+  modifyCanvas,
 } = canvasSlice.actions;
 
 export default canvasSlice.reducer;
