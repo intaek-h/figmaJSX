@@ -325,7 +325,7 @@ function useDrawShape(elementRef, canvasIndex) {
           top: previewText.offsetTop,
           left: previewText.offsetLeft,
           height: previewText.clientHeight,
-          width: previewText.clientWidth,
+          width: previewText.clientWidth + 2,
           text: previewText.innerText,
           color: globalColor,
           fontSize: globalFontSize,
