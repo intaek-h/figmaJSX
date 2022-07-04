@@ -68,6 +68,9 @@ const utilitySlice = createSlice({
     addSelectedShapeIndexes: (state, { payload }) => {
       state.selectedShapeIndexes.push(payload);
     },
+    emptySelectedShapeIndexes: (state) => {
+      state.selectedShapeIndexes = [];
+    },
   },
 });
 
@@ -108,6 +111,7 @@ export const {
   setWorkingCanvasIndex,
   setHoveredShape,
   addSelectedShapeIndexes,
+  emptySelectedShapeIndexes,
   replaceSelectedShapeIndexes,
 } = utilitySlice.actions;
 

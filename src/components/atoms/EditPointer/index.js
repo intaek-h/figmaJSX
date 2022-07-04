@@ -65,7 +65,7 @@ function EditPointer({ direction, ...shape }) {
     left: position.left,
     width: "6px",
     height: "6px",
-    backgroundColor: "#f4f7ff",
+    backgroundColor: "#ffffff",
     position: "absolute",
     border: "1px solid #1673ff",
     cursor: position.cursor,

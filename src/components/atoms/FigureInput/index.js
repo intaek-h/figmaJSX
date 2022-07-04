@@ -23,7 +23,9 @@ function FigureInput({ figure }) {
   const [value, setValue] = useState(0);
 
   useEffect(() => {
-    if (!isSingleShapeSelected) return;
+    if (!isSingleShapeSelected) {
+      return setValue(0);
+    }
 
     const defaultValue =
       canvases[workingCanvasIndex].children[selectedShapeIndexes[0]];

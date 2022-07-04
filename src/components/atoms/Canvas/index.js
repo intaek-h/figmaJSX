@@ -62,15 +62,15 @@ function Canvas({ canvasIndex, ...canvas }) {
           shape.type === tools.TEXT ? (
             <ShapeText
               key={i}
-              canvasIndex={canvasIndex}
-              shapeIndex={i}
+              currentCanvasIndex={canvasIndex}
+              currentShapeIndex={i}
               {...shape}
             />
           ) : (
             <Shape
               key={i}
-              canvasIndex={canvasIndex}
-              shapeIndex={i}
+              currentCanvasIndex={canvasIndex}
+              currentShapeIndex={i}
               {...shape}
             />
           )

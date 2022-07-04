@@ -21,11 +21,7 @@ import useDragShape from "../../../hooks/useDragShape";
 import EditPointer from "../EditPointer";
 import style from "./ShapeText.module.scss";
 
-function ShapeText({
-  canvasIndex: currentCanvasIndex,
-  shapeIndex: currentShapeIndex,
-  ...canvas
-}) {
+function ShapeText({ currentCanvasIndex, currentShapeIndex, ...canvas }) {
   const dispatch = useDispatch();
 
   const globalColor = useSelector(selectGlobalColor);

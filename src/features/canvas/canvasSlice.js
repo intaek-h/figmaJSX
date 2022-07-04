@@ -63,6 +63,11 @@ const canvasSlice = createSlice({
       state[canvasIdx].children.splice(fromIdx, 1);
       state[canvasIdx].children.splice(toIdx, 0, shape);
     },
+    deleteShape: (state, { payload: { canvasIndex, shapeIndexArr } }) => {
+      state[canvasIndex].children = state[canvasIndex].children.filter(
+        (_, i) => shapeIndexArr.indexOf(i) == -1
+      );
+    },
   },
 });
 
@@ -75,6 +80,7 @@ export const {
   modifyShape,
   changeShapeIndex,
   modifyCanvas,
+  deleteShape,
 } = canvasSlice.actions;
 
 export default canvasSlice.reducer;
