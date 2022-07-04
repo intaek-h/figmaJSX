@@ -16,11 +16,7 @@ import useDragShape from "../../../hooks/useDragShape";
 import EditPointer from "../EditPointer";
 import styles from "./Shape.module.scss";
 
-function Shape({
-  canvasIndex: currentCanvasIndex,
-  shapeIndex: currentShapeIndex,
-  ...shape
-}) {
+function Shape({ currentCanvasIndex, currentShapeIndex, ...shape }) {
   const dispatch = useDispatch();
 
   const selectedShapeIndexes = useSelector(selectSelectedShapeIndexes);
@@ -49,7 +45,7 @@ function Shape({
       <div
         ref={shapeRef}
         className={styles.shape}
-        style={{ ...shape, border: isMouseHovered && "2px solid #1673ff" }}
+        style={{ ...shape, border: isMouseHovered && "1px solid #22a7c3" }}
         onMouseEnter={() => {
           dispatch(deactivateSelector());
           dispatch(

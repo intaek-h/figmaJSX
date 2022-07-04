@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import styles from "./ArtBoard.module.scss";
 import useDragToScroll from "../../../hooks/useDragToScroll";
@@ -7,6 +7,8 @@ import { selectAllCanvas } from "../../../features/canvas/canvasSlice";
 import Canvas from "../Canvas";
 import useMockZoom from "../../../hooks/useMockZoom";
 import useDrawCanvas from "../../../hooks/useDrawCanvas";
+import useGlobalKeyboardShortCut from "../../../hooks/useGlobalKeyboardShortCut";
+import { emptySelectedShapeIndexes } from "../../../features/utility/utilitySlice";
 
 let isFirstRender = true;
 
@@ -14,6 +16,7 @@ function ArtBoard() {
   const boardRef = useRef();
   const innerBoardRef = useRef();
 
+  const dispatch = useDispatch();
   const canvases = useSelector(selectAllCanvas);
 
   useDragToScroll(boardRef);
@@ -21,6 +24,8 @@ function ArtBoard() {
   useMockZoom(boardRef, innerBoardRef);
 
   useDrawCanvas(innerBoardRef);
+
+  useGlobalKeyboardShortCut();
 
   useEffect(() => {
     if (!boardRef.current || !isFirstRender) return;
@@ -32,6 +37,19 @@ function ArtBoard() {
     boardRef.current.scrollLeft =
       left - boardRef.current.clientWidth / 2 + width / 2;
   }, [canvases]);
+
+  useEffect(() => {
+    if (!innerBoardRef.current) return;
+
+    const artboard = innerBoardRef.current;
+    const resetSelection = () => {
+      dispatch(emptySelectedShapeIndexes());
+    };
+
+    artboard.addEventListener("mousedown", resetSelection);
+
+    return () => artboard.removeEventListener("mousedown", resetSelection);
+  });
 
   return (
     <div ref={boardRef} className={styles["artboard-wrapper"]}>

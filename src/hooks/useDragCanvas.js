@@ -1,70 +1,59 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import tools from "../constants/tools";
-import { modifyShape, selectAllCanvas } from "../features/canvas/canvasSlice";
-import {
-  selectCurrentScale,
-  selectCurrentTool,
-  selectIsDragScrolling,
-} from "../features/utility/utilitySlice";
+import { modifyCanvas } from "../features/canvas/canvasSlice";
+import { selectCurrentScale } from "../features/utility/utilitySlice";
 
-let selectionLocked = false;
-
-function useDragShape(shapeRef, canvasIndex, shapeIndex) {
+function useDragCanvas(canvasRef, canvasNameRef, canvasIndex) {
   const dispatch = useDispatch();
 
-  const currentTool = useSelector(selectCurrentTool);
   const currentScale = useSelector(selectCurrentScale);
-  const isDragScrolling = useSelector(selectIsDragScrolling);
-  const canvases = useSelector(selectAllCanvas);
 
   useEffect(() => {
-    if (!shapeRef.current || isDragScrolling || currentTool !== tools.SELECTOR)
-      return;
+    if (!canvasNameRef.current || !canvasRef.current) return;
 
-    const shape = shapeRef.current;
+    const canvasName = canvasNameRef.current;
+    const canvas = canvasRef.current;
+
     let movedTop;
     let movedLeft;
 
     const handleMouseDown = (e) => {
-      e.stopPropagation();
       const originalElPositionTop = e.currentTarget.offsetTop;
       const originalElPositionLeft = e.currentTarget.offsetLeft;
       const originalMousePositionTop = e.clientY;
       const originalMousePositionLeft = e.clientX;
 
-      selectionLocked = true;
+      canvasName.style.opacity = 0.5;
 
       const handleMouseMove = (e) => {
         movedTop = (e.clientY - originalMousePositionTop) / currentScale;
         movedLeft = (e.clientX - originalMousePositionLeft) / currentScale;
 
-        shape.style.transform = `translate(${movedLeft}px, ${movedTop}px)`;
+        canvasName.style.transform = `translate(${movedLeft}px, calc(${movedTop}px - 100%))`;
+        canvas.style.transform = `translate(${movedLeft}px, ${movedTop}px)`;
       };
 
       const handleMouseUp = () => {
-        if (!selectionLocked) return;
-
         const newShapeTop = originalElPositionTop + movedTop;
         const newShapeLeft = originalElPositionLeft + movedLeft;
 
-        shape.style.removeProperty("transform");
+        canvasName.style.removeProperty("transform");
+        canvasName.style.removeProperty("opacity");
+        canvas.style.removeProperty("transform");
 
         if (movedTop || movedLeft) {
           dispatch(
-            modifyShape({
+            modifyCanvas({
               top: newShapeTop,
               left: newShapeLeft,
               canvasIndex,
-              shapeIndex,
             })
           );
         }
 
         movedTop = 0;
         movedLeft = 0;
-        selectionLocked = false;
 
         window.removeEventListener("mousemove", handleMouseMove);
         window.removeEventListener("mouseup", handleMouseUp);
@@ -74,21 +63,10 @@ function useDragShape(shapeRef, canvasIndex, shapeIndex) {
       window.addEventListener("mouseup", handleMouseUp);
     };
 
-    shape.addEventListener("mousedown", handleMouseDown);
+    canvasName.addEventListener("mousedown", handleMouseDown);
 
-    return () => {
-      shape.removeEventListener("mousedown", handleMouseDown);
-    };
-  }, [
-    canvasIndex,
-    currentScale,
-    currentTool,
-    dispatch,
-    isDragScrolling,
-    shapeIndex,
-    shapeRef,
-    canvases,
-  ]);
+    return () => canvasName.removeEventListener("mouseDown", handleMouseDown);
+  }, [currentScale, dispatch, canvasIndex, canvasNameRef, canvasRef]);
 }
 
-export default useDragShape;
+export default useDragCanvas;

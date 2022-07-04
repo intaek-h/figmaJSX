@@ -15,12 +15,16 @@ import {
   selectIsDragScrolling,
   setCurrentTool,
   selectIsSelectorActivated,
+  replaceSelectedShapeIndexes,
+  emptySelectedShapeIndexes,
+  setWorkingCanvasIndex,
 } from "../features/utility/utilitySlice";
 import computePreviewElement from "../utilities/computePreviewElement";
 import computePreviewLine from "../utilities/computePreviewLine";
+import computeIntersection from "../utilities/computeIntersection";
 import tools from "../constants/tools";
 
-function useDrawShape(elementRef, canvasIndex) {
+function useDrawShape(elementRef, canvasIndex, shapes) {
   const dispatch = useDispatch();
 
   const currentScale = useSelector(selectCurrentScale);
@@ -54,7 +58,7 @@ function useDrawShape(elementRef, canvasIndex) {
       element.appendChild(previewShape);
 
       const handleMouseMove = (e) => {
-        const { height, left, top, width } = computePreviewElement(
+        const previewShapeStyles = computePreviewElement(
           { x: startLeft, y: startTop },
           {
             x: (e.clientX - elementLeft) / currentScale,
@@ -62,27 +66,37 @@ function useDrawShape(elementRef, canvasIndex) {
           }
         );
 
-        previewShape.style.height = height + "px";
-        previewShape.style.width = width + "px";
-        previewShape.style.top = top + "px";
-        previewShape.style.left = left + "px";
+        const selectedShapeIndexes = [];
+
+        shapes.forEach((shape, i) => {
+          if (computeIntersection(previewShapeStyles, shape)) {
+            selectedShapeIndexes.push(i);
+          }
+        });
+
+        dispatch(replaceSelectedShapeIndexes([...selectedShapeIndexes]));
+
+        previewShape.style.height = previewShapeStyles.height + "px";
+        previewShape.style.width = previewShapeStyles.width + "px";
+        previewShape.style.top = previewShapeStyles.top + "px";
+        previewShape.style.left = previewShapeStyles.left + "px";
       };
 
       const handleMouseUp = () => {
         if (e.button === 2) {
           previewShape.remove();
-          element.removeEventListener("mousemove", handleMouseMove);
-          element.removeEventListener("mouseup", handleMouseUp);
+          window.removeEventListener("mousemove", handleMouseMove);
+          window.removeEventListener("mouseup", handleMouseUp);
           return;
         }
 
         previewShape.remove();
-        element.removeEventListener("mousemove", handleMouseMove);
-        element.removeEventListener("mouseup", handleMouseUp);
+        window.removeEventListener("mousemove", handleMouseMove);
+        window.removeEventListener("mouseup", handleMouseUp);
       };
 
-      element.addEventListener("mousemove", handleMouseMove);
-      element.addEventListener("mouseup", handleMouseUp);
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
     };
 
     const handleMouseDownRectangle = (e) => {
@@ -120,8 +134,8 @@ function useDrawShape(elementRef, canvasIndex) {
       const handleMouseUp = () => {
         if (e.button === 2) {
           previewShape.remove();
-          element.removeEventListener("mousemove", handleMouseMove);
-          element.removeEventListener("mouseup", handleMouseUp);
+          window.removeEventListener("mousemove", handleMouseMove);
+          window.removeEventListener("mouseup", handleMouseUp);
           return;
         }
 
@@ -140,12 +154,12 @@ function useDrawShape(elementRef, canvasIndex) {
           dispatch(addShape(coordinates));
 
         previewShape.remove();
-        element.removeEventListener("mousemove", handleMouseMove);
-        element.removeEventListener("mouseup", handleMouseUp);
+        window.removeEventListener("mousemove", handleMouseMove);
+        window.removeEventListener("mouseup", handleMouseUp);
       };
 
-      element.addEventListener("mousemove", handleMouseMove);
-      element.addEventListener("mouseup", handleMouseUp);
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
     };
 
     const handleMouseDownEllipse = (e) => {
@@ -184,8 +198,8 @@ function useDrawShape(elementRef, canvasIndex) {
       const handleMouseUp = () => {
         if (e.button === 2) {
           previewShape.remove();
-          element.removeEventListener("mousemove", handleMouseMove);
-          element.removeEventListener("mouseup", handleMouseUp);
+          window.removeEventListener("mousemove", handleMouseMove);
+          window.removeEventListener("mouseup", handleMouseUp);
           return;
         }
 
@@ -205,12 +219,12 @@ function useDrawShape(elementRef, canvasIndex) {
           dispatch(addShape(coordinates));
 
         previewShape.remove();
-        element.removeEventListener("mousemove", handleMouseMove);
-        element.removeEventListener("mouseup", handleMouseUp);
+        window.removeEventListener("mousemove", handleMouseMove);
+        window.removeEventListener("mouseup", handleMouseUp);
       };
 
-      element.addEventListener("mousemove", handleMouseMove);
-      element.addEventListener("mouseup", handleMouseUp);
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
     };
 
     const handleMouseDownLine = (e) => {
@@ -252,8 +266,8 @@ function useDrawShape(elementRef, canvasIndex) {
       const handleMouseUp = () => {
         if (e.button === 2) {
           previewShape.remove();
-          element.removeEventListener("mousemove", handleMouseMove);
-          element.removeEventListener("mouseup", handleMouseUp);
+          window.removeEventListener("mousemove", handleMouseMove);
+          window.removeEventListener("mouseup", handleMouseUp);
           return;
         }
 
@@ -272,12 +286,12 @@ function useDrawShape(elementRef, canvasIndex) {
           dispatch(addShape(coordinates));
 
         previewShape.remove();
-        element.removeEventListener("mousemove", handleMouseMove);
-        element.removeEventListener("mouseup", handleMouseUp);
+        window.removeEventListener("mousemove", handleMouseMove);
+        window.removeEventListener("mouseup", handleMouseUp);
       };
 
-      element.addEventListener("mousemove", handleMouseMove);
-      element.addEventListener("mouseup", handleMouseUp);
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
     };
 
     const handleClickText = (e) => {
@@ -325,7 +339,7 @@ function useDrawShape(elementRef, canvasIndex) {
           top: previewText.offsetTop,
           left: previewText.offsetLeft,
           height: previewText.clientHeight,
-          width: previewText.clientWidth,
+          width: previewText.clientWidth + 2,
           text: previewText.innerText,
           color: globalColor,
           fontSize: globalFontSize,
@@ -342,18 +356,28 @@ function useDrawShape(elementRef, canvasIndex) {
     if (currentTool === tools.SELECTOR) {
       if (!isSelectorActivated) return;
 
+      const resetSelection = (e) => {
+        e.stopPropagation();
+        dispatch(setWorkingCanvasIndex(canvasIndex));
+        dispatch(emptySelectedShapeIndexes());
+      };
+
       element.style.cursor = "default";
       element.addEventListener("mousedown", handleMouseDownSelector);
+      element.addEventListener("mousedown", resetSelection);
 
-      return () =>
+      return () => {
         element.removeEventListener("mousedown", handleMouseDownSelector);
+        element.removeEventListener("mousedown", resetSelection);
+      };
     }
     if (currentTool === tools.RECTANGLE) {
       element.style.cursor = "crosshair";
       element.addEventListener("mousedown", handleMouseDownRectangle);
 
-      return () =>
+      return () => {
         element.removeEventListener("mousedown", handleMouseDownRectangle);
+      };
     }
     if (currentTool === tools.ELLIPSE) {
       element.style.cursor = "crosshair";
@@ -386,6 +410,7 @@ function useDrawShape(elementRef, canvasIndex) {
     isDragScrolling,
     isSelectorActivated,
     globalThickness,
+    shapes,
   ]);
 }
 
