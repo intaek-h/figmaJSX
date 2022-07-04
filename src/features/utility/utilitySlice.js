@@ -63,6 +63,10 @@ const utilitySlice = createSlice({
       state.hoveredShape = { canvasIndex, shapeIndex };
     },
     replaceSelectedShapeIndexes: (state, { payload }) => {
+      if (typeof payload === "object") {
+        state.selectedShapeIndexes = [...payload];
+        return;
+      }
       state.selectedShapeIndexes = [payload];
     },
     addSelectedShapeIndexes: (state, { payload }) => {

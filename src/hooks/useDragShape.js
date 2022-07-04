@@ -28,6 +28,7 @@ function useDragShape(shapeRef, canvasIndex, shapeIndex) {
     let movedLeft;
 
     const handleMouseDown = (e) => {
+      e.stopPropagation();
       const originalElPositionTop = e.currentTarget.offsetTop;
       const originalElPositionLeft = e.currentTarget.offsetLeft;
       const originalMousePositionTop = e.clientY;
