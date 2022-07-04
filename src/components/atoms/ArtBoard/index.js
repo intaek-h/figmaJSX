@@ -7,6 +7,7 @@ import { selectAllCanvas } from "../../../features/canvas/canvasSlice";
 import Canvas from "../Canvas";
 import useMockZoom from "../../../hooks/useMockZoom";
 import useDrawCanvas from "../../../hooks/useDrawCanvas";
+import useGlobalKeyboardShortCut from "../../../hooks/useGlobalKeyboardShortCut";
 
 let isFirstRender = true;
 
@@ -21,6 +22,8 @@ function ArtBoard() {
   useMockZoom(boardRef, innerBoardRef);
 
   useDrawCanvas(innerBoardRef);
+
+  useGlobalKeyboardShortCut();
 
   useEffect(() => {
     if (!boardRef.current || !isFirstRender) return;

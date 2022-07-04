@@ -16,11 +16,7 @@ import useDragShape from "../../../hooks/useDragShape";
 import EditPointer from "../EditPointer";
 import styles from "./Shape.module.scss";
 
-function Shape({
-  canvasIndex: currentCanvasIndex,
-  shapeIndex: currentShapeIndex,
-  ...shape
-}) {
+function Shape({ currentCanvasIndex, currentShapeIndex, ...shape }) {
   const dispatch = useDispatch();
 
   const selectedShapeIndexes = useSelector(selectSelectedShapeIndexes);
