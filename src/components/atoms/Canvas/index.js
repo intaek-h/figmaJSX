@@ -18,7 +18,7 @@ function Canvas({ canvasIndex, ...canvas }) {
 
   const [isDoubleClicked, setIsDoubleClicked] = useState(false);
 
-  useDrawShape(canvasRef, canvasIndex);
+  useDrawShape(canvasRef, canvasIndex, canvas.children);
 
   useDragCanvas(canvasRef, nameRef, canvasIndex);
 
