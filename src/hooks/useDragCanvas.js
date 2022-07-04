@@ -4,13 +4,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { modifyCanvas } from "../features/canvas/canvasSlice";
 import { selectCurrentScale } from "../features/utility/utilitySlice";
 
-function useDragCanvas(canvasRef, canvasNameRef, canvasIndex) {
+function useDragCanvas(
+  canvasRef,
+  canvasNameRef,
+  canvasIndex,
+  isRendered = true
+) {
   const dispatch = useDispatch();
 
   const currentScale = useSelector(selectCurrentScale);
 
   useEffect(() => {
-    if (!canvasNameRef.current || !canvasRef.current) return;
+    if (!canvasNameRef.current || !canvasRef.current || !isRendered) return;
 
     const canvasName = canvasNameRef.current;
     const canvas = canvasRef.current;
@@ -56,17 +61,23 @@ function useDragCanvas(canvasRef, canvasNameRef, canvasIndex) {
         movedLeft = 0;
 
         window.removeEventListener("mousemove", handleMouseMove);
-        window.removeEventListener("mouseup", handleMouseUp);
       };
 
       window.addEventListener("mousemove", handleMouseMove);
-      window.addEventListener("mouseup", handleMouseUp);
+      window.addEventListener("mouseup", handleMouseUp, { once: true });
     };
 
     canvasName.addEventListener("mousedown", handleMouseDown);
 
     return () => canvasName.removeEventListener("mouseDown", handleMouseDown);
-  }, [currentScale, dispatch, canvasIndex, canvasNameRef, canvasRef]);
+  }, [
+    currentScale,
+    dispatch,
+    canvasIndex,
+    canvasNameRef,
+    canvasRef,
+    isRendered,
+  ]);
 }
 
 export default useDragCanvas;

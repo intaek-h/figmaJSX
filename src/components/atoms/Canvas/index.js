@@ -1,16 +1,26 @@
 import { useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
+import directions from "../../../constants/directions";
 import tools from "../../../constants/tools";
 import { changeCanvasName } from "../../../features/canvas/canvasSlice";
+import {
+  selectCurrentWorkingCanvasIndex,
+  selectSelectedShapeIndexes,
+} from "../../../features/utility/utilitySlice";
 import useDragCanvas from "../../../hooks/useDragCanvas";
 import useDrawShape from "../../../hooks/useDrawShape";
 import Shape from "../Shape";
 import ShapeText from "../ShapeText";
+import EditPointer from "../EditPointer";
 import cn from "./Canvas.module.scss";
+import computeSelectionBox from "../../../utilities/computeSelectionBox";
 
 function Canvas({ canvasIndex, ...canvas }) {
   const dispatch = useDispatch();
+
+  const workingCanvasIndex = useSelector(selectCurrentWorkingCanvasIndex);
+  const selectedShapeIndexes = useSelector(selectSelectedShapeIndexes);
 
   const canvasRef = useRef();
   const inputRef = useRef();
@@ -20,7 +30,7 @@ function Canvas({ canvasIndex, ...canvas }) {
 
   useDrawShape(canvasRef, canvasIndex, canvas.children);
 
-  useDragCanvas(canvasRef, nameRef, canvasIndex);
+  useDragCanvas(canvasRef, nameRef, canvasIndex, !isDoubleClicked);
 
   return (
     <>
@@ -75,6 +85,15 @@ function Canvas({ canvasIndex, ...canvas }) {
             />
           )
         )}
+        {workingCanvasIndex === canvasIndex && selectedShapeIndexes.length
+          ? directions.map((direction) => (
+              <EditPointer
+                direction={direction}
+                key={direction}
+                {...computeSelectionBox(canvas.children, selectedShapeIndexes)}
+              />
+            ))
+          : null}
       </div>
     </>
   );

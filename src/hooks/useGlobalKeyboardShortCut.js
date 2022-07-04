@@ -20,6 +20,7 @@ function useGlobalKeyboardShortCut() {
   useEffect(() => {
     const deleteShapeShortCut = (e) => {
       if (e.key === "Backspace" && selectedShapeIndexes.length) {
+        e.preventDefault();
         dispatch(emptySelectedShapeIndexes());
         dispatch(
           deleteShape({
@@ -50,6 +51,7 @@ function useGlobalKeyboardShortCut() {
     };
 
     const rectangleToolShortCut = (e) => {
+      if ((e.ctrlKey && e.key === "r") || (e.metaKey && e.key === "r")) return;
       if (e.key === "r") {
         e.preventDefault();
         dispatch(setCurrentTool(tools.RECTANGLE));
@@ -57,6 +59,7 @@ function useGlobalKeyboardShortCut() {
     };
 
     const ellipseToolShortCut = (e) => {
+      if ((e.ctrlKey && e.key === "e") || (e.metaKey && e.key === "e")) return;
       if (e.key === "e") {
         e.preventDefault();
         dispatch(setCurrentTool(tools.ELLIPSE));
@@ -64,6 +67,7 @@ function useGlobalKeyboardShortCut() {
     };
 
     const lineToolShortCut = (e) => {
+      if ((e.ctrlKey && e.key === "l") || (e.metaKey && e.key === "l")) return;
       if (e.key === "l") {
         e.preventDefault();
         dispatch(setCurrentTool(tools.LINE));
@@ -71,6 +75,7 @@ function useGlobalKeyboardShortCut() {
     };
 
     const selectorToolShortCut = (e) => {
+      if ((e.ctrlKey && e.key === "v") || (e.metaKey && e.key === "v")) return;
       if (e.key === "v") {
         e.preventDefault();
         dispatch(setCurrentTool(tools.SELECTOR));
@@ -78,6 +83,7 @@ function useGlobalKeyboardShortCut() {
     };
 
     const textToolShortCut = (e) => {
+      if ((e.ctrlKey && e.key === "t") || (e.metaKey && e.key === "t")) return;
       if (e.key === "t") {
         e.preventDefault();
         dispatch(setCurrentTool(tools.TEXT));
@@ -85,6 +91,7 @@ function useGlobalKeyboardShortCut() {
     };
 
     const canvasToolShortCut = (e) => {
+      if ((e.ctrlKey && e.key === "c") || (e.metaKey && e.key === "c")) return;
       if (e.key === "c") {
         e.preventDefault();
         dispatch(setCurrentTool(tools.CANVAS));

@@ -42,6 +42,7 @@ function ArtBoard() {
     if (!innerBoardRef.current) return;
 
     const artboard = innerBoardRef.current;
+
     const resetSelection = () => {
       dispatch(emptySelectedShapeIndexes());
     };
