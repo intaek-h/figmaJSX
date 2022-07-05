@@ -13,7 +13,7 @@ import {
 import useDragShape from "../../../hooks/useDragShape";
 import styles from "./Shape.module.scss";
 
-function Shape({ currentCanvasIndex, currentShapeIndex, ...shape }) {
+function Shape({ canvasRef, currentCanvasIndex, currentShapeIndex, ...shape }) {
   const dispatch = useDispatch();
 
   const workingCanvasIndex = useSelector(selectCurrentWorkingCanvasIndex);
@@ -23,7 +23,7 @@ function Shape({ currentCanvasIndex, currentShapeIndex, ...shape }) {
 
   const [isMouseHovered, setIsMouseHovered] = useState(false);
 
-  useDragShape(shapeRef, currentCanvasIndex, currentShapeIndex);
+  useDragShape(shapeRef, canvasRef, currentCanvasIndex, currentShapeIndex);
 
   useEffect(() => {
     if (

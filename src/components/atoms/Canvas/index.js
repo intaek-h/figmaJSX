@@ -74,6 +74,7 @@ function Canvas({ canvasIndex, ...canvas }) {
               key={i}
               currentCanvasIndex={canvasIndex}
               currentShapeIndex={i}
+              canvasRef={canvasRef}
               {...shape}
             />
           ) : (
@@ -81,6 +82,7 @@ function Canvas({ canvasIndex, ...canvas }) {
               key={i}
               currentCanvasIndex={canvasIndex}
               currentShapeIndex={i}
+              canvasRef={canvasRef}
               {...shape}
             />
           )

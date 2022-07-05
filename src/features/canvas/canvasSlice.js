@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 
 const generateSampleCanvas = (
   top = 1000,
@@ -45,8 +45,26 @@ const canvasSlice = createSlice({
     addShape: (state, { payload }) => {
       const index = payload.canvasIndex;
       delete payload.canvasIndex;
-      payload.name = `${payload.type} ${state[index].children.length}`;
+      const xAxisSnaps = [
+        payload.left,
+        payload.left + payload.width / 2,
+        payload.left + payload.width,
+      ];
+      const yAxisSnaps = [
+        payload.top,
+        payload.top + payload.height / 2,
+        payload.top + payload.height,
+      ];
+      const xAxisSnapSet = new Set(
+        current(state[index].xAxisSnap).concat(xAxisSnaps)
+      );
+      const yAxisSnapSet = new Set(
+        current(state[index].yAxisSnap).concat(yAxisSnaps)
+      );
       state[index].children.push(payload);
+      state[index].xAxisSnap.push(...[...xAxisSnapSet]);
+      state[index].yAxisSnap.push(...[...yAxisSnapSet]);
+      payload.name = `${payload.type} ${state[index].children.length}`;
     },
     modifyShape: (state, { payload }) => {
       const canvasIndex = payload.canvasIndex;
@@ -56,6 +74,49 @@ const canvasSlice = createSlice({
       state[canvasIndex].children[shapeIndex] = {
         ...state[canvasIndex].children[shapeIndex],
         ...payload,
+      };
+    },
+    changeShapePosition: (state, { payload }) => {
+      const canvasIndex = payload.canvasIndex;
+      const shapeIndex = payload.shapeIndex;
+      const prevXAxisSnaps = [
+        payload.prevLeft,
+        payload.prevLeft + payload.prevWidth / 2,
+        payload.prevLeft + payload.prevWidth,
+      ];
+      const prevYAxisSnaps = [
+        payload.prevTop,
+        payload.prevTop + payload.prevHeight / 2,
+        payload.prevTop + payload.prevHeight,
+      ];
+      const xAxisSnaps = [
+        payload.left,
+        payload.left + payload.prevWidth / 2,
+        payload.left + payload.prevWidth,
+      ];
+      const yAxisSnaps = [
+        payload.top,
+        payload.top + payload.prevHeight / 2,
+        payload.top + payload.prevHeight,
+      ];
+      const filteredXAxisSnaps = [];
+      current(state[canvasIndex].xAxisSnap).forEach((num) => {
+        if (!prevXAxisSnaps.includes(num)) filteredXAxisSnaps.push(num);
+      });
+      const filteredYAxisSnaps = [];
+      current(state[canvasIndex].yAxisSnap).forEach((num) => {
+        if (!prevYAxisSnaps.includes(num)) filteredYAxisSnaps.push(num);
+      });
+      const newXAxisSnap = new Set(filteredXAxisSnaps.concat(xAxisSnaps));
+      const newYAxisSnap = new Set(filteredYAxisSnaps.concat(yAxisSnaps));
+      state[canvasIndex].xAxisSnap = [...newXAxisSnap];
+      state[canvasIndex].yAxisSnap = [...newYAxisSnap];
+      state[canvasIndex].children[shapeIndex] = {
+        ...state[canvasIndex].children[shapeIndex],
+        ...{
+          top: payload.top,
+          left: payload.left,
+        },
       };
     },
     changeShapeIndex: (state, { payload: { canvasIdx, fromIdx, toIdx } }) => {
@@ -73,6 +134,12 @@ const canvasSlice = createSlice({
 
 export const selectAllCanvas = (state) => state.workbench.present.canvas;
 
+export const selectXAxisSnapPoints = (canvasIdx) => (state) =>
+  state.workbench.present.canvas[canvasIdx].xAxisSnap;
+
+export const selectYAxisSnapPoints = (canvasIdx) => (state) =>
+  state.workbench.present.canvas[canvasIdx].yAxisSnap;
+
 export const {
   createCanvas,
   changeCanvasName,
@@ -81,6 +148,7 @@ export const {
   changeShapeIndex,
   modifyCanvas,
   deleteShape,
+  changeShapePosition,
 } = canvasSlice.actions;
 
 export default canvasSlice.reducer;
