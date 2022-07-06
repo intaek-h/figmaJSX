@@ -11,8 +11,6 @@ const generateSampleCanvas = (
   left,
   width,
   height,
-  xAxisSnap: [0, width / 2, width],
-  yAxisSnap: [0, height / 2, height],
   selectedShapes: [],
   children: [],
 });
@@ -28,7 +26,6 @@ const canvasSlice = createSlice({
         ...generateSampleCanvas(top, left, width, height),
         canvasName: `canvas_${state.length}`,
       };
-
       state.push(newCanvas);
     },
     changeCanvasName: (state, { payload: { name, canvasIndex } }) => {
@@ -45,8 +42,8 @@ const canvasSlice = createSlice({
     addShape: (state, { payload }) => {
       const index = payload.canvasIndex;
       delete payload.canvasIndex;
-      payload.name = `${payload.type} ${state[index].children.length}`;
       state[index].children.push(payload);
+      payload.name = `${payload.type} ${state[index].children.length}`;
     },
     modifyShape: (state, { payload }) => {
       const canvasIndex = payload.canvasIndex;

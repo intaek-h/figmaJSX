@@ -6,14 +6,14 @@ import Header from "../../molecules/Header";
 
 function WorkbenchPage() {
   return (
-    <div>
+    <>
       <Header />
       <div className={styles.workbench}>
         <LeftSideBar />
         <ArtBoard />
         <RightSideBar />
       </div>
-    </div>
+    </>
   );
 }
 

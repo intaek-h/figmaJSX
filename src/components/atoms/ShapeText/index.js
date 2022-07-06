@@ -18,7 +18,12 @@ import {
 import useDragShape from "../../../hooks/useDragShape";
 import style from "./ShapeText.module.scss";
 
-function ShapeText({ currentCanvasIndex, currentShapeIndex, ...canvas }) {
+function ShapeText({
+  canvasRef,
+  currentCanvasIndex,
+  currentShapeIndex,
+  ...canvas
+}) {
   const dispatch = useDispatch();
 
   const globalColor = useSelector(selectGlobalColor);
@@ -34,6 +39,7 @@ function ShapeText({ currentCanvasIndex, currentShapeIndex, ...canvas }) {
 
   useDragShape(
     shapeRef,
+    canvasRef,
     currentCanvasIndex,
     currentShapeIndex,
     !isDoubleClicked
