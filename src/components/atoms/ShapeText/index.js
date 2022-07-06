@@ -36,7 +36,7 @@ function ShapeText({
 
   const [isDoubleClicked, setIsDoubleClicked] = useState(false);
   const [isMouseHovered, setIsMouseHovered] = useState(false);
-  console.log("...canvas", canvas);
+
   useDragShape(
     shapeRef,
     canvasRef,

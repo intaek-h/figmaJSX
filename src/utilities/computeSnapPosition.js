@@ -1,34 +1,34 @@
-function computeSnapPosition(snappables, left, right) {
-  let nearestDistanceFromLeft = Number.MAX_SAFE_INTEGER;
-  let snappablePositionFromLeft;
+function computeSnapPosition(snappables, pointA, pointB) {
+  let nearestDistanceFromPointA = Number.MAX_SAFE_INTEGER;
+  let snappablePositionFromPointA;
 
   snappables.forEach((position) => {
-    const distance = Math.abs(position - left);
+    const distance = Math.abs(position - pointA);
 
-    nearestDistanceFromLeft = Math.min(nearestDistanceFromLeft, distance);
+    nearestDistanceFromPointA = Math.min(nearestDistanceFromPointA, distance);
 
-    if (nearestDistanceFromLeft === distance) {
-      snappablePositionFromLeft = position;
+    if (nearestDistanceFromPointA === distance) {
+      snappablePositionFromPointA = position;
     }
   });
 
-  let nearestDistanceFromRight = Number.MAX_SAFE_INTEGER;
-  let snappablePositionFromRight;
+  let nearestDistanceFromPointB = Number.MAX_SAFE_INTEGER;
+  let snappablePositionFromPointB;
 
   snappables.forEach((position) => {
-    const distance = Math.abs(position - right);
+    const distance = Math.abs(position - pointB);
 
-    nearestDistanceFromRight = Math.min(nearestDistanceFromRight, distance);
+    nearestDistanceFromPointB = Math.min(nearestDistanceFromPointB, distance);
 
-    if (nearestDistanceFromRight === distance) {
-      snappablePositionFromRight = position;
+    if (nearestDistanceFromPointB === distance) {
+      snappablePositionFromPointB = position;
     }
   });
 
-  if (nearestDistanceFromLeft < nearestDistanceFromRight) {
-    return snappablePositionFromLeft;
+  if (nearestDistanceFromPointA < nearestDistanceFromPointB) {
+    return snappablePositionFromPointA;
   }
 
-  return snappablePositionFromRight;
+  return snappablePositionFromPointB;
 }
 export default computeSnapPosition;

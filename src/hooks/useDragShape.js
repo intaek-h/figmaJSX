@@ -2,11 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import tools from "../constants/tools";
-import {
-  changeShapePosition,
-  selectXAxisSnapPoints,
-  selectYAxisSnapPoints,
-} from "../features/canvas/canvasSlice";
+import { modifyShape, selectAllCanvas } from "../features/canvas/canvasSlice";
 import {
   selectCurrentScale,
   selectCurrentTool,
@@ -14,7 +10,7 @@ import {
 } from "../features/utility/utilitySlice";
 import computeSnapPosition from "../utilities/computeSnapPosition";
 
-const GRAVITY = 10;
+const GRAVITY = 5;
 
 function useDragShape(
   shapeRef,
@@ -28,8 +24,7 @@ function useDragShape(
   const currentTool = useSelector(selectCurrentTool);
   const currentScale = useSelector(selectCurrentScale);
   const isDragScrolling = useSelector(selectIsDragScrolling);
-  const xAxisSnapPoints = useSelector(selectXAxisSnapPoints(canvasIndex));
-  const yAxisSnapPoints = useSelector(selectYAxisSnapPoints(canvasIndex));
+  const canvases = useSelector(selectAllCanvas);
 
   useEffect(() => {
     if (
@@ -57,6 +52,37 @@ function useDragShape(
       const originalElWidth = e.currentTarget.offsetWidth;
       const originalMousePositionTop = e.clientY;
       const originalMousePositionLeft = e.clientX;
+      const canvasFigures = e.currentTarget.offsetParent;
+
+      const shapes = canvases[canvasIndex].children.slice();
+      const filteredXAxisSnapPoints = [];
+      const filteredYAxisSnapPoints = [];
+
+      shapes.splice(shapeIndex, 1);
+
+      shapes.forEach((shape) => {
+        filteredXAxisSnapPoints.push(
+          shape.left,
+          shape.left + shape.width / 2,
+          shape.left + shape.width
+        );
+        filteredYAxisSnapPoints.push(
+          shape.top,
+          shape.top + shape.height / 2,
+          shape.top + shape.height
+        );
+      });
+
+      filteredXAxisSnapPoints.push(
+        canvasFigures.clientLeft,
+        canvasFigures.clientLeft + canvasFigures.clientWidth / 2,
+        canvasFigures.clientLeft + canvasFigures.clientWidth
+      );
+      filteredYAxisSnapPoints.push(
+        canvasFigures.clientTop,
+        canvasFigures.clientTop + canvasFigures.clientHeight / 2,
+        canvasFigures.clientTop + canvasFigures.clientHeight
+      );
 
       let movedTop;
       let movedLeft;
@@ -86,12 +112,12 @@ function useDragShape(
         verRightLine.style.visibility = "hidden";
 
         nearestPossibleSnapAtX = computeSnapPosition(
-          xAxisSnapPoints,
+          filteredXAxisSnapPoints,
           currentLeft,
           currentLeft + originalElWidth
         );
         nearestPossibleSnapAtY = computeSnapPosition(
-          yAxisSnapPoints,
+          filteredYAxisSnapPoints,
           currentTop,
           currentTop + originalElHeight
         );
@@ -100,6 +126,7 @@ function useDragShape(
           shape.style.left = nearestPossibleSnapAtX + "px";
           isLocked = true;
           isLeftAttached = true;
+          isRightAttached = false;
         } else if (
           Math.abs(currentLeft + originalElWidth - nearestPossibleSnapAtX) <
           GRAVITY
@@ -107,6 +134,7 @@ function useDragShape(
           shape.style.left = nearestPossibleSnapAtX - originalElWidth + "px";
           isLocked = true;
           isRightAttached = true;
+          isLeftAttached = false;
         } else {
           shape.style.left = currentLeft + "px";
           isLocked = false;
@@ -118,6 +146,7 @@ function useDragShape(
           shape.style.top = nearestPossibleSnapAtY + "px";
           isLocked = true;
           isTopAttached = true;
+          isBottomAttached = false;
         } else if (
           Math.abs(currentTop + originalElHeight - nearestPossibleSnapAtY) <
           GRAVITY
@@ -125,6 +154,7 @@ function useDragShape(
           shape.style.top = nearestPossibleSnapAtY - originalElHeight + "px";
           isLocked = true;
           isBottomAttached = true;
+          isTopAttached = false;
         } else {
           shape.style.top = currentTop + "px";
           isLocked = false;
@@ -177,117 +207,81 @@ function useDragShape(
         if (movedTop || movedLeft) {
           if (isLeftAttached && isTopAttached) {
             dispatch(
-              changeShapePosition({
+              modifyShape({
                 top: nearestPossibleSnapAtY,
                 left: nearestPossibleSnapAtX,
-                prevTop: originalElPositionTop,
-                prevLeft: originalElPositionLeft,
-                prevHeight: originalElHeight,
-                prevWidth: originalElWidth,
                 canvasIndex,
                 shapeIndex,
               })
             );
           } else if (isLeftAttached && isBottomAttached) {
             dispatch(
-              changeShapePosition({
+              modifyShape({
                 top: nearestPossibleSnapAtY - originalElHeight,
                 left: nearestPossibleSnapAtX,
-                prevTop: originalElPositionTop,
-                prevLeft: originalElPositionLeft,
-                prevHeight: originalElHeight,
-                prevWidth: originalElWidth,
                 canvasIndex,
                 shapeIndex,
               })
             );
           } else if (isRightAttached && isTopAttached) {
             dispatch(
-              changeShapePosition({
+              modifyShape({
                 top: nearestPossibleSnapAtY,
                 left: nearestPossibleSnapAtX - originalElWidth,
-                prevTop: originalElPositionTop,
-                prevLeft: originalElPositionLeft,
-                prevHeight: originalElHeight,
-                prevWidth: originalElWidth,
                 canvasIndex,
                 shapeIndex,
               })
             );
           } else if (isRightAttached && isBottomAttached) {
             dispatch(
-              changeShapePosition({
+              modifyShape({
                 top: nearestPossibleSnapAtY - originalElHeight,
                 left: nearestPossibleSnapAtX - originalElWidth,
-                prevTop: originalElPositionTop,
-                prevLeft: originalElPositionLeft,
-                prevHeight: originalElHeight,
-                prevWidth: originalElWidth,
                 canvasIndex,
                 shapeIndex,
               })
             );
           } else if (isLeftAttached) {
             dispatch(
-              changeShapePosition({
+              modifyShape({
                 top: newShapeTop,
                 left: nearestPossibleSnapAtX,
-                prevTop: originalElPositionTop,
-                prevLeft: originalElPositionLeft,
-                prevHeight: originalElHeight,
-                prevWidth: originalElWidth,
                 canvasIndex,
                 shapeIndex,
               })
             );
           } else if (isRightAttached) {
             dispatch(
-              changeShapePosition({
+              modifyShape({
                 top: newShapeTop,
                 left: nearestPossibleSnapAtX - originalElWidth,
-                prevTop: originalElPositionTop,
-                prevLeft: originalElPositionLeft,
-                prevHeight: originalElHeight,
-                prevWidth: originalElWidth,
                 canvasIndex,
                 shapeIndex,
               })
             );
           } else if (isTopAttached) {
             dispatch(
-              changeShapePosition({
+              modifyShape({
                 top: nearestPossibleSnapAtY,
                 left: newShapeLeft,
-                prevTop: originalElPositionTop,
-                prevLeft: originalElPositionLeft,
-                prevHeight: originalElHeight,
-                prevWidth: originalElWidth,
                 canvasIndex,
                 shapeIndex,
               })
             );
           } else if (isBottomAttached) {
             dispatch(
-              changeShapePosition({
+              modifyShape({
                 top: nearestPossibleSnapAtY - originalElHeight,
                 left: newShapeLeft,
-                prevTop: originalElPositionTop,
-                prevLeft: originalElPositionLeft,
-                prevHeight: originalElHeight,
-                prevWidth: originalElWidth,
                 canvasIndex,
                 shapeIndex,
               })
             );
           } else {
             dispatch(
-              changeShapePosition({
+              modifyShape({
                 top: newShapeTop,
                 left: newShapeLeft,
-                prevTop: originalElPositionTop,
-                prevLeft: originalElPositionLeft,
-                prevHeight: originalElHeight,
-                prevWidth: originalElWidth,
                 canvasIndex,
                 shapeIndex,
               })
@@ -313,6 +307,7 @@ function useDragShape(
   }, [
     canvasIndex,
     canvasRef,
+    canvases,
     currentScale,
     currentTool,
     dispatch,
@@ -320,8 +315,6 @@ function useDragShape(
     isRendered,
     shapeIndex,
     shapeRef,
-    xAxisSnapPoints,
-    yAxisSnapPoints,
   ]);
 }
 
