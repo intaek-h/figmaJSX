@@ -322,9 +322,6 @@ function useDrawShape(elementRef, canvasIndex, shapes) {
       element.appendChild(form);
 
       previewText.style.top = startTop - previewText.clientHeight + "px";
-      window.onload = () => {
-        console.log("hi");
-      };
 
       dispatch(setInputFieldFocused());
       dispatch(setCurrentTool(tools.SELECTOR));

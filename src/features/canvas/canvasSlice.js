@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
+import tools from "../../constants/tools";
 
 const generateSampleCanvas = (
   top = 1000,
@@ -39,6 +40,59 @@ const canvasSlice = createSlice({
         ...payload,
       };
     },
+    changeShapeColor: (state, { payload }) => {
+      const canvasIndex = payload.canvasIndex;
+      const shapeIndex = payload.shapeIndex;
+      delete payload.canvasIndex;
+      delete payload.shapeIndex;
+      if (
+        current(state[canvasIndex].children[shapeIndex]).type === tools.TEXT
+      ) {
+        state[canvasIndex].children[shapeIndex] = {
+          ...state[canvasIndex].children[shapeIndex],
+          color: payload.color,
+        };
+      } else {
+        state[canvasIndex].children[shapeIndex] = {
+          ...state[canvasIndex].children[shapeIndex],
+          backgroundColor: payload.color,
+        };
+      }
+    },
+    changeTextProperty: (state, { payload }) => {
+      const canvasIndex = payload.canvasIndex;
+      const shapeIndex = payload.shapeIndex;
+      delete payload.canvasIndex;
+      delete payload.shapeIndex;
+      if (
+        current(state[canvasIndex].children[shapeIndex]).type === tools.TEXT
+      ) {
+        state[canvasIndex].children[shapeIndex] = {
+          ...state[canvasIndex].children[shapeIndex],
+          ...payload,
+        };
+      }
+    },
+    changeLineThickness: (state, { payload }) => {
+      const canvasIndex = payload.canvasIndex;
+      const shapeIndex = payload.shapeIndex;
+      delete payload.canvasIndex;
+      delete payload.shapeIndex;
+      const targetLine = current(state[canvasIndex].children[shapeIndex]);
+      if (targetLine.type === tools.LINE) {
+        if (targetLine.width > targetLine.height) {
+          state[canvasIndex].children[shapeIndex] = {
+            ...state[canvasIndex].children[shapeIndex],
+            height: payload.thickness,
+          };
+        } else {
+          state[canvasIndex].children[shapeIndex] = {
+            ...state[canvasIndex].children[shapeIndex],
+            width: payload.thickness,
+          };
+        }
+      }
+    },
     addShape: (state, { payload }) => {
       const index = payload.canvasIndex;
       delete payload.canvasIndex;
@@ -78,6 +132,9 @@ export const {
   changeShapeIndex,
   modifyCanvas,
   deleteShape,
+  changeShapeColor,
+  changeTextProperty,
+  changeLineThickness,
 } = canvasSlice.actions;
 
 export default canvasSlice.reducer;

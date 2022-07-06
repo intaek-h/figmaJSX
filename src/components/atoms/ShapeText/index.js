@@ -13,6 +13,7 @@ import {
   selectCurrentWorkingCanvasIndex,
   selectHoveredShape,
   setHoveredShape,
+  setInputFieldFocused,
   setWorkingCanvasIndex,
 } from "../../../features/utility/utilitySlice";
 import useDragShape from "../../../hooks/useDragShape";
@@ -61,6 +62,20 @@ function ShapeText({
     inputRef.current.focus();
   }, [inputRef, isDoubleClicked]);
 
+  useEffect(() => {
+    if (!shapeRef.current) return;
+    if (canvas.height !== shapeRef.current.clientHeight) {
+      dispatch(
+        modifyShape({
+          canvasIndex: currentCanvasIndex,
+          shapeIndex: currentShapeIndex,
+          height: shapeRef.current.clientHeight,
+          width: shapeRef.current.clientWidth,
+        })
+      );
+    }
+  }, [canvas, currentCanvasIndex, currentShapeIndex, dispatch]);
+
   if (isDoubleClicked)
     return (
       <form>
@@ -76,6 +91,7 @@ function ShapeText({
           contentEditable="plaintext-only"
           suppressContentEditableWarning
           spellCheck={false}
+          onFocus={() => dispatch(setInputFieldFocused())}
           onBlur={(e) => {
             const newText = {
               text: inputRef.current.textContent,
@@ -104,7 +120,10 @@ function ShapeText({
         ref={shapeRef}
         className={style.idle}
         style={{
-          ...canvas,
+          top: canvas.top,
+          left: canvas.left,
+          fontSize: canvas.fontSize,
+          color: canvas.color,
           borderBottom: isMouseHovered ? "1px dotted black" : "none",
         }}
         onMouseEnter={() => {
