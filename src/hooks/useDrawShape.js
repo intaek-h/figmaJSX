@@ -295,6 +295,7 @@ function useDrawShape(elementRef, canvasIndex, shapes) {
     };
 
     const handleClickText = (e) => {
+      e.stopPropagation();
       const form = document.createElement("form");
       const previewText = document.createElement("div");
       const elementFigures = element.getBoundingClientRect();
@@ -308,6 +309,8 @@ function useDrawShape(elementRef, canvasIndex, shapes) {
       previewText.style.left = startLeft + "px";
       previewText.style.position = "absolute";
       previewText.style.fontSize = globalFontSize + "px";
+      previewText.style.color = globalColor;
+      previewText.style.caretColor = "green";
       previewText.style.backgroundColor = "transparent";
       previewText.style.margin = 0;
       previewText.style.padding = 0;
@@ -319,6 +322,9 @@ function useDrawShape(elementRef, canvasIndex, shapes) {
       element.appendChild(form);
 
       previewText.style.top = startTop - previewText.clientHeight + "px";
+      window.onload = () => {
+        console.log("hi");
+      };
 
       dispatch(setInputFieldFocused());
       dispatch(setCurrentTool(tools.SELECTOR));

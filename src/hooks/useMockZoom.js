@@ -3,17 +3,19 @@ import { useDispatch, useSelector } from "react-redux";
 
 import {
   selectCurrentScale,
+  selectIsInputFieldFocused,
   setCurrentScale,
 } from "../features/utility/utilitySlice";
 import { computeMockZoom } from "../utilities/computeMockZoom";
 
 function useMockZoom(outerRef, innerRef) {
   const currentScale = useSelector(selectCurrentScale);
+  const isInputFieldFocused = useSelector(selectIsInputFieldFocused);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!innerRef.current || !outerRef.current) return;
+    if (!innerRef.current || !outerRef.current || isInputFieldFocused) return;
 
     const outerBoard = outerRef.current;
     const innerBoard = innerRef.current;
@@ -69,7 +71,7 @@ function useMockZoom(outerRef, innerRef) {
       window.removeEventListener("keydown", zoomWithKeyboard);
       window.removeEventListener("wheel", zoomWithWheel);
     };
-  }, [currentScale, dispatch, innerRef, outerRef]);
+  }, [currentScale, dispatch, innerRef, isInputFieldFocused, outerRef]);
 }
 
 export default useMockZoom;

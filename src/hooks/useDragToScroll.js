@@ -1,16 +1,18 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import {
   finishDragScroll,
+  selectIsInputFieldFocused,
   startDragScoll,
 } from "../features/utility/utilitySlice";
 
 function useDragToScroll(boardRef) {
   const dispatch = useDispatch();
+  const isInputFieldFocused = useSelector(selectIsInputFieldFocused);
 
   useEffect(() => {
-    if (!boardRef.current) return;
+    if (!boardRef.current || isInputFieldFocused) return;
 
     const board = boardRef.current;
 
@@ -49,7 +51,7 @@ function useDragToScroll(boardRef) {
         dispatch(startDragScoll());
         board.style.cursor = "grab";
         board.addEventListener("mousedown", handleMouseDown);
-        document.addEventListener("keyup", handleSpaceKeyUp);
+        window.addEventListener("keyup", handleSpaceKeyUp);
       }
     };
 
@@ -59,14 +61,14 @@ function useDragToScroll(boardRef) {
         dispatch(finishDragScroll());
         board.style.cursor = "default";
         board.removeEventListener("mousedown", handleMouseDown);
-        document.removeEventListener("keyup", handleSpaceKeyUp);
+        window.removeEventListener("keyup", handleSpaceKeyUp);
       }
     };
 
-    document.addEventListener("keydown", handleSpaceKeyDown);
+    window.addEventListener("keydown", handleSpaceKeyDown);
 
-    return () => document.removeEventListener("keydown", handleSpaceKeyDown);
-  }, [boardRef, dispatch]);
+    return () => window.removeEventListener("keydown", handleSpaceKeyDown);
+  }, [boardRef, dispatch, isInputFieldFocused]);
 }
 
 export default useDragToScroll;

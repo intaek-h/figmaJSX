@@ -7,6 +7,8 @@ import { changeCanvasName } from "../../../features/canvas/canvasSlice";
 import {
   selectCurrentWorkingCanvasIndex,
   selectSelectedShapeIndexes,
+  setInputFieldBlurred,
+  setInputFieldFocused,
 } from "../../../features/utility/utilitySlice";
 import useDragCanvas from "../../../hooks/useDragCanvas";
 import useDrawShape from "../../../hooks/useDrawShape";
@@ -45,8 +47,10 @@ function Canvas({ canvasIndex, ...canvas }) {
           }}
           defaultValue={canvas.canvasName}
           autoFocus
+          onFocus={() => dispatch(setInputFieldFocused())}
           onBlur={() => {
             setIsDoubleClicked(false);
+            dispatch(setInputFieldBlurred());
             dispatch(
               changeCanvasName({ name: inputRef.current.value, canvasIndex })
             );

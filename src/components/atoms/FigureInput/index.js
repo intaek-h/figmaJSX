@@ -7,7 +7,10 @@ import {
 import {
   selectCurrentWorkingCanvasIndex,
   selectSelectedShapeIndexes,
+  setInputFieldFocused,
+  setInputFieldBlurred,
 } from "../../../features/utility/utilitySlice";
+// import { setIsInputFieldFocused } from "../../../features/utility/utilitySlice";
 import styles from "./FigureInput.module.scss";
 
 function FigureInput({ figure }) {
@@ -66,11 +69,13 @@ function FigureInput({ figure }) {
         name={figure}
         className={styles.input}
         value={value}
+        onFocus={() => dispatch(setInputFieldFocused())}
         onChange={(e) => setValue(e.target.value)}
         onKeyDown={(e) => {
           e.key === "Enter" && e.target.blur();
         }}
         onBlur={() => {
+          dispatch(setInputFieldBlurred());
           dispatch(
             modifyShape({
               [style]: Number(value),
