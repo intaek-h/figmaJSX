@@ -41,10 +41,9 @@ function useDragShape(
 
     const handleMouseDown = (e) => {
       e.stopPropagation();
-      const horTopLine = document.createElement("div");
-      const horBotLine = document.createElement("div");
-      const verLeftLine = document.createElement("div");
-      const verRightLine = document.createElement("div");
+
+      const verticalLine = document.createElement("div");
+      const horizontalLine = document.createElement("div");
 
       const originalElPositionTop = e.currentTarget.offsetTop;
       const originalElPositionLeft = e.currentTarget.offsetLeft;
@@ -89,15 +88,15 @@ function useDragShape(
       let isLocked = false; // eslint-disable-line no-unused-vars
       let isLeftAttached = false;
       let isRightAttached = false;
+      let isVerMidAttached = false;
       let isTopAttached = false;
       let isBottomAttached = false;
+      let isHorMidAttached = false;
       let nearestPossibleSnapAtX;
       let nearestPossibleSnapAtY;
 
-      canvas.appendChild(horTopLine);
-      canvas.appendChild(horBotLine);
-      canvas.appendChild(verLeftLine);
-      canvas.appendChild(verRightLine);
+      canvas.appendChild(verticalLine);
+      canvas.appendChild(horizontalLine);
 
       const handleMouseMove = (e) => {
         movedTop = (e.clientY - originalMousePositionTop) / currentScale;
@@ -106,20 +105,29 @@ function useDragShape(
         const currentLeft = originalElPositionLeft + movedLeft;
         const currentTop = originalElPositionTop + movedTop;
 
-        horTopLine.style.visibility = "hidden";
-        horBotLine.style.visibility = "hidden";
-        verLeftLine.style.visibility = "hidden";
-        verRightLine.style.visibility = "hidden";
+        verticalLine.style.visibility = "hidden";
+        verticalLine.style.position = "absolute";
+        verticalLine.style.width = "1px";
+        verticalLine.style.height = "100%";
+        verticalLine.style.backgroundColor = "#c8deff";
+
+        horizontalLine.style.visibility = "hidden";
+        horizontalLine.style.position = "absolute";
+        horizontalLine.style.width = "100%";
+        horizontalLine.style.height = "1px";
+        horizontalLine.style.backgroundColor = "#c8deff";
 
         nearestPossibleSnapAtX = computeSnapPosition(
           filteredXAxisSnapPoints,
           currentLeft,
-          currentLeft + originalElWidth
+          currentLeft + originalElWidth,
+          currentLeft + originalElWidth / 2
         );
         nearestPossibleSnapAtY = computeSnapPosition(
           filteredYAxisSnapPoints,
           currentTop,
-          currentTop + originalElHeight
+          currentTop + originalElHeight,
+          currentTop + originalElHeight / 2
         );
 
         if (Math.abs(currentLeft - nearestPossibleSnapAtX) < GRAVITY) {
@@ -127,6 +135,7 @@ function useDragShape(
           isLocked = true;
           isLeftAttached = true;
           isRightAttached = false;
+          isVerMidAttached = false;
         } else if (
           Math.abs(currentLeft + originalElWidth - nearestPossibleSnapAtX) <
           GRAVITY
@@ -135,11 +144,23 @@ function useDragShape(
           isLocked = true;
           isRightAttached = true;
           isLeftAttached = false;
+          isVerMidAttached = false;
+        } else if (
+          Math.abs(currentLeft + originalElWidth / 2 - nearestPossibleSnapAtX) <
+          GRAVITY
+        ) {
+          shape.style.left =
+            nearestPossibleSnapAtX - originalElWidth / 2 + "px";
+          isLocked = true;
+          isRightAttached = false;
+          isLeftAttached = false;
+          isVerMidAttached = true;
         } else {
           shape.style.left = currentLeft + "px";
           isLocked = false;
           isLeftAttached = false;
           isRightAttached = false;
+          isVerMidAttached = false;
         }
 
         if (Math.abs(currentTop - nearestPossibleSnapAtY) < GRAVITY) {
@@ -147,6 +168,7 @@ function useDragShape(
           isLocked = true;
           isTopAttached = true;
           isBottomAttached = false;
+          isHorMidAttached = false;
         } else if (
           Math.abs(currentTop + originalElHeight - nearestPossibleSnapAtY) <
           GRAVITY
@@ -155,43 +177,33 @@ function useDragShape(
           isLocked = true;
           isBottomAttached = true;
           isTopAttached = false;
+          isHorMidAttached = false;
+        } else if (
+          Math.abs(currentTop + originalElHeight / 2 - nearestPossibleSnapAtY) <
+          GRAVITY
+        ) {
+          shape.style.top =
+            nearestPossibleSnapAtY - originalElHeight / 2 + "px";
+          isLocked = true;
+          isBottomAttached = false;
+          isTopAttached = false;
+          isHorMidAttached = true;
         } else {
           shape.style.top = currentTop + "px";
           isLocked = false;
           isTopAttached = false;
           isBottomAttached = false;
+          isHorMidAttached = false;
         }
 
-        if (isLeftAttached) {
-          verLeftLine.style.visibility = "visible";
-          verLeftLine.style.left = nearestPossibleSnapAtX + "px";
-          verLeftLine.style.position = "absolute";
-          verLeftLine.style.width = "1px";
-          verLeftLine.style.height = "100%";
-          verLeftLine.style.backgroundColor = "#c8deff";
-        } else if (isRightAttached) {
-          verRightLine.style.visibility = "visible";
-          verRightLine.style.left = nearestPossibleSnapAtX + "px";
-          verRightLine.style.position = "absolute";
-          verRightLine.style.width = "1px";
-          verRightLine.style.height = "100%";
-          verRightLine.style.backgroundColor = "#c8deff";
+        if (isLeftAttached || isRightAttached || isVerMidAttached) {
+          verticalLine.style.visibility = "visible";
+          verticalLine.style.left = nearestPossibleSnapAtX + "px";
         }
 
-        if (isTopAttached) {
-          horTopLine.style.visibility = "visible";
-          horTopLine.style.top = nearestPossibleSnapAtY + "px";
-          horTopLine.style.position = "absolute";
-          horTopLine.style.width = "100%";
-          horTopLine.style.height = "1px";
-          horTopLine.style.backgroundColor = "#c8deff";
-        } else if (isBottomAttached) {
-          horBotLine.style.visibility = "visible";
-          horBotLine.style.top = nearestPossibleSnapAtY + "px";
-          horBotLine.style.position = "absolute";
-          horBotLine.style.width = "100%";
-          horBotLine.style.height = "1px";
-          horBotLine.style.backgroundColor = "#c8deff";
+        if (isTopAttached || isBottomAttached || isHorMidAttached) {
+          horizontalLine.style.visibility = "visible";
+          horizontalLine.style.top = nearestPossibleSnapAtY + "px";
         }
       };
 
@@ -199,10 +211,8 @@ function useDragShape(
         const newShapeTop = originalElPositionTop + movedTop;
         const newShapeLeft = originalElPositionLeft + movedLeft;
 
-        horBotLine.remove();
-        horTopLine.remove();
-        verLeftLine.remove();
-        verRightLine.remove();
+        verticalLine.remove();
+        horizontalLine.remove();
 
         if (movedTop || movedLeft) {
           if (isLeftAttached && isTopAttached) {
@@ -237,6 +247,69 @@ function useDragShape(
               modifyShape({
                 top: nearestPossibleSnapAtY - originalElHeight,
                 left: nearestPossibleSnapAtX - originalElWidth,
+                canvasIndex,
+                shapeIndex,
+              })
+            );
+          } else if (isLeftAttached && isHorMidAttached) {
+            dispatch(
+              modifyShape({
+                top: nearestPossibleSnapAtY - originalElHeight / 2,
+                left: nearestPossibleSnapAtX,
+                canvasIndex,
+                shapeIndex,
+              })
+            );
+          } else if (isRightAttached && isHorMidAttached) {
+            dispatch(
+              modifyShape({
+                top: nearestPossibleSnapAtY - originalElHeight / 2,
+                left: nearestPossibleSnapAtX - originalElWidth,
+                canvasIndex,
+                shapeIndex,
+              })
+            );
+          } else if (isTopAttached && isVerMidAttached) {
+            dispatch(
+              modifyShape({
+                top: nearestPossibleSnapAtY,
+                left: nearestPossibleSnapAtX - originalElWidth / 2,
+                canvasIndex,
+                shapeIndex,
+              })
+            );
+          } else if (isBottomAttached && isVerMidAttached) {
+            dispatch(
+              modifyShape({
+                top: nearestPossibleSnapAtY - originalElHeight,
+                left: nearestPossibleSnapAtX - originalElWidth / 2,
+                canvasIndex,
+                shapeIndex,
+              })
+            );
+          } else if (isHorMidAttached && isVerMidAttached) {
+            dispatch(
+              modifyShape({
+                top: nearestPossibleSnapAtY - originalElHeight / 2,
+                left: nearestPossibleSnapAtX - originalElWidth / 2,
+                canvasIndex,
+                shapeIndex,
+              })
+            );
+          } else if (isHorMidAttached) {
+            dispatch(
+              modifyShape({
+                top: nearestPossibleSnapAtY - originalElHeight / 2,
+                left: newShapeLeft,
+                canvasIndex,
+                shapeIndex,
+              })
+            );
+          } else if (isVerMidAttached) {
+            dispatch(
+              modifyShape({
+                top: newShapeTop,
+                left: nearestPossibleSnapAtX - originalElWidth / 2,
                 canvasIndex,
                 shapeIndex,
               })

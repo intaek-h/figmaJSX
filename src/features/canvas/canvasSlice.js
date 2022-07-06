@@ -11,8 +11,6 @@ const generateSampleCanvas = (
   left,
   width,
   height,
-  xAxisSnap: [0, width / 2, width],
-  yAxisSnap: [0, height / 2, height],
   selectedShapes: [],
   children: [],
 });
@@ -71,12 +69,6 @@ const canvasSlice = createSlice({
 });
 
 export const selectAllCanvas = (state) => state.workbench.present.canvas;
-
-export const selectXAxisSnapPoints = (canvasIdx) => (state) =>
-  state.workbench.present.canvas[canvasIdx].xAxisSnap;
-
-export const selectYAxisSnapPoints = (canvasIdx) => (state) =>
-  state.workbench.present.canvas[canvasIdx].yAxisSnap;
 
 export const {
   createCanvas,
