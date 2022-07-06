@@ -7,6 +7,7 @@ import { deleteShape } from "../features/canvas/canvasSlice";
 import {
   emptySelectedShapeIndexes,
   selectCurrentWorkingCanvasIndex,
+  selectIsInputFieldFocused,
   selectSelectedShapeIndexes,
   setCurrentTool,
 } from "../features/utility/utilitySlice";
@@ -16,8 +17,11 @@ function useGlobalKeyboardShortCut() {
 
   const workingCanvasIndex = useSelector(selectCurrentWorkingCanvasIndex);
   const selectedShapeIndexes = useSelector(selectSelectedShapeIndexes);
+  const isInputFieldFocused = useSelector(selectIsInputFieldFocused);
 
   useEffect(() => {
+    if (isInputFieldFocused) return;
+
     const deleteShapeShortCut = (e) => {
       if (e.key === "Backspace" && selectedShapeIndexes.length) {
         e.preventDefault();
@@ -119,7 +123,7 @@ function useGlobalKeyboardShortCut() {
       window.removeEventListener("keydown", textToolShortCut);
       window.removeEventListener("keydown", canvasToolShortCut);
     };
-  }, [dispatch, selectedShapeIndexes, workingCanvasIndex]);
+  }, [dispatch, isInputFieldFocused, selectedShapeIndexes, workingCanvasIndex]);
 }
 
 export default useGlobalKeyboardShortCut;

@@ -56,6 +56,11 @@ function ShapeText({
     setIsMouseHovered(false);
   }, [canvasIndex, currentShapeIndex, shapeIndex, currentCanvasIndex]);
 
+  useEffect(() => {
+    if (!inputRef.current) return;
+    inputRef.current.focus();
+  }, [inputRef, isDoubleClicked]);
+
   if (isDoubleClicked)
     return (
       <form>
@@ -70,6 +75,7 @@ function ShapeText({
           }}
           contentEditable="plaintext-only"
           suppressContentEditableWarning
+          spellCheck={false}
           onBlur={(e) => {
             const newText = {
               text: inputRef.current.textContent,

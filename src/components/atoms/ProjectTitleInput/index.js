@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 import {
   selectProjectTitle,
+  setInputFieldBlurred,
+  setInputFieldFocused,
   setProjectTitle,
 } from "../../../features/utility/utilitySlice";
 import styles from "./ProjectTitleInput.module.scss";
@@ -21,9 +23,11 @@ function ProjectTitleInput() {
         type="text"
         className={styles.field}
         value={title}
+        onFocus={() => dispatch(setInputFieldFocused())}
         onChange={(e) => setTitle(e.target.value)}
         onBlur={() => {
           dispatch(setProjectTitle(title));
+          dispatch(setInputFieldBlurred());
           setIsFocused(false);
         }}
         autoFocus
