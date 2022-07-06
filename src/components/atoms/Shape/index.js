@@ -37,41 +37,39 @@ function Shape({ canvasRef, currentCanvasIndex, currentShapeIndex, ...shape }) {
   }, [canvasIndex, currentShapeIndex, shapeIndex, currentCanvasIndex]);
 
   return (
-    <>
-      <div
-        ref={shapeRef}
-        className={styles.shape}
-        style={{ ...shape, border: isMouseHovered && "1px solid #22a7c3" }}
-        onMouseEnter={() => {
-          dispatch(deactivateSelector());
-          dispatch(
-            setHoveredShape({
-              canvasIndex: currentCanvasIndex,
-              shapeIndex: currentShapeIndex,
-            })
-          );
-          setIsMouseHovered(true);
-        }}
-        onMouseLeave={() => {
-          dispatch(activateSelector());
-          dispatch(
-            setHoveredShape({
-              canvasIndex: null,
-              shapeIndex: null,
-            })
-          );
-          setIsMouseHovered(false);
-        }}
-        onClick={() => {
-          if (workingCanvasIndex === currentCanvasIndex) {
-            return dispatch(replaceSelectedShapeIndexes(currentShapeIndex));
-          }
+    <div
+      ref={shapeRef}
+      className={styles.shape}
+      style={{ ...shape, border: isMouseHovered && "1px solid #22a7c3" }}
+      onMouseEnter={() => {
+        dispatch(deactivateSelector());
+        dispatch(
+          setHoveredShape({
+            canvasIndex: currentCanvasIndex,
+            shapeIndex: currentShapeIndex,
+          })
+        );
+        setIsMouseHovered(true);
+      }}
+      onMouseLeave={() => {
+        dispatch(activateSelector());
+        dispatch(
+          setHoveredShape({
+            canvasIndex: null,
+            shapeIndex: null,
+          })
+        );
+        setIsMouseHovered(false);
+      }}
+      onClick={() => {
+        if (workingCanvasIndex === currentCanvasIndex) {
+          return dispatch(replaceSelectedShapeIndexes(currentShapeIndex));
+        }
 
-          dispatch(setWorkingCanvasIndex(currentCanvasIndex));
-          dispatch(replaceSelectedShapeIndexes(currentShapeIndex));
-        }}
-      ></div>
-    </>
+        dispatch(setWorkingCanvasIndex(currentCanvasIndex));
+        dispatch(replaceSelectedShapeIndexes(currentShapeIndex));
+      }}
+    ></div>
   );
 }
 
