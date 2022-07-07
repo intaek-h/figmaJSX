@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { changeLineThickness } from "../../../features/canvas/canvasSlice";
+import tools from "../../../constants/tools";
+import {
+  changeLineThickness,
+  selectAllCanvas,
+} from "../../../features/canvas/canvasSlice";
 import {
   selectGlobalThickness,
   setGlobalThickness,
@@ -20,8 +24,22 @@ function ThicknessInputField() {
   const globalThickness = useSelector(selectGlobalThickness);
   const workingCanvasIndex = useSelector(selectCurrentWorkingCanvasIndex);
   const selectedShapeIndexes = useSelector(selectSelectedShapeIndexes);
+  const canvases = useSelector(selectAllCanvas);
 
   const [value, setValue] = useState(globalThickness);
+
+  useEffect(() => {
+    if (
+      selectedShapeIndexes.length === 1 &&
+      canvases[workingCanvasIndex].children[selectedShapeIndexes[0]].type ===
+        tools.LINE
+    ) {
+      const line =
+        canvases[workingCanvasIndex].children[selectedShapeIndexes[0]];
+
+      line.height > line.width ? setValue(line.width) : setValue(line.height);
+    }
+  }, [canvases, selectedShapeIndexes, workingCanvasIndex]);
 
   return (
     <input

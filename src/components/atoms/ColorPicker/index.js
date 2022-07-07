@@ -1,6 +1,11 @@
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { changeShapeColor } from "../../../features/canvas/canvasSlice";
 
+import tools from "../../../constants/tools";
+import {
+  changeShapeColor,
+  selectAllCanvas,
+} from "../../../features/canvas/canvasSlice";
 import {
   selectGlobalColor,
   setGlobalColor,
@@ -19,15 +24,36 @@ function ColorPicker() {
   const globalColor = useSelector(selectGlobalColor);
   const workingCanvasIndex = useSelector(selectCurrentWorkingCanvasIndex);
   const selectedShapeIndexes = useSelector(selectSelectedShapeIndexes);
+  const canvases = useSelector(selectAllCanvas);
+
+  const [value, setValue] = useState(globalColor);
+
+  useEffect(() => {
+    if (
+      selectedShapeIndexes.length === 1 &&
+      canvases[workingCanvasIndex].children[selectedShapeIndexes[0]].type ===
+        tools.TEXT
+    ) {
+      setValue(
+        canvases[workingCanvasIndex].children[selectedShapeIndexes[0]].color
+      );
+    } else if (selectedShapeIndexes.length === 1) {
+      setValue(
+        canvases[workingCanvasIndex].children[selectedShapeIndexes[0]]
+          .backgroundColor
+      );
+    }
+  }, [canvases, selectedShapeIndexes, workingCanvasIndex]);
 
   return (
     <div className={styles["picker-wrapper"]}>
       <input
         type="color"
         className={styles.picker}
-        value={globalColor}
+        value={value}
         onFocus={() => dispatch(setInputFieldFocused())}
         onChange={(e) => {
+          setValue(e.target.value);
           if (selectedShapeIndexes.length === 1) {
             dispatch(
               changeShapeColor({
@@ -37,11 +63,13 @@ function ColorPicker() {
               })
             );
           }
-          dispatch(setGlobalColor(e.target.value));
         }}
-        onBlur={() => dispatch(setInputFieldBlurred())}
+        onBlur={() => {
+          dispatch(setGlobalColor(value));
+          dispatch(setInputFieldBlurred());
+        }}
       />
-      <span>{globalColor}</span>
+      <span>{value}</span>
     </div>
   );
 }

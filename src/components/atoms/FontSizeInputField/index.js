@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { changeTextProperty } from "../../../features/canvas/canvasSlice";
 
+import tools from "../../../constants/tools";
+import {
+  changeTextProperty,
+  selectAllCanvas,
+} from "../../../features/canvas/canvasSlice";
 import {
   selectGlobalFontSize,
   setGlobalFontSize,
@@ -20,8 +24,23 @@ function FontSizeInputField() {
   const globalFontSize = useSelector(selectGlobalFontSize);
   const workingCanvasIndex = useSelector(selectCurrentWorkingCanvasIndex);
   const selectedShapeIndexes = useSelector(selectSelectedShapeIndexes);
+  const canvases = useSelector(selectAllCanvas);
 
   const [value, setValue] = useState(globalFontSize);
+
+  useEffect(() => {
+    if (
+      selectedShapeIndexes.length === 1 &&
+      canvases[workingCanvasIndex].children[selectedShapeIndexes[0]].type ===
+        tools.TEXT
+    ) {
+      setValue(
+        canvases[workingCanvasIndex].children[
+          selectedShapeIndexes[0]
+        ].fontSize.toString()
+      );
+    }
+  }, [canvases, selectedShapeIndexes, workingCanvasIndex]);
 
   return (
     <input
