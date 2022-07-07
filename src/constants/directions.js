@@ -1,3 +1,12 @@
-const directions = ["n", "e", "s", "w", "ne", "nw", "se", "sw"];
+export const directions = {
+  N: "n",
+  E: "e",
+  S: "s",
+  W: "w",
+  NE: "ne",
+  NW: "nw",
+  SE: "se",
+  SW: "sw",
+};
 
 export default directions;

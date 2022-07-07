@@ -1,5 +1,9 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  CANVAS_PREVIEW_STYLES,
+  SIZE_PREVIEW_STYLES,
+} from "../constants/styles";
 
 import tools from "../constants/tools";
 import { createCanvas } from "../features/canvas/canvasSlice";
@@ -34,10 +38,10 @@ function useDrawCanvas(elementRef) {
 
       canvasPreview.style.top = startTop + "px";
       canvasPreview.style.left = startLeft + "px";
-      canvasPreview.style.backgroundColor = "#4faaff36";
-      canvasPreview.style.border = "1px solid #94beff";
-      canvasPreview.style.position = "absolute";
-      canvasPreview.style.boxSizing = "border-box";
+      canvasPreview.style.backgroundColor = CANVAS_PREVIEW_STYLES.BG_COLOR;
+      canvasPreview.style.border = CANVAS_PREVIEW_STYLES.BORDER;
+      canvasPreview.style.position = CANVAS_PREVIEW_STYLES.POSITION;
+      canvasPreview.style.boxSizing = CANVAS_PREVIEW_STYLES.BOX_SIZING;
 
       const sizePreview = document.createElement("div");
 
@@ -59,15 +63,16 @@ function useDrawCanvas(elementRef) {
         canvasPreview.style.left = left + "px";
 
         sizePreview.textContent = `${width} X ${height}`;
-        sizePreview.style.position = "absolute";
+        sizePreview.style.position = SIZE_PREVIEW_STYLES.POSITION;
         sizePreview.style.top = top + height + 10 + "px";
         sizePreview.style.left = left + width + 10 + "px";
-        sizePreview.style.backgroundColor = "black";
-        sizePreview.style.color = "white";
+        sizePreview.style.backgroundColor = SIZE_PREVIEW_STYLES.BG_COLOR;
+        sizePreview.style.color = SIZE_PREVIEW_STYLES.COLOR;
         sizePreview.style.fontSize =
-          currentScale >= 1 ? "10px" : `${Math.floor(20 / currentScale)}px`;
-        sizePreview.style.opacity = 0.3;
-        sizePreview.style.padding = "0 2px";
+          currentScale >= 1
+            ? SIZE_PREVIEW_STYLES.FONT_SIZE
+            : `${Math.floor(SIZE_PREVIEW_STYLES.WEIGHT / currentScale)}px`;
+        sizePreview.style.padding = SIZE_PREVIEW_STYLES.PADDING;
       };
 
       const handleMouseUp = (e) => {

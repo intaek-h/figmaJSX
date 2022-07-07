@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { CANVAS_NAME_STYLES } from "../constants/styles";
 
 import { modifyCanvas } from "../features/canvas/canvasSlice";
 import { selectCurrentScale } from "../features/utility/utilitySlice";
@@ -29,7 +30,7 @@ function useDragCanvas(
       const originalMousePositionTop = e.clientY;
       const originalMousePositionLeft = e.clientX;
 
-      canvasName.style.opacity = 0.5;
+      canvasName.style.opacity = CANVAS_NAME_STYLES.OPACITY;
 
       const handleMouseMove = (e) => {
         movedTop = (e.clientY - originalMousePositionTop) / currentScale;

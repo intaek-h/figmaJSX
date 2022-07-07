@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { SHAPE_STYLES } from "../../../constants/styles";
 
 import {
   activateSelector,
@@ -40,7 +41,8 @@ function Shape({ canvasRef, currentCanvasIndex, currentShapeIndex, ...shape }) {
     <div
       ref={shapeRef}
       className={styles.shape}
-      style={{ ...shape, border: isMouseHovered && "1px solid #22a7c3" }}
+      style={{ ...shape, border: isMouseHovered && SHAPE_STYLES.BORDER }}
+      draggable={false}
       onMouseEnter={() => {
         dispatch(deactivateSelector());
         dispatch(
