@@ -7,7 +7,7 @@
     "dev": "webpack-dev-server",
     "build": "NODE_ENV=production webpack --mode production --progress",
     "prepare": "husky install",
-    "lint": "./node_modules/.bin/eslint src standard --verbose"
+    "lint": "./node_modules/.bin/eslint src"
   },
   "author": "intaek h",
   "license": "ISC",

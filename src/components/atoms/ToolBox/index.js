@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
-import shortcuts from "../../../constants/shortcuts";
 
+import shortcuts from "../../../constants/shortcuts";
+import tools from "../../../constants/tools";
 import {
   selectCurrentTool,
   setCurrentTool,
@@ -14,19 +15,19 @@ function ToolBox({ tool }) {
   let shortcut = "";
 
   switch (tool) {
-    case "rectangle":
+    case tools.RECTANGLE:
       shortcut = shortcuts.RECTANGLE_TOOL;
       break;
-    case "ellipse":
+    case tools.ELLIPSE:
       shortcut = shortcuts.ELLIPSE_TOOL;
       break;
-    case "line":
+    case tools.LINE:
       shortcut = shortcuts.LINE_TOOL;
       break;
-    case "selector":
+    case tools.SELECTOR:
       shortcut = shortcuts.SELECTOR_TOOL;
       break;
-    case "text":
+    case tools.TEXT:
       shortcut = shortcuts.TEXT_TOOL;
       break;
   }
