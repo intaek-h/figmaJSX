@@ -109,6 +109,90 @@ const canvasSlice = createSlice({
         ...payload,
       };
     },
+    resizeNorth: (state, { payload }) => {
+      const canvasIndex = payload.canvasIndex;
+      const shapeIndexes = payload.shapeIndexes;
+      shapeIndexes.forEach((i) => {
+        state[canvasIndex].children[i].top =
+          current(state[canvasIndex].children[i]).top + payload.change;
+        state[canvasIndex].children[i].height =
+          current(state[canvasIndex].children[i]).height - payload.change;
+      });
+    },
+    resizeEast: (state, { payload }) => {
+      const canvasIndex = payload.canvasIndex;
+      const shapeIndexes = payload.shapeIndexes;
+      shapeIndexes.forEach((i) => {
+        state[canvasIndex].children[i].width =
+          current(state[canvasIndex].children[i]).width + payload.change;
+      });
+    },
+    resizeSouth: (state, { payload }) => {
+      const canvasIndex = payload.canvasIndex;
+      const shapeIndexes = payload.shapeIndexes;
+      shapeIndexes.forEach((i) => {
+        state[canvasIndex].children[i].height =
+          current(state[canvasIndex].children[i]).height + payload.change;
+      });
+    },
+    resizeWest: (state, { payload }) => {
+      const canvasIndex = payload.canvasIndex;
+      const shapeIndexes = payload.shapeIndexes;
+      shapeIndexes.forEach((i) => {
+        state[canvasIndex].children[i].left =
+          current(state[canvasIndex].children[i]).left + payload.change;
+        state[canvasIndex].children[i].width =
+          current(state[canvasIndex].children[i]).width - payload.change;
+      });
+    },
+    resizeNorthEast: (state, { payload }) => {
+      const canvasIndex = payload.canvasIndex;
+      const shapeIndexes = payload.shapeIndexes;
+      shapeIndexes.forEach((i) => {
+        state[canvasIndex].children[i].top =
+          current(state[canvasIndex].children[i]).top + payload.verChange;
+        state[canvasIndex].children[i].height =
+          current(state[canvasIndex].children[i]).height - payload.verChange;
+        state[canvasIndex].children[i].width =
+          current(state[canvasIndex].children[i]).width + payload.horChange;
+      });
+    },
+    resizeSouthEast: (state, { payload }) => {
+      const canvasIndex = payload.canvasIndex;
+      const shapeIndexes = payload.shapeIndexes;
+      shapeIndexes.forEach((i) => {
+        state[canvasIndex].children[i].height =
+          current(state[canvasIndex].children[i]).height + payload.verChange;
+        state[canvasIndex].children[i].width =
+          current(state[canvasIndex].children[i]).width + payload.horChange;
+      });
+    },
+    resizeNorthWest: (state, { payload }) => {
+      const canvasIndex = payload.canvasIndex;
+      const shapeIndexes = payload.shapeIndexes;
+      shapeIndexes.forEach((i) => {
+        state[canvasIndex].children[i].top =
+          current(state[canvasIndex].children[i]).top + payload.verChange;
+        state[canvasIndex].children[i].height =
+          current(state[canvasIndex].children[i]).height - payload.verChange;
+        state[canvasIndex].children[i].left =
+          current(state[canvasIndex].children[i]).left + payload.horChange;
+        state[canvasIndex].children[i].width =
+          current(state[canvasIndex].children[i]).width - payload.horChange;
+      });
+    },
+    resizeSouthWest: (state, { payload }) => {
+      const canvasIndex = payload.canvasIndex;
+      const shapeIndexes = payload.shapeIndexes;
+      shapeIndexes.forEach((i) => {
+        state[canvasIndex].children[i].left =
+          current(state[canvasIndex].children[i]).left + payload.horChange;
+        state[canvasIndex].children[i].width =
+          current(state[canvasIndex].children[i]).width - payload.horChange;
+        state[canvasIndex].children[i].height =
+          current(state[canvasIndex].children[i]).height + payload.verChange;
+      });
+    },
     changeShapeIndex: (state, { payload: { canvasIdx, fromIdx, toIdx } }) => {
       const shape = state[canvasIdx].children[fromIdx];
       state[canvasIdx].children.splice(fromIdx, 1);
@@ -135,6 +219,14 @@ export const {
   changeShapeColor,
   changeTextProperty,
   changeLineThickness,
+  resizeEast,
+  resizeNorth,
+  resizeSouth,
+  resizeWest,
+  resizeNorthEast,
+  resizeSouthEast,
+  resizeNorthWest,
+  resizeSouthWest,
 } = canvasSlice.actions;
 
 export default canvasSlice.reducer;
