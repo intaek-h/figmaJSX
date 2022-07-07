@@ -10,7 +10,7 @@ import {
   setInputFieldFocused,
   setInputFieldBlurred,
 } from "../../../features/utility/utilitySlice";
-// import { setIsInputFieldFocused } from "../../../features/utility/utilitySlice";
+import translateFigure from "../../../utilities/translateFigure";
 import styles from "./FigureInput.module.scss";
 
 function FigureInput({ figure }) {
@@ -90,18 +90,3 @@ function FigureInput({ figure }) {
 }
 
 export default FigureInput;
-
-function translateFigure(figure) {
-  switch (figure) {
-    case "X":
-      return "left";
-    case "Y":
-      return "top";
-    case "W":
-      return "width";
-    case "H":
-      return "height";
-    default:
-      return;
-  }
-}

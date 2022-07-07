@@ -41,6 +41,7 @@ function useDrawShape(elementRef, canvasIndex, shapes) {
     const element = elementRef.current;
 
     const handleMouseDownSelector = (e) => {
+      e.stopPropagation();
       const previewShape = document.createElement("div");
       const elementFigures = element.getBoundingClientRect();
       const elementTop = elementFigures.top;

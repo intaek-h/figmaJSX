@@ -92,7 +92,7 @@ function Canvas({ canvasIndex, ...canvas }) {
           )
         )}
         {workingCanvasIndex === canvasIndex && selectedShapeIndexes.length
-          ? directions.map((direction) => (
+          ? Object.values(directions).map((direction) => (
               <EditPointer
                 direction={direction}
                 key={direction}
