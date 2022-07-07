@@ -35,18 +35,10 @@ function useGlobalKeyboardShortCut() {
       }
     };
 
-    const undoShortCut = (e) => {
-      if ((e.ctrlKey && e.key === "z") || (e.metaKey && e.key === "z")) {
-        e.preventDefault();
-        dispatch(ActionCreators.undo());
-        dispatch(emptySelectedShapeIndexes());
-      }
-    };
-
     const redoShortCut = (e) => {
       if (
-        (e.ctrlKey && e.shiftKey && e.key === "x") ||
-        (e.metaKey && e.shiftKey && e.key === "x")
+        (e.ctrlKey && e.shiftKey && e.code === "KeyZ") ||
+        (e.metaKey && e.shiftKey && e.code === "KeyZ")
       ) {
         e.preventDefault();
         dispatch(ActionCreators.redo());
@@ -54,49 +46,71 @@ function useGlobalKeyboardShortCut() {
       }
     };
 
+    const undoShortCut = (e) => {
+      if (
+        (e.ctrlKey && e.shiftKey && e.code === "KeyZ") ||
+        (e.metaKey && e.shiftKey && e.code === "KeyZ")
+      )
+        return;
+      if (
+        (e.ctrlKey && e.code === "KeyZ") ||
+        (e.metaKey && e.code === "KeyZ")
+      ) {
+        e.preventDefault();
+        dispatch(ActionCreators.undo());
+        dispatch(emptySelectedShapeIndexes());
+      }
+    };
+
     const rectangleToolShortCut = (e) => {
-      if ((e.ctrlKey && e.key === "r") || (e.metaKey && e.key === "r")) return;
-      if (e.key === "r") {
+      if ((e.ctrlKey && e.code === "KeyR") || (e.metaKey && e.code === "KeyR"))
+        return;
+      if (e.code === "KeyR") {
         e.preventDefault();
         dispatch(setCurrentTool(tools.RECTANGLE));
       }
     };
 
     const ellipseToolShortCut = (e) => {
-      if ((e.ctrlKey && e.key === "e") || (e.metaKey && e.key === "e")) return;
-      if (e.key === "e") {
+      if ((e.ctrlKey && e.code === "KeyE") || (e.metaKey && e.code === "KeyE"))
+        return;
+      if (e.code === "KeyE") {
         e.preventDefault();
         dispatch(setCurrentTool(tools.ELLIPSE));
       }
     };
 
     const lineToolShortCut = (e) => {
-      if ((e.ctrlKey && e.key === "l") || (e.metaKey && e.key === "l")) return;
-      if (e.key === "l") {
+      if ((e.ctrlKey && e.code === "KeyL") || (e.metaKey && e.code === "KeyL"))
+        return;
+      if (e.code === "KeyL") {
         e.preventDefault();
         dispatch(setCurrentTool(tools.LINE));
       }
     };
 
     const selectorToolShortCut = (e) => {
-      if ((e.ctrlKey && e.key === "v") || (e.metaKey && e.key === "v")) return;
-      if (e.key === "v") {
+      if ((e.ctrlKey && e.code === "KeyV") || (e.metaKey && e.code === "KeyV"))
+        return;
+      if (e.code === "KeyV") {
         e.preventDefault();
         dispatch(setCurrentTool(tools.SELECTOR));
       }
     };
 
     const textToolShortCut = (e) => {
-      if ((e.ctrlKey && e.key === "t") || (e.metaKey && e.key === "t")) return;
-      if (e.key === "t") {
+      if ((e.ctrlKey && e.code === "KeyT") || (e.metaKey && e.code === "KeyT"))
+        return;
+      if (e.code === "KeyT") {
         e.preventDefault();
         dispatch(setCurrentTool(tools.TEXT));
       }
     };
 
     const canvasToolShortCut = (e) => {
-      if ((e.ctrlKey && e.key === "c") || (e.metaKey && e.key === "c")) return;
-      if (e.key === "c") {
+      if ((e.ctrlKey && e.code === "KeyC") || (e.metaKey && e.code === "KeyC"))
+        return;
+      if (e.code === "KeyC") {
         e.preventDefault();
         dispatch(setCurrentTool(tools.CANVAS));
       }

@@ -23,6 +23,13 @@ import computePreviewElement from "../utilities/computePreviewElement";
 import computePreviewLine from "../utilities/computePreviewLine";
 import computeIntersection from "../utilities/computeIntersection";
 import tools from "../constants/tools";
+import {
+  ELLIPSE_PREVIEW_STYLES,
+  LINE_PREVIEW_STYLES,
+  RECTANGLE_PREVIEW_STYLES,
+  SELECTOR_STYLES,
+  TEXT_PREVIEW_STYLES,
+} from "../constants/styles";
 
 function useDrawShape(elementRef, canvasIndex, shapes) {
   const dispatch = useDispatch();
@@ -51,10 +58,10 @@ function useDrawShape(elementRef, canvasIndex, shapes) {
 
       previewShape.style.top = startTop + "px";
       previewShape.style.left = startLeft + "px";
-      previewShape.style.backgroundColor = "#4faaff36";
-      previewShape.style.border = "1px solid #94beff";
-      previewShape.style.position = "absolute";
-      previewShape.style.boxSizing = "border-box";
+      previewShape.style.backgroundColor = SELECTOR_STYLES.BG_COLOR;
+      previewShape.style.border = SELECTOR_STYLES.BORDER;
+      previewShape.style.position = SELECTOR_STYLES.POSITION;
+      previewShape.style.boxSizing = SELECTOR_STYLES.BOX_SIZING;
 
       element.appendChild(previewShape);
 
@@ -111,9 +118,9 @@ function useDrawShape(elementRef, canvasIndex, shapes) {
       previewShape.style.top = startTop + "px";
       previewShape.style.left = startLeft + "px";
       previewShape.style.backgroundColor = globalColor;
-      previewShape.style.border = `1px solid #94beff`;
-      previewShape.style.position = "absolute";
-      previewShape.style.boxSizing = "border-box";
+      previewShape.style.border = RECTANGLE_PREVIEW_STYLES.BORDER;
+      previewShape.style.position = RECTANGLE_PREVIEW_STYLES.POSITION;
+      previewShape.style.boxSizing = RECTANGLE_PREVIEW_STYLES.BOX_SIZING;
 
       element.appendChild(previewShape);
 
@@ -173,11 +180,11 @@ function useDrawShape(elementRef, canvasIndex, shapes) {
 
       previewShape.style.top = startTop + "px";
       previewShape.style.left = startLeft + "px";
-      previewShape.style.backgroundColor = "#4faaff36";
-      previewShape.style.border = "1px solid #94beff";
-      previewShape.style.borderRadius = "50%";
-      previewShape.style.position = "absolute";
-      previewShape.style.boxSizing = "border-box";
+      previewShape.style.backgroundColor = globalColor;
+      previewShape.style.border = ELLIPSE_PREVIEW_STYLES.BORDER;
+      previewShape.style.borderRadius = ELLIPSE_PREVIEW_STYLES.BORDER_RADIUS;
+      previewShape.style.position = ELLIPSE_PREVIEW_STYLES.POSITION;
+      previewShape.style.boxSizing = ELLIPSE_PREVIEW_STYLES.BOX_SIZING;
 
       element.appendChild(previewShape);
 
@@ -238,8 +245,8 @@ function useDrawShape(elementRef, canvasIndex, shapes) {
 
       previewShape.style.top = startTop + "px";
       previewShape.style.left = startLeft + "px";
-      previewShape.style.backgroundColor = "#4faaff36";
-      previewShape.style.position = "absolute";
+      previewShape.style.backgroundColor = globalColor;
+      previewShape.style.position = LINE_PREVIEW_STYLES.POSITION;
 
       element.appendChild(previewShape);
 
@@ -305,19 +312,19 @@ function useDrawShape(elementRef, canvasIndex, shapes) {
       const startTop = (e.clientY - elementTop) / currentScale;
       const startLeft = (e.clientX - elementLeft) / currentScale;
 
-      previewText.contentEditable = "plaintext-only";
-      previewText.style.minWidth = "10px";
+      previewText.contentEditable = TEXT_PREVIEW_STYLES.CONTENT_EDITABLE;
+      previewText.style.minWidth = TEXT_PREVIEW_STYLES.MIN_WIDTH;
       previewText.style.left = startLeft + "px";
-      previewText.style.position = "absolute";
+      previewText.style.position = TEXT_PREVIEW_STYLES.POSITION;
       previewText.style.fontSize = globalFontSize + "px";
       previewText.style.color = globalColor;
-      previewText.style.caretColor = "green";
-      previewText.style.backgroundColor = "transparent";
-      previewText.style.margin = 0;
-      previewText.style.padding = 0;
-      previewText.style.border = "none";
-      previewText.style.borderBottom = "1px dotted black";
-      previewText.style.outline = "none";
+      previewText.style.caretColor = TEXT_PREVIEW_STYLES.CARET_COLOR;
+      previewText.style.backgroundColor = TEXT_PREVIEW_STYLES.BG_COLOR;
+      previewText.style.margin = TEXT_PREVIEW_STYLES.MARGIN;
+      previewText.style.padding = TEXT_PREVIEW_STYLES.PADDING;
+      previewText.style.border = TEXT_PREVIEW_STYLES.BORDER;
+      previewText.style.borderBottom = TEXT_PREVIEW_STYLES.BORDER_BOTTOM;
+      previewText.style.outline = TEXT_PREVIEW_STYLES.OUTLINE;
 
       form.appendChild(previewText);
       element.appendChild(form);

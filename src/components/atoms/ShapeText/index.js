@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { SHAPE_TEXT_STYLES } from "../../../constants/styles";
 
 import { modifyShape } from "../../../features/canvas/canvasSlice";
 import {
@@ -124,7 +125,7 @@ function ShapeText({
           left: canvas.left,
           fontSize: canvas.fontSize,
           color: canvas.color,
-          borderBottom: isMouseHovered ? "1px dotted black" : "none",
+          borderBottom: isMouseHovered && SHAPE_TEXT_STYLES.BORDER,
         }}
         onMouseEnter={() => {
           dispatch(deactivateSelector());

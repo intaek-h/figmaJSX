@@ -1,5 +1,9 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  HOR_SNAP_LINE_STYLES,
+  VER_SNAP_LINE_STYLES,
+} from "../constants/styles";
 
 import tools from "../constants/tools";
 import { modifyShape, selectAllCanvas } from "../features/canvas/canvasSlice";
@@ -105,17 +109,17 @@ function useDragShape(
         const currentLeft = originalElPositionLeft + movedLeft;
         const currentTop = originalElPositionTop + movedTop;
 
-        verticalLine.style.visibility = "hidden";
-        verticalLine.style.position = "absolute";
-        verticalLine.style.width = "1px";
-        verticalLine.style.height = "100%";
-        verticalLine.style.backgroundColor = "#c8deff";
+        verticalLine.style.visibility = VER_SNAP_LINE_STYLES.HIDDEN;
+        verticalLine.style.position = VER_SNAP_LINE_STYLES.POSITION;
+        verticalLine.style.width = VER_SNAP_LINE_STYLES.WIDTH;
+        verticalLine.style.height = VER_SNAP_LINE_STYLES.HEIGHT;
+        verticalLine.style.backgroundColor = VER_SNAP_LINE_STYLES.BG_COLOR;
 
-        horizontalLine.style.visibility = "hidden";
-        horizontalLine.style.position = "absolute";
-        horizontalLine.style.width = "100%";
-        horizontalLine.style.height = "1px";
-        horizontalLine.style.backgroundColor = "#c8deff";
+        horizontalLine.style.visibility = HOR_SNAP_LINE_STYLES.HIDDEN;
+        horizontalLine.style.position = HOR_SNAP_LINE_STYLES.POSITION;
+        horizontalLine.style.width = HOR_SNAP_LINE_STYLES.WIDTH;
+        horizontalLine.style.height = HOR_SNAP_LINE_STYLES.HEIGHT;
+        horizontalLine.style.backgroundColor = HOR_SNAP_LINE_STYLES.BG_COLOR;
 
         nearestPossibleSnapAtX = computeSnapPosition(
           filteredXAxisSnapPoints,
@@ -197,12 +201,12 @@ function useDragShape(
         }
 
         if (isLeftAttached || isRightAttached || isVerMidAttached) {
-          verticalLine.style.visibility = "visible";
+          verticalLine.style.visibility = VER_SNAP_LINE_STYLES.VISIBLE;
           verticalLine.style.left = nearestPossibleSnapAtX + "px";
         }
 
         if (isTopAttached || isBottomAttached || isHorMidAttached) {
-          horizontalLine.style.visibility = "visible";
+          horizontalLine.style.visibility = VER_SNAP_LINE_STYLES.VISIBLE;
           horizontalLine.style.top = nearestPossibleSnapAtY + "px";
         }
       };
