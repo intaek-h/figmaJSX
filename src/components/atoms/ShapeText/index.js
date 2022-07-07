@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import directions from "../../../constants/directions";
+import { SHAPE_TEXT_STYLES } from "../../../constants/styles";
 
 import { modifyShape } from "../../../features/canvas/canvasSlice";
 import {
@@ -13,20 +13,23 @@ import {
   replaceSelectedShapeIndexes,
   selectCurrentWorkingCanvasIndex,
   selectHoveredShape,
-  selectSelectedShapeIndexes,
   setHoveredShape,
+  setInputFieldFocused,
   setWorkingCanvasIndex,
 } from "../../../features/utility/utilitySlice";
 import useDragShape from "../../../hooks/useDragShape";
-import EditPointer from "../EditPointer";
 import style from "./ShapeText.module.scss";
 
-function ShapeText({ currentCanvasIndex, currentShapeIndex, ...canvas }) {
+function ShapeText({
+  canvasRef,
+  currentCanvasIndex,
+  currentShapeIndex,
+  ...canvas
+}) {
   const dispatch = useDispatch();
 
   const globalColor = useSelector(selectGlobalColor);
   const globalFontSize = useSelector(selectGlobalFontSize);
-  const selectedShapeIndexes = useSelector(selectSelectedShapeIndexes);
   const workingCanvasIndex = useSelector(selectCurrentWorkingCanvasIndex);
   const { canvasIndex, shapeIndex } = useSelector(selectHoveredShape);
 
@@ -36,7 +39,13 @@ function ShapeText({ currentCanvasIndex, currentShapeIndex, ...canvas }) {
   const [isDoubleClicked, setIsDoubleClicked] = useState(false);
   const [isMouseHovered, setIsMouseHovered] = useState(false);
 
-  useDragShape(shapeRef, currentCanvasIndex, currentShapeIndex);
+  useDragShape(
+    shapeRef,
+    canvasRef,
+    currentCanvasIndex,
+    currentShapeIndex,
+    !isDoubleClicked
+  );
 
   useEffect(() => {
     if (
@@ -48,6 +57,25 @@ function ShapeText({ currentCanvasIndex, currentShapeIndex, ...canvas }) {
 
     setIsMouseHovered(false);
   }, [canvasIndex, currentShapeIndex, shapeIndex, currentCanvasIndex]);
+
+  useEffect(() => {
+    if (!inputRef.current) return;
+    inputRef.current.focus();
+  }, [inputRef, isDoubleClicked]);
+
+  useEffect(() => {
+    if (!shapeRef.current) return;
+    if (canvas.height !== shapeRef.current.clientHeight) {
+      dispatch(
+        modifyShape({
+          canvasIndex: currentCanvasIndex,
+          shapeIndex: currentShapeIndex,
+          height: shapeRef.current.clientHeight,
+          width: shapeRef.current.clientWidth,
+        })
+      );
+    }
+  }, [canvas, currentCanvasIndex, currentShapeIndex, dispatch]);
 
   if (isDoubleClicked)
     return (
@@ -63,6 +91,8 @@ function ShapeText({ currentCanvasIndex, currentShapeIndex, ...canvas }) {
           }}
           contentEditable="plaintext-only"
           suppressContentEditableWarning
+          spellCheck={false}
+          onFocus={() => dispatch(setInputFieldFocused())}
           onBlur={(e) => {
             const newText = {
               text: inputRef.current.textContent,
@@ -91,8 +121,11 @@ function ShapeText({ currentCanvasIndex, currentShapeIndex, ...canvas }) {
         ref={shapeRef}
         className={style.idle}
         style={{
-          ...canvas,
-          borderBottom: isMouseHovered ? "1px dotted black" : "none",
+          top: canvas.top,
+          left: canvas.left,
+          fontSize: canvas.fontSize,
+          color: canvas.color,
+          borderBottom: isMouseHovered && SHAPE_TEXT_STYLES.BORDER,
         }}
         onMouseEnter={() => {
           dispatch(deactivateSelector());
@@ -128,20 +161,6 @@ function ShapeText({ currentCanvasIndex, currentShapeIndex, ...canvas }) {
       >
         {canvas.text}
       </div>
-      {workingCanvasIndex === currentCanvasIndex &&
-        selectedShapeIndexes.includes(currentShapeIndex) &&
-        shapeRef.current &&
-        directions.map((direction) => (
-          <EditPointer
-            direction={direction}
-            key={direction}
-            {...{
-              height: shapeRef.current.clientHeight,
-              width: shapeRef.current.clientWidth,
-              ...canvas,
-            }}
-          />
-        ))}
     </>
   );
 }

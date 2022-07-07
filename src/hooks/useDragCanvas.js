@@ -1,16 +1,22 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { CANVAS_NAME_STYLES } from "../constants/styles";
 
 import { modifyCanvas } from "../features/canvas/canvasSlice";
 import { selectCurrentScale } from "../features/utility/utilitySlice";
 
-function useDragCanvas(canvasRef, canvasNameRef, canvasIndex) {
+function useDragCanvas(
+  canvasRef,
+  canvasNameRef,
+  canvasIndex,
+  isRendered = true
+) {
   const dispatch = useDispatch();
 
   const currentScale = useSelector(selectCurrentScale);
 
   useEffect(() => {
-    if (!canvasNameRef.current || !canvasRef.current) return;
+    if (!canvasNameRef.current || !canvasRef.current || !isRendered) return;
 
     const canvasName = canvasNameRef.current;
     const canvas = canvasRef.current;
@@ -24,7 +30,7 @@ function useDragCanvas(canvasRef, canvasNameRef, canvasIndex) {
       const originalMousePositionTop = e.clientY;
       const originalMousePositionLeft = e.clientX;
 
-      canvasName.style.opacity = 0.5;
+      canvasName.style.opacity = CANVAS_NAME_STYLES.OPACITY;
 
       const handleMouseMove = (e) => {
         movedTop = (e.clientY - originalMousePositionTop) / currentScale;
@@ -56,17 +62,23 @@ function useDragCanvas(canvasRef, canvasNameRef, canvasIndex) {
         movedLeft = 0;
 
         window.removeEventListener("mousemove", handleMouseMove);
-        window.removeEventListener("mouseup", handleMouseUp);
       };
 
       window.addEventListener("mousemove", handleMouseMove);
-      window.addEventListener("mouseup", handleMouseUp);
+      window.addEventListener("mouseup", handleMouseUp, { once: true });
     };
 
     canvasName.addEventListener("mousedown", handleMouseDown);
 
     return () => canvasName.removeEventListener("mouseDown", handleMouseDown);
-  }, [currentScale, dispatch, canvasIndex, canvasNameRef, canvasRef]);
+  }, [
+    currentScale,
+    dispatch,
+    canvasIndex,
+    canvasNameRef,
+    canvasRef,
+    isRendered,
+  ]);
 }
 
 export default useDragCanvas;

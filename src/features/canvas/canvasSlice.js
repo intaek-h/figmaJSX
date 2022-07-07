@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
+import tools from "../../constants/tools";
 
 const generateSampleCanvas = (
   top = 1000,
@@ -11,8 +12,6 @@ const generateSampleCanvas = (
   left,
   width,
   height,
-  xAxisSnap: [0, width / 2, width],
-  yAxisSnap: [0, height / 2, height],
   selectedShapes: [],
   children: [],
 });
@@ -28,7 +27,6 @@ const canvasSlice = createSlice({
         ...generateSampleCanvas(top, left, width, height),
         canvasName: `canvas_${state.length}`,
       };
-
       state.push(newCanvas);
     },
     changeCanvasName: (state, { payload: { name, canvasIndex } }) => {
@@ -42,11 +40,64 @@ const canvasSlice = createSlice({
         ...payload,
       };
     },
+    changeShapeColor: (state, { payload }) => {
+      const canvasIndex = payload.canvasIndex;
+      const shapeIndex = payload.shapeIndex;
+      delete payload.canvasIndex;
+      delete payload.shapeIndex;
+      if (
+        current(state[canvasIndex].children[shapeIndex]).type === tools.TEXT
+      ) {
+        state[canvasIndex].children[shapeIndex] = {
+          ...state[canvasIndex].children[shapeIndex],
+          color: payload.color,
+        };
+      } else {
+        state[canvasIndex].children[shapeIndex] = {
+          ...state[canvasIndex].children[shapeIndex],
+          backgroundColor: payload.color,
+        };
+      }
+    },
+    changeTextProperty: (state, { payload }) => {
+      const canvasIndex = payload.canvasIndex;
+      const shapeIndex = payload.shapeIndex;
+      delete payload.canvasIndex;
+      delete payload.shapeIndex;
+      if (
+        current(state[canvasIndex].children[shapeIndex]).type === tools.TEXT
+      ) {
+        state[canvasIndex].children[shapeIndex] = {
+          ...state[canvasIndex].children[shapeIndex],
+          ...payload,
+        };
+      }
+    },
+    changeLineThickness: (state, { payload }) => {
+      const canvasIndex = payload.canvasIndex;
+      const shapeIndex = payload.shapeIndex;
+      delete payload.canvasIndex;
+      delete payload.shapeIndex;
+      const targetLine = current(state[canvasIndex].children[shapeIndex]);
+      if (targetLine.type === tools.LINE) {
+        if (targetLine.width > targetLine.height) {
+          state[canvasIndex].children[shapeIndex] = {
+            ...state[canvasIndex].children[shapeIndex],
+            height: payload.thickness,
+          };
+        } else {
+          state[canvasIndex].children[shapeIndex] = {
+            ...state[canvasIndex].children[shapeIndex],
+            width: payload.thickness,
+          };
+        }
+      }
+    },
     addShape: (state, { payload }) => {
       const index = payload.canvasIndex;
       delete payload.canvasIndex;
-      payload.name = `${payload.type} ${state[index].children.length}`;
       state[index].children.push(payload);
+      payload.name = `${payload.type} ${state[index].children.length}`;
     },
     modifyShape: (state, { payload }) => {
       const canvasIndex = payload.canvasIndex;
@@ -57,6 +108,90 @@ const canvasSlice = createSlice({
         ...state[canvasIndex].children[shapeIndex],
         ...payload,
       };
+    },
+    resizeNorth: (state, { payload }) => {
+      const canvasIndex = payload.canvasIndex;
+      const shapeIndexes = payload.shapeIndexes;
+      shapeIndexes.forEach((i) => {
+        state[canvasIndex].children[i].top =
+          current(state[canvasIndex].children[i]).top + payload.change;
+        state[canvasIndex].children[i].height =
+          current(state[canvasIndex].children[i]).height - payload.change;
+      });
+    },
+    resizeEast: (state, { payload }) => {
+      const canvasIndex = payload.canvasIndex;
+      const shapeIndexes = payload.shapeIndexes;
+      shapeIndexes.forEach((i) => {
+        state[canvasIndex].children[i].width =
+          current(state[canvasIndex].children[i]).width + payload.change;
+      });
+    },
+    resizeSouth: (state, { payload }) => {
+      const canvasIndex = payload.canvasIndex;
+      const shapeIndexes = payload.shapeIndexes;
+      shapeIndexes.forEach((i) => {
+        state[canvasIndex].children[i].height =
+          current(state[canvasIndex].children[i]).height + payload.change;
+      });
+    },
+    resizeWest: (state, { payload }) => {
+      const canvasIndex = payload.canvasIndex;
+      const shapeIndexes = payload.shapeIndexes;
+      shapeIndexes.forEach((i) => {
+        state[canvasIndex].children[i].left =
+          current(state[canvasIndex].children[i]).left + payload.change;
+        state[canvasIndex].children[i].width =
+          current(state[canvasIndex].children[i]).width - payload.change;
+      });
+    },
+    resizeNorthEast: (state, { payload }) => {
+      const canvasIndex = payload.canvasIndex;
+      const shapeIndexes = payload.shapeIndexes;
+      shapeIndexes.forEach((i) => {
+        state[canvasIndex].children[i].top =
+          current(state[canvasIndex].children[i]).top + payload.verChange;
+        state[canvasIndex].children[i].height =
+          current(state[canvasIndex].children[i]).height - payload.verChange;
+        state[canvasIndex].children[i].width =
+          current(state[canvasIndex].children[i]).width + payload.horChange;
+      });
+    },
+    resizeSouthEast: (state, { payload }) => {
+      const canvasIndex = payload.canvasIndex;
+      const shapeIndexes = payload.shapeIndexes;
+      shapeIndexes.forEach((i) => {
+        state[canvasIndex].children[i].height =
+          current(state[canvasIndex].children[i]).height + payload.verChange;
+        state[canvasIndex].children[i].width =
+          current(state[canvasIndex].children[i]).width + payload.horChange;
+      });
+    },
+    resizeNorthWest: (state, { payload }) => {
+      const canvasIndex = payload.canvasIndex;
+      const shapeIndexes = payload.shapeIndexes;
+      shapeIndexes.forEach((i) => {
+        state[canvasIndex].children[i].top =
+          current(state[canvasIndex].children[i]).top + payload.verChange;
+        state[canvasIndex].children[i].height =
+          current(state[canvasIndex].children[i]).height - payload.verChange;
+        state[canvasIndex].children[i].left =
+          current(state[canvasIndex].children[i]).left + payload.horChange;
+        state[canvasIndex].children[i].width =
+          current(state[canvasIndex].children[i]).width - payload.horChange;
+      });
+    },
+    resizeSouthWest: (state, { payload }) => {
+      const canvasIndex = payload.canvasIndex;
+      const shapeIndexes = payload.shapeIndexes;
+      shapeIndexes.forEach((i) => {
+        state[canvasIndex].children[i].left =
+          current(state[canvasIndex].children[i]).left + payload.horChange;
+        state[canvasIndex].children[i].width =
+          current(state[canvasIndex].children[i]).width - payload.horChange;
+        state[canvasIndex].children[i].height =
+          current(state[canvasIndex].children[i]).height + payload.verChange;
+      });
     },
     changeShapeIndex: (state, { payload: { canvasIdx, fromIdx, toIdx } }) => {
       const shape = state[canvasIdx].children[fromIdx];
@@ -81,6 +216,17 @@ export const {
   changeShapeIndex,
   modifyCanvas,
   deleteShape,
+  changeShapeColor,
+  changeTextProperty,
+  changeLineThickness,
+  resizeEast,
+  resizeNorth,
+  resizeSouth,
+  resizeWest,
+  resizeNorthEast,
+  resizeSouthEast,
+  resizeNorthWest,
+  resizeSouthWest,
 } = canvasSlice.actions;
 
 export default canvasSlice.reducer;
