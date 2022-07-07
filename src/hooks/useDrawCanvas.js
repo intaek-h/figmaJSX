@@ -48,6 +48,8 @@ function useDrawCanvas(elementRef) {
       element.appendChild(canvasPreview);
       element.appendChild(sizePreview);
 
+      let lastAnimationFrame;
+
       const handleMouseMove = (e) => {
         const { height, left, top, width } = computePreviewElement(
           { x: startLeft, y: startTop },
@@ -57,6 +59,15 @@ function useDrawCanvas(elementRef) {
           }
         );
 
+        if (lastAnimationFrame) cancelAnimationFrame(lastAnimationFrame);
+
+        lastAnimationFrame = requestAnimationFrame(() => {
+          renderNextAnimationFrame(height, left, top, width)();
+          lastAnimationFrame = null;
+        });
+      };
+
+      const renderNextAnimationFrame = (height, left, top, width) => () => {
         canvasPreview.style.height = height + "px";
         canvasPreview.style.width = width + "px";
         canvasPreview.style.top = top + "px";

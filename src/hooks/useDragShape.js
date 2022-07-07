@@ -98,6 +98,7 @@ function useDragShape(
       let isHorMidAttached = false;
       let nearestPossibleSnapAtX;
       let nearestPossibleSnapAtY;
+      let lastAnimationFrame;
 
       canvas.appendChild(verticalLine);
       canvas.appendChild(horizontalLine);
@@ -106,6 +107,15 @@ function useDragShape(
         movedTop = (e.clientY - originalMousePositionTop) / currentScale;
         movedLeft = (e.clientX - originalMousePositionLeft) / currentScale;
 
+        if (lastAnimationFrame) cancelAnimationFrame(lastAnimationFrame);
+
+        lastAnimationFrame = requestAnimationFrame(() => {
+          renderNextAnimationFrame();
+          lastAnimationFrame = null;
+        });
+      };
+
+      const renderNextAnimationFrame = () => {
         const currentLeft = originalElPositionLeft + movedLeft;
         const currentTop = originalElPositionTop + movedTop;
 

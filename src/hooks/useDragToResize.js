@@ -42,6 +42,7 @@ function useDragToResize(pointerRef, direction) {
       let movedLeft;
       let prevMovedTop = 0;
       let prevMovedLeft = 0;
+      let lastAnimationFrame;
 
       batchGroupBy.start(randomID);
 
@@ -49,6 +50,17 @@ function useDragToResize(pointerRef, direction) {
         movedTop = (e.clientY - originalMousePositionTop) / currentScale;
         movedLeft = (e.clientX - originalMousePositionLeft) / currentScale;
 
+        if (lastAnimationFrame) cancelAnimationFrame(lastAnimationFrame);
+
+        lastAnimationFrame = requestAnimationFrame(() => {
+          renderNextAnimationFrame();
+          lastAnimationFrame = null;
+          prevMovedTop = movedTop;
+          prevMovedLeft = movedLeft;
+        });
+      };
+
+      const renderNextAnimationFrame = () => {
         if (direction === directions.N) {
           dispatch(
             resizeNorth({
@@ -118,9 +130,6 @@ function useDragToResize(pointerRef, direction) {
             })
           );
         }
-
-        prevMovedTop = movedTop;
-        prevMovedLeft = movedLeft;
       };
 
       const handleMouseUp = () => {

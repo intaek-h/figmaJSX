@@ -23,6 +23,7 @@ function useDragCanvas(
 
     let movedTop;
     let movedLeft;
+    let lastAnimationFrame;
 
     const handleMouseDown = (e) => {
       const originalElPositionTop = e.currentTarget.offsetTop;
@@ -36,6 +37,15 @@ function useDragCanvas(
         movedTop = (e.clientY - originalMousePositionTop) / currentScale;
         movedLeft = (e.clientX - originalMousePositionLeft) / currentScale;
 
+        if (lastAnimationFrame) cancelAnimationFrame(lastAnimationFrame);
+
+        lastAnimationFrame = requestAnimationFrame(() => {
+          renderNextAnimationFrame();
+          lastAnimationFrame = null;
+        });
+      };
+
+      const renderNextAnimationFrame = () => {
         canvasName.style.transform = `translate(${movedLeft}px, calc(${movedTop}px - 100%))`;
         canvas.style.transform = `translate(${movedLeft}px, ${movedTop}px)`;
       };
