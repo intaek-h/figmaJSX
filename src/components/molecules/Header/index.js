@@ -4,11 +4,15 @@ import DropDownMenu from "../../atoms/DropDownMenu";
 import ExportButton from "../../atoms/ExportButton";
 import ImportButton from "../../atoms/ImportButton";
 import AutoSaveButton from "../../atoms/AutoSaveButton";
+import NewProjectButton from "../../atoms/NewProjectButton";
 
 function Header() {
   return (
     <div className={styles.header}>
-      <ProjectTitleInput />
+      <div className={styles["left-side"]}>
+        <ProjectTitleInput />
+        <NewProjectButton />
+      </div>
       <div className={styles["right-side"]}>
         <AutoSaveButton />
         <ImportButton />
