@@ -1,0 +1,29 @@
+@use "../../scss/forwards" as *;
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.text {
+  color: $text-error-h1;
+  line-height: 1.7;
+  font-size: $emphasized-font-size;
+  user-select: none;
+}
+
+.clickable {
+  color: $text-highlight;
+  cursor: pointer;
+  user-select: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
+}

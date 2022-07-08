@@ -1,15 +1,13 @@
-import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useRef, useState } from "react";
 
 import styles from "./AutoSaveButton.module.scss";
 import LOCAL_STORAGE_KEY from "../../../constants/localStorage";
+import store from "../../../store/configureStore";
 
-const TWO_SECONDS = 2000;
-const TWENTY_SECONDS = 20000;
+const DISPLAY_DURATION = 2000;
+const AUTO_SAVE_INTERVAL = 20000;
 
 function AutoSaveButton() {
-  const store = useSelector((state) => state);
-
   const interval = useRef();
 
   const [isAutoSaveOn, setIsAutoSaveOn] = useState(false);
@@ -25,27 +23,16 @@ function AutoSaveButton() {
     setIsAutoSaveOn(true);
 
     interval.current = setInterval(() => {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(store));
+      const latestStore = store.getState();
+
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(latestStore));
       setIsSavedMsgDisplayed(true);
+
       setTimeout(() => {
         setIsSavedMsgDisplayed(false);
-      }, TWO_SECONDS);
-    }, TWENTY_SECONDS);
+      }, DISPLAY_DURATION);
+    }, AUTO_SAVE_INTERVAL);
   };
-
-  useEffect(() => {
-    if (!interval.current) return;
-
-    clearInterval(interval.current);
-
-    interval.current = setInterval(() => {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(store));
-      setIsSavedMsgDisplayed(true);
-      setTimeout(() => {
-        setIsSavedMsgDisplayed(false);
-      }, TWO_SECONDS);
-    }, TWENTY_SECONDS);
-  }, [store]);
 
   return (
     <span
