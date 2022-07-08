@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { ActionCreators } from "redux-undo";
 
-import { resetCanvas } from "../../../features/canvas/canvasSlice";
-import { resetGlobalStyles } from "../../../features/globalStyles/globalStylesSlice";
+import { loadCanvas } from "../../../features/canvas/canvasSlice";
+import { loadGlobalStyles } from "../../../features/globalStyles/globalStylesSlice";
 import {
-  resetUtility,
+  loadUtility,
   utilitySliceName,
 } from "../../../features/utility/utilitySlice";
 import { INVALID_FILE } from "../../../constants/errors";
@@ -36,9 +36,9 @@ function ImportButton() {
         )
           throw INVALID_FILE;
 
-        dispatch(resetCanvas(file.workbench.present.canvas));
-        dispatch(resetGlobalStyles(file.workbench.present.globalStyles));
-        dispatch(resetUtility(file.utility));
+        dispatch(loadCanvas(file.workbench.present.canvas));
+        dispatch(loadGlobalStyles(file.workbench.present.globalStyles));
+        dispatch(loadUtility(file.utility));
         dispatch(ActionCreators.clearHistory());
       } catch {
         setIsError(true);
