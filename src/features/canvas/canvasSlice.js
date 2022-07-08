@@ -22,6 +22,10 @@ const canvasSlice = createSlice({
   name: "canvas",
   initialState,
   reducers: {
+    loadCanvas: (_, { payload }) => {
+      return payload;
+    },
+    resetCanvas: () => initialState,
     createCanvas: (state, { payload: { top, left, width, height } }) => {
       const newCanvas = {
         ...generateSampleCanvas(top, left, width, height),
@@ -227,6 +231,8 @@ export const {
   resizeSouthEast,
   resizeNorthWest,
   resizeSouthWest,
+  loadCanvas,
+  resetCanvas,
 } = canvasSlice.actions;
 
 export default canvasSlice.reducer;

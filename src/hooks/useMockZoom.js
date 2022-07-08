@@ -19,6 +19,7 @@ function useMockZoom(outerRef, innerRef) {
 
     const outerBoard = outerRef.current;
     const innerBoard = innerRef.current;
+    let lastAnimationFrame;
 
     const zoomWithKeyboard = (event) => {
       if (
@@ -55,12 +56,21 @@ function useMockZoom(outerRef, innerRef) {
           currentScale
         );
 
-        innerBoard.style.transform = `scale(${scale}, ${scale})`;
-        outerBoard.scrollTop = adjustedScroll.y;
-        outerBoard.scrollLeft = adjustedScroll.x;
+        if (lastAnimationFrame) cancelAnimationFrame(lastAnimationFrame);
 
-        dispatch(setCurrentScale(scale));
+        lastAnimationFrame = requestAnimationFrame(() => {
+          renderNextAnimationFrame(adjustedScroll, scale)();
+          lastAnimationFrame = null;
+        });
       }
+    };
+
+    const renderNextAnimationFrame = (adjustedScroll, scale) => () => {
+      innerBoard.style.transform = `scale(${scale}, ${scale})`;
+      outerBoard.scrollTop = adjustedScroll.y;
+      outerBoard.scrollLeft = adjustedScroll.x;
+
+      dispatch(setCurrentScale(scale));
     };
 
     innerRef.current.style.transform = `scale(${currentScale}, ${currentScale})`;

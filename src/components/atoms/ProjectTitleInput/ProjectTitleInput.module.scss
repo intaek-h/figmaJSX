@@ -12,7 +12,7 @@
   padding: 0 10px;
   border: 2px solid $object-header-bg;
   box-sizing: border-box;
-  margin-left: 8px;
+  margin: 0px 8px;
 
   &:hover {
     border: 2px solid $object-line;
@@ -32,5 +32,5 @@
   color: $text-white;
   font-size: $emphasized-font-size;
   font-weight: $medium-font-weight;
-  margin-left: 20px;
+  margin: 0px 20px;
 }

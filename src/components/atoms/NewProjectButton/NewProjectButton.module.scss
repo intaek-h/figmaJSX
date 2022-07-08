@@ -1,0 +1,17 @@
+@use "../../scss/forwards" as *;
+
+.button {
+  color: $text-highlight;
+  font-size: $regular-font-size;
+  text-decoration: underline;
+  user-select: none;
+  cursor: pointer;
+
+  &:hover {
+    color: lighten($color: $text-highlight, $amount: 10%);
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
+}

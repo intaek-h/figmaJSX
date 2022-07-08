@@ -14,3 +14,11 @@
   font-weight: $medium-font-weight;
   margin-left: 20px;
 }
+
+.right-side {
+  @include flexCenterRow;
+}
+
+.left-side {
+  @include flexCenterRow;
+}

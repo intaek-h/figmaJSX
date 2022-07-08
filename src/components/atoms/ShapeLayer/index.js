@@ -4,11 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import tools from "../../../constants/tools";
 import { changeShapeIndex } from "../../../features/canvas/canvasSlice";
 import {
+  replaceSelectedShapeIndexes,
   selectCurrentTool,
   selectCurrentWorkingCanvasIndex,
   selectHoveredShape,
   selectSelectedShapeIndexes,
   setHoveredShape,
+  setWorkingCanvasIndex,
 } from "../../../features/utility/utilitySlice";
 import styles from "./ShapeLayer.module.scss";
 
@@ -41,6 +43,15 @@ function ShapeLayer({ name, currentCanvasIndex, currentShapeIndex }) {
         shapeIndex: null,
       })
     );
+  };
+
+  const handleClick = () => {
+    if (workingCanvasIndex === currentCanvasIndex) {
+      return dispatch(replaceSelectedShapeIndexes(currentShapeIndex));
+    }
+
+    dispatch(setWorkingCanvasIndex(currentCanvasIndex));
+    dispatch(replaceSelectedShapeIndexes(currentShapeIndex));
   };
 
   const handleDragOver = (e) => {
@@ -102,6 +113,7 @@ function ShapeLayer({ name, currentCanvasIndex, currentShapeIndex }) {
       onDragEnd={handleDragEnd}
       onDragOver={handleDragOver}
       onDrop={handleDrop}
+      onClick={handleClick}
     >
       {name}
     </div>

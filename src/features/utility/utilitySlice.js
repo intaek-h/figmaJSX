@@ -29,6 +29,10 @@ const utilitySlice = createSlice({
   name: "utility",
   initialState,
   reducers: {
+    loadUtility: (_, { payload }) => {
+      return payload;
+    },
+    resetUtility: () => initialState,
     deactivateSelector: (state) => {
       state.isSelectorActivated = false;
     },
@@ -117,6 +121,10 @@ export const {
   addSelectedShapeIndexes,
   emptySelectedShapeIndexes,
   replaceSelectedShapeIndexes,
+  loadUtility,
+  resetUtility,
 } = utilitySlice.actions;
+
+export const utilitySliceName = utilitySlice.name;
 
 export default utilitySlice.reducer;

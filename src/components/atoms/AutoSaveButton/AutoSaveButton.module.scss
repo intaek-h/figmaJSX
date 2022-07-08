@@ -1,0 +1,54 @@
+@use "../../scss/forwards" as *;
+
+.button {
+  color: $text-white;
+  font-size: $regular-font-size;
+  font-weight: $medium-font-weight;
+  border-radius: 3px;
+  user-select: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: lighten($color: $object-button-cyan-bg, $amount: 5%);
+  }
+
+  &:active {
+    background-color: darken($color: $object-button-cyan-bg, $amount: 10%);
+  }
+}
+
+.active {
+  @include flexCenterRow;
+  margin: 0px 5px;
+  color: $text-disabled;
+  font-size: $regular-font-size;
+  user-select: none;
+  cursor: pointer;
+}
+
+.icon-visible {
+  @include flexCenterRow;
+  margin: 0px 5px;
+  color: $text-green;
+  font-size: $regular-font-size;
+  user-select: none;
+  cursor: pointer;
+}
+
+.stale {
+  @include flexCenterRow;
+  margin: 0px 5px;
+  color: $text-disabled;
+  font-size: $regular-font-size;
+  user-select: none;
+  cursor: pointer;
+}
+
+.icon-greyed {
+  @include flexCenterRow;
+  margin: 0px 5px;
+  color: $text-disabled;
+  font-size: $regular-font-size;
+  user-select: none;
+  cursor: pointer;
+}

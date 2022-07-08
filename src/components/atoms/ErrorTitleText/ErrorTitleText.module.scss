@@ -1,0 +1,8 @@
+@use "../../scss/forwards" as *;
+
+.text {
+  font-size: $h1-font-size;
+  font-weight: 700;
+  color: $text-error-h1;
+  user-select: none;
+}
