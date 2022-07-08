@@ -10,6 +10,9 @@ const globalStylesSlice = createSlice({
   name: "globalStyles",
   initialState,
   reducers: {
+    resetGlobalStyles: (_, { payload }) => {
+      return payload;
+    },
     setGlobalColor: (state, { payload }) => {
       state.color = payload;
     },
@@ -31,7 +34,11 @@ export const selectGlobalThickness = (state) =>
 export const selectGlobalFontSize = (state) =>
   state.workbench.present.globalStyles.fontSize;
 
-export const { setGlobalColor, setGlobalFontSize, setGlobalThickness } =
-  globalStylesSlice.actions;
+export const {
+  setGlobalColor,
+  setGlobalFontSize,
+  setGlobalThickness,
+  resetGlobalStyles,
+} = globalStylesSlice.actions;
 
 export default globalStylesSlice.reducer;
