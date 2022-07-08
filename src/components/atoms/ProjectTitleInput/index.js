@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -17,12 +17,17 @@ function ProjectTitleInput() {
   const [isFocused, setIsFocused] = useState(false);
   const [title, setTitle] = useState(projectTitle);
 
+  useEffect(() => {
+    setTitle(projectTitle);
+  }, [projectTitle]);
+
   if (isFocused) {
     return (
       <input
         type="text"
         className={styles.field}
         value={title}
+        autoFocus
         onFocus={() => dispatch(setInputFieldFocused())}
         onChange={(e) => setTitle(e.target.value)}
         onBlur={() => {
@@ -30,7 +35,6 @@ function ProjectTitleInput() {
           dispatch(setInputFieldBlurred());
           setIsFocused(false);
         }}
-        autoFocus
       />
     );
   }

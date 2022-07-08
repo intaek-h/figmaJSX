@@ -20,3 +20,24 @@
     background-color: darken($color: $object-button-grey-bg, $amount: 10%);
   }
 }
+
+.error {
+  @include flexCenter;
+  padding: 6px 10px;
+  margin: 0px 5px;
+  background-color: $object-button-red-bg;
+  color: $text-white;
+  font-size: $regular-font-size;
+  font-weight: $medium-font-weight;
+  border-radius: 3px;
+  user-select: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: lighten($color: $object-button-grey-bg, $amount: 5%);
+  }
+
+  &:active {
+    background-color: darken($color: $object-button-grey-bg, $amount: 10%);
+  }
+}

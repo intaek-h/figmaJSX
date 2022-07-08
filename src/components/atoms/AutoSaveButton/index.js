@@ -1,5 +1,6 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
+
 import styles from "./AutoSaveButton.module.scss";
 import LOCAL_STORAGE_KEY from "../../../constants/localStorage";
 
@@ -9,7 +10,7 @@ const TWENTY_SECONDS = 20000;
 function AutoSaveButton() {
   const store = useSelector((state) => state);
 
-  const increment = useRef(null);
+  const interval = useRef();
 
   const [isAutoSaveOn, setIsAutoSaveOn] = useState(false);
   const [isSavedMsgDisplayed, setIsSavedMsgDisplayed] = useState(false);
@@ -17,13 +18,13 @@ function AutoSaveButton() {
   const toggleAutoSave = () => {
     if (isAutoSaveOn) {
       setIsAutoSaveOn(false);
-      clearInterval(increment.current);
+      clearInterval(interval.current);
       return;
     }
 
     setIsAutoSaveOn(true);
 
-    increment.current = setInterval(() => {
+    interval.current = setInterval(() => {
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(store));
       setIsSavedMsgDisplayed(true);
       setTimeout(() => {
@@ -31,6 +32,20 @@ function AutoSaveButton() {
       }, TWO_SECONDS);
     }, TWENTY_SECONDS);
   };
+
+  useEffect(() => {
+    if (!interval.current) return;
+
+    clearInterval(interval.current);
+
+    interval.current = setInterval(() => {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(store));
+      setIsSavedMsgDisplayed(true);
+      setTimeout(() => {
+        setIsSavedMsgDisplayed(false);
+      }, TWO_SECONDS);
+    }, TWENTY_SECONDS);
+  }, [store]);
 
   return (
     <span
@@ -41,7 +56,7 @@ function AutoSaveButton() {
       {isAutoSaveOn && (
         <span
           className={`material-symbols-outlined ${
-            isSavedMsgDisplayed ? styles["icon-visible"] : styles["icon-hidden"]
+            isSavedMsgDisplayed ? styles["icon-visible"] : styles["icon-greyed"]
           }`}
         >
           done

@@ -44,7 +44,7 @@
   cursor: pointer;
 }
 
-.icon-hidden {
+.icon-greyed {
   @include flexCenterRow;
   margin: 0px 5px;
   color: $text-disabled;
