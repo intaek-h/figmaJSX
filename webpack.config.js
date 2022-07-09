@@ -27,7 +27,7 @@ module.exports = {
         },
       },
       {
-        test: /\.s[ac]ss$/i,
+        test: /\.(sa|sc|c)ss$/,
         exclude: /node_module/,
         use: [
           MiniCssExtractPlugin.loader,
@@ -60,5 +60,14 @@ module.exports = {
   devServer: {
     port: 3000,
     hot: true,
+  },
+  stats: {
+    errorDetails: true,
+  },
+  resolve: {
+    fallback: {
+      perf_hooks: false,
+      canvas: false,
+    },
   },
 };
