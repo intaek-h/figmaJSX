@@ -25,6 +25,7 @@ function ErrorDescriptionText() {
 
   const wipeData = () => {
     localStorage.removeItem(LOCAL_STORAGE_KEY);
+    window.location.reload();
   };
 
   const reloadPage = () => {
