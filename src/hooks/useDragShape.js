@@ -1,12 +1,16 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import {
   HOR_SNAP_LINE_STYLES,
   VER_SNAP_LINE_STYLES,
 } from "../constants/styles";
-
 import tools from "../constants/tools";
-import { modifyShape, selectAllCanvas } from "../features/canvas/canvasSlice";
+import {
+  addShape,
+  modifyShape,
+  selectAllCanvas,
+} from "../features/canvas/canvasSlice";
 import {
   selectCurrentScale,
   selectCurrentTool,
@@ -29,6 +33,8 @@ function useDragShape(
   const currentScale = useSelector(selectCurrentScale);
   const isDragScrolling = useSelector(selectIsDragScrolling);
   const canvases = useSelector(selectAllCanvas);
+
+  const [isCloning, setIsCloning] = useState(false);
 
   useEffect(() => {
     if (
@@ -386,10 +392,115 @@ function useDragShape(
       window.addEventListener("mouseup", handleMouseUp, { once: true });
     };
 
+    const handleAltKeyDown = (e) => {
+      if (e.altKey) {
+        e.preventDefault();
+        setIsCloning(true);
+        shape.addEventListener("mousedown", handleMouseDownClone);
+        window.addEventListener("keyup", handleAltKeyUp);
+      }
+    };
+
+    const handleAltKeyUp = (e) => {
+      if (e.code === "AltLeft") {
+        e.preventDefault();
+        setIsCloning(false);
+        shape.removeEventListener("mousedown", handleMouseDownClone);
+        window.removeEventListener("keyup", handleAltKeyUp);
+      }
+    };
+
+    const handleMouseDownClone = (e) => {
+      e.stopPropagation();
+
+      const targetShape = canvases[canvasIndex].children[shapeIndex];
+      const shapeClone = document.createElement("div");
+      const shapeTop = targetShape.top;
+      const shapeLeft = targetShape.left;
+      const originalMousePositionTop = e.clientY;
+      const originalMousePositionLeft = e.clientX;
+
+      shapeClone.style.top = targetShape.top + "px";
+      shapeClone.style.left = targetShape.left + "px";
+      shapeClone.style.width = targetShape.width + "px";
+      shapeClone.style.height = targetShape.height + "px";
+      shapeClone.style.position = "absolute";
+
+      if (targetShape.type === tools.TEXT) {
+        shapeClone.style.color = targetShape.color;
+        shapeClone.style.fontSize = targetShape.fontSize + "px";
+        shapeClone.textContent = targetShape.text;
+      } else {
+        shapeClone.style.backgroundColor = targetShape.backgroundColor;
+      }
+
+      if (targetShape.type === tools.ELLIPSE) {
+        shapeClone.style.borderRadius = targetShape.borderRadius;
+      }
+
+      let movedTop;
+      let movedLeft;
+
+      canvas.appendChild(shapeClone);
+
+      const handleMouseMoveClone = (e) => {
+        movedTop = (e.clientY - originalMousePositionTop) / currentScale;
+        movedLeft = (e.clientX - originalMousePositionLeft) / currentScale;
+
+        const currentLeft = shapeLeft + movedLeft;
+        const currentTop = shapeTop + movedTop;
+
+        shapeClone.style.top = currentTop + "px";
+        shapeClone.style.left = currentLeft + "px";
+      };
+
+      const handleMouseUpClone = () => {
+        const currentLeft = shapeLeft + movedLeft;
+        const currentTop = shapeTop + movedTop;
+
+        const coordinates = {
+          type: targetShape.type,
+          name: targetShape.type,
+          top: currentTop,
+          left: currentLeft,
+          height: targetShape.height,
+          width: targetShape.width,
+          canvasIndex,
+        };
+
+        if (targetShape.type === tools.RECTANGLE) {
+          coordinates.backgroundColor = targetShape.backgroundColor;
+        } else if (targetShape.type === tools.ELLIPSE) {
+          coordinates.backgroundColor = targetShape.backgroundColor;
+          coordinates.borderRadius = targetShape.borderRadius;
+        } else if (targetShape.type === tools.LINE) {
+          coordinates.backgroundColor = targetShape.backgroundColor;
+        } else if (targetShape.type === tools.TEXT) {
+          coordinates.text = targetShape.text;
+          coordinates.color = targetShape.color;
+          coordinates.fontSize = targetShape.fontSize;
+        }
+
+        dispatch(addShape(coordinates));
+        shapeClone.remove();
+
+        window.removeEventListener("mousemove", handleMouseMoveClone);
+      };
+
+      window.addEventListener("mousemove", handleMouseMoveClone);
+      window.addEventListener("mouseup", handleMouseUpClone, { once: true });
+    };
+
+    window.addEventListener("keydown", handleAltKeyDown);
     shape.addEventListener("mousedown", handleMouseDown);
+
+    if (isCloning) {
+      shape.removeEventListener("mousedown", handleMouseDown);
+    }
 
     return () => {
       shape.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener("keydown", handleAltKeyDown);
     };
   }, [
     canvasIndex,
@@ -398,6 +509,7 @@ function useDragShape(
     currentScale,
     currentTool,
     dispatch,
+    isCloning,
     isDragScrolling,
     isRendered,
     shapeIndex,
