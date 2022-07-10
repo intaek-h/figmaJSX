@@ -78,13 +78,13 @@ export const LINE_PREVIEW_STYLES = {
 
 export const TEXT_PREVIEW_STYLES = {
   CONTENT_EDITABLE: "plaintext-only",
-  MIN_WIDTH: "min-width",
+  MIN_WIDTH: "10px",
   POSITION: "absolute",
   CARET_COLOR: "green",
   BG_COLOR: "transparent",
   MARGIN: 0,
   PADDING: 0,
   BORDER: "none",
-  BORDER_BOTTOM: "1px dotted black",
+  BORDER_BOTTOM: "2px solid yellowgreen",
   OUTLINE: "none",
 };
