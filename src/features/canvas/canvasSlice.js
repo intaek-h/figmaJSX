@@ -26,6 +26,9 @@ const canvasSlice = createSlice({
       return payload;
     },
     resetCanvas: () => initialState,
+    deleteCanvas: (state, { payload: canvasIndex }) => {
+      state.splice(canvasIndex, 1);
+    },
     createCanvas: (state, { payload: { top, left, width, height } }) => {
       const newCanvas = {
         ...generateSampleCanvas(top, left, width, height),
@@ -212,6 +215,9 @@ const canvasSlice = createSlice({
 
 export const selectAllCanvas = (state) => state.workbench.present.canvas;
 
+export const selectCanvasLength = (state) =>
+  state.workbench.present.canvas.length;
+
 export const {
   createCanvas,
   changeCanvasName,
@@ -233,6 +239,7 @@ export const {
   resizeSouthWest,
   loadCanvas,
   resetCanvas,
+  deleteCanvas,
 } = canvasSlice.actions;
 
 export default canvasSlice.reducer;

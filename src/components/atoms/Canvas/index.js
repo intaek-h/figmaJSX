@@ -10,6 +10,7 @@ import {
   selectSelectedShapeIndexes,
   setInputFieldBlurred,
   setInputFieldFocused,
+  setWorkingCanvasIndex,
 } from "../../../features/utility/utilitySlice";
 import useDragCanvas from "../../../hooks/useDragCanvas";
 import useDrawShape from "../../../hooks/useDrawShape";
@@ -18,6 +19,7 @@ import ShapeText from "../ShapeText";
 import EditPointer from "../EditPointer";
 import cn from "./Canvas.module.scss";
 import computeSelectionBox from "../../../utilities/computeSelectionBox";
+import { CANVAS_NAME_STYLES } from "../../../constants/styles";
 
 function Canvas({ canvasIndex, ...canvas }) {
   const dispatch = useDispatch();
@@ -65,10 +67,14 @@ function Canvas({ canvasIndex, ...canvas }) {
           style={{
             top: canvas.top,
             left: canvas.left,
+            color:
+              workingCanvasIndex === canvasIndex &&
+              CANVAS_NAME_STYLES.HIGHLIGHTED_COLOR,
           }}
           onDoubleClick={() => {
             setIsDoubleClicked(true);
           }}
+          onClick={() => dispatch(setWorkingCanvasIndex(canvasIndex))}
         >
           {canvas.canvasName}
         </span>
