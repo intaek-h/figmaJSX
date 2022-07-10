@@ -16,6 +16,7 @@ export const SHAPE_TEXT_STYLES = {
 
 export const CANVAS_NAME_STYLES = {
   OPACITY: 0.5,
+  HIGHLIGHTED_COLOR: "#5096ff",
 };
 
 export const VER_SNAP_LINE_STYLES = {

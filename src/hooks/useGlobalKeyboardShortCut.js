@@ -3,13 +3,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { ActionCreators } from "redux-undo";
 
 import tools from "../constants/tools";
-import { deleteShape } from "../features/canvas/canvasSlice";
+import {
+  deleteCanvas,
+  deleteShape,
+  selectCanvasLength,
+} from "../features/canvas/canvasSlice";
 import {
   emptySelectedShapeIndexes,
   selectCurrentWorkingCanvasIndex,
   selectIsInputFieldFocused,
   selectSelectedShapeIndexes,
   setCurrentTool,
+  setWorkingCanvasIndex,
 } from "../features/utility/utilitySlice";
 
 function useGlobalKeyboardShortCut() {
@@ -18,6 +23,7 @@ function useGlobalKeyboardShortCut() {
   const workingCanvasIndex = useSelector(selectCurrentWorkingCanvasIndex);
   const selectedShapeIndexes = useSelector(selectSelectedShapeIndexes);
   const isInputFieldFocused = useSelector(selectIsInputFieldFocused);
+  const canvasCount = useSelector(selectCanvasLength);
 
   useEffect(() => {
     if (isInputFieldFocused) return;
@@ -32,6 +38,14 @@ function useGlobalKeyboardShortCut() {
             shapeIndexArr: selectedShapeIndexes,
           })
         );
+      } else if (
+        e.key === "Backspace" &&
+        selectedShapeIndexes.length === 0 &&
+        canvasCount > 1
+      ) {
+        e.preventDefault();
+        dispatch(deleteCanvas(workingCanvasIndex));
+        dispatch(setWorkingCanvasIndex(0));
       }
     };
 
@@ -137,7 +151,13 @@ function useGlobalKeyboardShortCut() {
       window.removeEventListener("keydown", textToolShortCut);
       window.removeEventListener("keydown", canvasToolShortCut);
     };
-  }, [dispatch, isInputFieldFocused, selectedShapeIndexes, workingCanvasIndex]);
+  }, [
+    canvasCount,
+    dispatch,
+    isInputFieldFocused,
+    selectedShapeIndexes,
+    workingCanvasIndex,
+  ]);
 }
 
 export default useGlobalKeyboardShortCut;

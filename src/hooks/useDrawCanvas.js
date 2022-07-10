@@ -11,6 +11,7 @@ import {
   selectCurrentScale,
   selectCurrentTool,
   selectIsDragScrolling,
+  setCurrentTool,
 } from "../features/utility/utilitySlice";
 import computePreviewElement from "../utilities/computePreviewElement";
 
@@ -104,6 +105,8 @@ function useDrawCanvas(elementRef) {
 
         coordinates.height + coordinates.width > 4 &&
           dispatch(createCanvas(coordinates));
+
+        dispatch(setCurrentTool(tools.SELECTOR));
 
         canvasPreview.remove();
         sizePreview.remove();
