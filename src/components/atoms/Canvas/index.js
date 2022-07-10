@@ -6,6 +6,7 @@ import tools from "../../../constants/tools";
 import { changeCanvasName } from "../../../features/canvas/canvasSlice";
 import {
   selectCurrentWorkingCanvasIndex,
+  selectIsDraggingShape,
   selectSelectedShapeIndexes,
   setInputFieldBlurred,
   setInputFieldFocused,
@@ -23,6 +24,7 @@ function Canvas({ canvasIndex, ...canvas }) {
 
   const workingCanvasIndex = useSelector(selectCurrentWorkingCanvasIndex);
   const selectedShapeIndexes = useSelector(selectSelectedShapeIndexes);
+  const isDraggingShape = useSelector(selectIsDraggingShape);
 
   const canvasRef = useRef();
   const inputRef = useRef();
@@ -91,7 +93,9 @@ function Canvas({ canvasIndex, ...canvas }) {
             />
           )
         )}
-        {workingCanvasIndex === canvasIndex && selectedShapeIndexes.length
+        {workingCanvasIndex === canvasIndex &&
+        selectedShapeIndexes.length &&
+        !isDraggingShape
           ? Object.values(directions).map((direction) => (
               <EditPointer
                 direction={direction}
