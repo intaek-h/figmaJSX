@@ -12,9 +12,11 @@ import {
   selectAllCanvas,
 } from "../features/canvas/canvasSlice";
 import {
+  finishDraggingShape,
   selectCurrentScale,
   selectCurrentTool,
   selectIsDragScrolling,
+  startDraggingShape,
 } from "../features/utility/utilitySlice";
 import computeSnapPosition from "../utilities/computeSnapPosition";
 
@@ -105,11 +107,17 @@ function useDragShape(
       let nearestPossibleSnapAtX;
       let nearestPossibleSnapAtY;
       let lastAnimationFrame;
+      let isFirstMove = true;
 
       canvas.appendChild(verticalLine);
       canvas.appendChild(horizontalLine);
 
       const handleMouseMove = (e) => {
+        if (isFirstMove) {
+          dispatch(startDraggingShape());
+          isFirstMove = false;
+        }
+
         movedTop = (e.clientY - originalMousePositionTop) / currentScale;
         movedLeft = (e.clientX - originalMousePositionLeft) / currentScale;
 
@@ -381,6 +389,8 @@ function useDragShape(
             );
           }
         }
+
+        dispatch(finishDraggingShape());
 
         movedTop = 0;
         movedLeft = 0;
