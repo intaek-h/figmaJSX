@@ -63,16 +63,8 @@ function useDragCanvas(
       canvasList.splice(currentCanvasIndex, 1);
 
       canvasList.forEach((canvas) => {
-        filteredXAxisSnapPoints.push(
-          canvas.left,
-          canvas.left + canvas.width / 2,
-          canvas.left + canvas.width
-        );
-        filteredYAxisSnapPoints.push(
-          canvas.top,
-          canvas.top + canvas.height / 2,
-          canvas.top + canvas.height
-        );
+        filteredXAxisSnapPoints.push(canvas.left, canvas.left + canvas.width);
+        filteredYAxisSnapPoints.push(canvas.top, canvas.top + canvas.height);
       });
 
       canvasName.style.opacity = CANVAS_NAME_STYLES.OPACITY;
