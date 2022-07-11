@@ -56,7 +56,12 @@ function ArtBoard() {
     <div ref={boardRef} className={styles["artboard-wrapper"]}>
       <div ref={innerBoardRef} className={styles.artboard}>
         {canvases.map((canvas, i) => (
-          <Canvas {...canvas} canvasIndex={i} key={i} />
+          <Canvas
+            {...canvas}
+            canvasIndex={i}
+            artBoardRef={innerBoardRef}
+            key={i}
+          />
         ))}
       </div>
     </div>

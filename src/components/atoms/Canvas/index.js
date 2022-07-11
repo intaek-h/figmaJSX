@@ -21,7 +21,7 @@ import cn from "./Canvas.module.scss";
 import computeSelectionBox from "../../../utilities/computeSelectionBox";
 import { CANVAS_NAME_STYLES } from "../../../constants/styles";
 
-function Canvas({ canvasIndex, ...canvas }) {
+function Canvas({ artBoardRef, canvasIndex, ...canvas }) {
   const dispatch = useDispatch();
 
   const workingCanvasIndex = useSelector(selectCurrentWorkingCanvasIndex);
@@ -36,7 +36,7 @@ function Canvas({ canvasIndex, ...canvas }) {
 
   useDrawShape(canvasRef, canvasIndex, canvas.children);
 
-  useDragCanvas(canvasRef, nameRef, canvasIndex, !isDoubleClicked);
+  useDragCanvas(canvasRef, nameRef, artBoardRef, canvasIndex, !isDoubleClicked);
 
   return (
     <>

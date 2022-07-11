@@ -97,7 +97,6 @@ function useDragShape(
 
       let movedTop;
       let movedLeft;
-      let isLocked = false; // eslint-disable-line no-unused-vars
       let isLeftAttached = false;
       let isRightAttached = false;
       let isVerMidAttached = false;
@@ -150,7 +149,6 @@ function useDragShape(
 
         if (Math.abs(currentLeft - nearestPossibleSnapAtX) < GRAVITY) {
           shape.style.left = nearestPossibleSnapAtX + "px";
-          isLocked = true;
           isLeftAttached = true;
           isRightAttached = false;
           isVerMidAttached = false;
@@ -159,7 +157,6 @@ function useDragShape(
           GRAVITY
         ) {
           shape.style.left = nearestPossibleSnapAtX - originalElWidth + "px";
-          isLocked = true;
           isRightAttached = true;
           isLeftAttached = false;
           isVerMidAttached = false;
@@ -169,13 +166,11 @@ function useDragShape(
         ) {
           shape.style.left =
             nearestPossibleSnapAtX - originalElWidth / 2 + "px";
-          isLocked = true;
           isRightAttached = false;
           isLeftAttached = false;
           isVerMidAttached = true;
         } else {
           shape.style.left = currentLeft + "px";
-          isLocked = false;
           isLeftAttached = false;
           isRightAttached = false;
           isVerMidAttached = false;
@@ -183,7 +178,6 @@ function useDragShape(
 
         if (Math.abs(currentTop - nearestPossibleSnapAtY) < GRAVITY) {
           shape.style.top = nearestPossibleSnapAtY + "px";
-          isLocked = true;
           isTopAttached = true;
           isBottomAttached = false;
           isHorMidAttached = false;
@@ -192,7 +186,6 @@ function useDragShape(
           GRAVITY
         ) {
           shape.style.top = nearestPossibleSnapAtY - originalElHeight + "px";
-          isLocked = true;
           isBottomAttached = true;
           isTopAttached = false;
           isHorMidAttached = false;
@@ -202,13 +195,11 @@ function useDragShape(
         ) {
           shape.style.top =
             nearestPossibleSnapAtY - originalElHeight / 2 + "px";
-          isLocked = true;
           isBottomAttached = false;
           isTopAttached = false;
           isHorMidAttached = true;
         } else {
           shape.style.top = currentTop + "px";
-          isLocked = false;
           isTopAttached = false;
           isBottomAttached = false;
           isHorMidAttached = false;
