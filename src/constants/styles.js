@@ -89,3 +89,10 @@ export const TEXT_PREVIEW_STYLES = {
   BORDER_BOTTOM: "2px solid yellowgreen",
   OUTLINE: "none",
 };
+
+export const MULTI_SELECTION_BOX_STYLES = {
+  POSITION: "absolute",
+  BG_COLOR: "transparent",
+  BORDER: "2px solid #c8deff",
+  BOX_SIZING: "border-box",
+};
