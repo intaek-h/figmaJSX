@@ -20,6 +20,7 @@ import EditPointer from "../EditPointer";
 import cn from "./Canvas.module.scss";
 import computeSelectionBox from "../../../utilities/computeSelectionBox";
 import { CANVAS_NAME_STYLES } from "../../../constants/styles";
+import useDragMultipleShapes from "../../../hooks/useDragMultipleShapes";
 
 function Canvas({ artBoardRef, canvasIndex, ...canvas }) {
   const dispatch = useDispatch();
@@ -37,6 +38,8 @@ function Canvas({ artBoardRef, canvasIndex, ...canvas }) {
   useDrawShape(canvasRef, canvasIndex, canvas.children);
 
   useDragCanvas(canvasRef, nameRef, artBoardRef, canvasIndex, !isDoubleClicked);
+
+  useDragMultipleShapes(canvasRef, canvasIndex);
 
   return (
     <>

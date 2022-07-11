@@ -14,6 +14,7 @@ import {
   selectCurrentWorkingCanvasIndex,
   selectHoveredShape,
   setHoveredShape,
+  setInputFieldBlurred,
   setInputFieldFocused,
   setWorkingCanvasIndex,
 } from "../../../features/utility/utilitySlice";
@@ -108,6 +109,7 @@ function ShapeText({
             setIsMouseHovered(false);
             dispatch(modifyShape(newText));
             dispatch(activateSelector());
+            dispatch(setInputFieldBlurred());
           }}
         >
           {canvas.text}

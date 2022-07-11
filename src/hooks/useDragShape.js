@@ -371,7 +371,7 @@ function useDragShape(
           }
         }
 
-        dispatch(finishDraggingShape());
+        !isFirstMove && dispatch(finishDraggingShape());
 
         movedTop = 0;
         movedLeft = 0;
