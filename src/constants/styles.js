@@ -23,7 +23,7 @@ export const VER_SNAP_LINE_STYLES = {
   HIDDEN: "hidden",
   VISIBLE: "visible",
   POSITION: "absolute",
-  WIDTH: "1px",
+  WIDTH: "2px",
   HEIGHT: "100%",
   BG_COLOR: "#c8deff",
 };
@@ -33,7 +33,7 @@ export const HOR_SNAP_LINE_STYLES = {
   VISIBLE: "visible",
   POSITION: "absolute",
   WIDTH: "100%",
-  HEIGHT: "1px",
+  HEIGHT: "2px",
   BG_COLOR: "#c8deff",
 };
 

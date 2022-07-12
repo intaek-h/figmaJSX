@@ -358,13 +358,13 @@ function useDragMultipleShapes(canvasRef, canvasIndex) {
           });
         }
 
+        !isFirstMove && dispatch(finishDraggingShape());
+
+        movedTop = 0;
+        movedLeft = 0;
+
         window.removeEventListener("mousemove", handleMouseMove);
       };
-
-      !isFirstMove && dispatch(finishDraggingShape());
-
-      movedTop = 0;
-      movedLeft = 0;
 
       window.addEventListener("mousemove", handleMouseMove);
       window.addEventListener("mouseup", handleMouseUp, { once: true });
