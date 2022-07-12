@@ -7,7 +7,6 @@ import utilitySlice from "../features/utility/utilitySlice";
 import { batchGroupBy } from "../utilities/batchActions";
 
 const MAXIMUM_UNDO_COUNT = 100;
-const WORKBENCH_REDUCER_NAME = "workbench";
 
 const workbench = combineReducers({
   globalStyles: globalStylesSlice,
@@ -28,4 +27,4 @@ const store = configureStore({
 
 export default store;
 
-export const workbenchReducerName = WORKBENCH_REDUCER_NAME;
+export const WORKBENCH_REDUCER_NAME = "workbench";
