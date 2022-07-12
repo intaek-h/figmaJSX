@@ -9,8 +9,9 @@ import {
 import styles from "./ToolBox.module.scss";
 
 function ToolBox({ tool }) {
-  const currentTool = useSelector(selectCurrentTool);
   const dispatch = useDispatch();
+
+  const currentTool = useSelector(selectCurrentTool);
 
   let shortcut = "";
 

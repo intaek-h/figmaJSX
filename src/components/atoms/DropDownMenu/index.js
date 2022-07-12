@@ -19,6 +19,11 @@ function DropDownMenu() {
 
   const [isOpen, setIsOpen] = useState(false);
 
+  const handleClick = (zoom) => () => {
+    setIsOpen(false);
+    dispatch(setCurrentScale(zoom.value));
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.box}>
@@ -38,13 +43,7 @@ function DropDownMenu() {
         >
           <ul>
             {ZOOM_LEVELS.map((zoom, i) => (
-              <li
-                onClick={() => {
-                  setIsOpen(false);
-                  dispatch(setCurrentScale(zoom.value));
-                }}
-                key={i}
-              >
+              <li onClick={handleClick(zoom)} key={i}>
                 {zoom.level}
               </li>
             ))}

@@ -32,17 +32,16 @@ const CompileModal = ({ children, closePortal }) => {
     return () => clearTimeout(timer);
   }, [isCopied]);
 
+  const handleClick = () => {
+    navigator.clipboard.writeText(children);
+    setIsCopied(true);
+  };
+
   if (portalRef.current && isMounted) {
     return createPortal(
       <div className={styles.container}>
         <div className={styles.background} onClick={closePortal} />
-        <div
-          className={styles.content}
-          onClick={() => {
-            navigator.clipboard.writeText(children);
-            setIsCopied(true);
-          }}
-        >
+        <div className={styles.content} onClick={handleClick}>
           <pre>
             <code className="language-jsx">{children}</code>
           </pre>

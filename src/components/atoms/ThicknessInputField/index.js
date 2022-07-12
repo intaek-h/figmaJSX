@@ -28,6 +28,24 @@ function ThicknessInputField() {
 
   const [value, setValue] = useState(globalThickness);
 
+  const handleChange = (e) => {
+    setValue(e.target.value);
+    if (selectedShapeIndexes.length === 1) {
+      dispatch(
+        changeLineThickness({
+          canvasIndex: workingCanvasIndex,
+          shapeIndex: selectedShapeIndexes[0],
+          thickness: Number(e.target.value),
+        })
+      );
+    }
+  };
+
+  const handleBlur = () => {
+    dispatch(setGlobalThickness(Number(value)));
+    dispatch(setInputFieldBlurred());
+  };
+
   useEffect(() => {
     if (
       selectedShapeIndexes.length === 1 &&
@@ -47,24 +65,10 @@ function ThicknessInputField() {
       className={styles.input}
       value={value}
       onFocus={() => dispatch(setInputFieldFocused())}
-      onChange={(e) => {
-        setValue(e.target.value);
-        if (selectedShapeIndexes.length === 1) {
-          dispatch(
-            changeLineThickness({
-              canvasIndex: workingCanvasIndex,
-              shapeIndex: selectedShapeIndexes[0],
-              thickness: Number(e.target.value),
-            })
-          );
-        }
-      }}
+      onChange={handleChange}
+      onBlur={handleBlur}
       onKeyDown={(e) => {
         e.key === "Enter" && e.target.blur();
-      }}
-      onBlur={() => {
-        dispatch(setGlobalThickness(Number(value)));
-        dispatch(setInputFieldBlurred());
       }}
     />
   );

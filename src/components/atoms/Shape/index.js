@@ -24,6 +24,37 @@ function Shape({ canvasRef, currentCanvasIndex, currentShapeIndex, ...shape }) {
 
   const [isMouseHovered, setIsMouseHovered] = useState(false);
 
+  const handleMouseEnter = () => {
+    dispatch(deactivateSelector());
+    dispatch(
+      setHoveredShape({
+        canvasIndex: currentCanvasIndex,
+        shapeIndex: currentShapeIndex,
+      })
+    );
+    setIsMouseHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    dispatch(activateSelector());
+    dispatch(
+      setHoveredShape({
+        canvasIndex: null,
+        shapeIndex: null,
+      })
+    );
+    setIsMouseHovered(false);
+  };
+
+  const handleClick = () => {
+    if (workingCanvasIndex === currentCanvasIndex) {
+      return dispatch(replaceSelectedShapeIndexes(currentShapeIndex));
+    }
+
+    dispatch(setWorkingCanvasIndex(currentCanvasIndex));
+    dispatch(replaceSelectedShapeIndexes(currentShapeIndex));
+  };
+
   useDragShape(shapeRef, canvasRef, currentCanvasIndex, currentShapeIndex);
 
   useEffect(() => {
@@ -43,34 +74,9 @@ function Shape({ canvasRef, currentCanvasIndex, currentShapeIndex, ...shape }) {
       className={styles.shape}
       style={{ ...shape, border: isMouseHovered && SHAPE_STYLES.BORDER }}
       draggable={false}
-      onMouseEnter={() => {
-        dispatch(deactivateSelector());
-        dispatch(
-          setHoveredShape({
-            canvasIndex: currentCanvasIndex,
-            shapeIndex: currentShapeIndex,
-          })
-        );
-        setIsMouseHovered(true);
-      }}
-      onMouseLeave={() => {
-        dispatch(activateSelector());
-        dispatch(
-          setHoveredShape({
-            canvasIndex: null,
-            shapeIndex: null,
-          })
-        );
-        setIsMouseHovered(false);
-      }}
-      onClick={() => {
-        if (workingCanvasIndex === currentCanvasIndex) {
-          return dispatch(replaceSelectedShapeIndexes(currentShapeIndex));
-        }
-
-        dispatch(setWorkingCanvasIndex(currentCanvasIndex));
-        dispatch(replaceSelectedShapeIndexes(currentShapeIndex));
-      }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onClick={handleClick}
     ></div>
   );
 }

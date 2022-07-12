@@ -17,6 +17,12 @@ function ProjectTitleInput() {
   const [isFocused, setIsFocused] = useState(false);
   const [title, setTitle] = useState(projectTitle);
 
+  const handleBlur = () => {
+    dispatch(setProjectTitle(title));
+    dispatch(setInputFieldBlurred());
+    setIsFocused(false);
+  };
+
   useEffect(() => {
     setTitle(projectTitle);
   }, [projectTitle]);
@@ -30,11 +36,7 @@ function ProjectTitleInput() {
         autoFocus
         onFocus={() => dispatch(setInputFieldFocused())}
         onChange={(e) => setTitle(e.target.value)}
-        onBlur={() => {
-          dispatch(setProjectTitle(title));
-          dispatch(setInputFieldBlurred());
-          setIsFocused(false);
-        }}
+        onBlur={handleBlur}
       />
     );
   }
