@@ -1,7 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import undoable from "redux-undo";
 
-import canvasSlice from "../features/canvas/canvasSlice";
+import canvasSlice, { changeShapeColor } from "../features/canvas/canvasSlice";
 import globalStylesSlice from "../features/globalStyles/globalStylesSlice";
 import utilitySlice from "../features/utility/utilitySlice";
 import { batchGroupBy } from "../utilities/batchActions";
@@ -15,7 +15,7 @@ const workbench = combineReducers({
 });
 
 const undoableWorkBench = undoable(workbench, {
-  groupBy: batchGroupBy.init(),
+  groupBy: batchGroupBy.init(changeShapeColor.type),
   limit: MAXIMUM_UNDO_COUNT,
 });
 

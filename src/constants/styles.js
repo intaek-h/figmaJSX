@@ -4,6 +4,7 @@ export const EDIT_POINTER_STYLES = {
   BG_COLOR: "#ffffff",
   POSITION: "absolute",
   BORDER: "1px solid #1673ff",
+  BOX_SIZING: "border-box",
 };
 
 export const SHAPE_STYLES = {
@@ -16,13 +17,14 @@ export const SHAPE_TEXT_STYLES = {
 
 export const CANVAS_NAME_STYLES = {
   OPACITY: 0.5,
+  HIGHLIGHTED_COLOR: "#5096ff",
 };
 
 export const VER_SNAP_LINE_STYLES = {
   HIDDEN: "hidden",
   VISIBLE: "visible",
   POSITION: "absolute",
-  WIDTH: "1px",
+  WIDTH: "2px",
   HEIGHT: "100%",
   BG_COLOR: "#c8deff",
 };
@@ -32,7 +34,7 @@ export const HOR_SNAP_LINE_STYLES = {
   VISIBLE: "visible",
   POSITION: "absolute",
   WIDTH: "100%",
-  HEIGHT: "1px",
+  HEIGHT: "2px",
   BG_COLOR: "#c8deff",
 };
 
@@ -78,13 +80,20 @@ export const LINE_PREVIEW_STYLES = {
 
 export const TEXT_PREVIEW_STYLES = {
   CONTENT_EDITABLE: "plaintext-only",
-  MIN_WIDTH: "min-width",
+  MIN_WIDTH: "10px",
   POSITION: "absolute",
   CARET_COLOR: "green",
   BG_COLOR: "transparent",
   MARGIN: 0,
   PADDING: 0,
   BORDER: "none",
-  BORDER_BOTTOM: "1px dotted black",
+  BORDER_BOTTOM: "2px solid yellowgreen",
   OUTLINE: "none",
+};
+
+export const MULTI_SELECTION_BOX_STYLES = {
+  POSITION: "absolute",
+  BG_COLOR: "transparent",
+  BORDER: "2px solid #c8deff",
+  BOX_SIZING: "border-box",
 };

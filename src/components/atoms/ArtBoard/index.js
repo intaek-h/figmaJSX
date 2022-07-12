@@ -13,11 +13,12 @@ import { emptySelectedShapeIndexes } from "../../../features/utility/utilitySlic
 let isFirstRender = true;
 
 function ArtBoard() {
+  const dispatch = useDispatch();
+
+  const canvases = useSelector(selectAllCanvas);
+
   const boardRef = useRef();
   const innerBoardRef = useRef();
-
-  const dispatch = useDispatch();
-  const canvases = useSelector(selectAllCanvas);
 
   useDragToScroll(boardRef);
 
@@ -50,13 +51,18 @@ function ArtBoard() {
     artboard.addEventListener("mousedown", resetSelection);
 
     return () => artboard.removeEventListener("mousedown", resetSelection);
-  });
+  }, [dispatch]);
 
   return (
     <div ref={boardRef} className={styles["artboard-wrapper"]}>
       <div ref={innerBoardRef} className={styles.artboard}>
         {canvases.map((canvas, i) => (
-          <Canvas {...canvas} canvasIndex={i} key={i} />
+          <Canvas
+            {...canvas}
+            canvasIndex={i}
+            artBoardRef={innerBoardRef}
+            key={i}
+          />
         ))}
       </div>
     </div>

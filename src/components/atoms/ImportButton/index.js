@@ -12,7 +12,7 @@ import { INVALID_FILE } from "../../../constants/errors";
 import styles from "./ImportButton.module.scss";
 import { workbenchReducerName } from "../../../store/configureStore";
 
-const TWO_SECONDS = 2000;
+const ERROR_DURATION = 2000;
 
 function ImportButton() {
   const dispatch = useDispatch();
@@ -51,7 +51,7 @@ function ImportButton() {
 
     const timer = setTimeout(() => {
       setIsError(false);
-    }, TWO_SECONDS);
+    }, ERROR_DURATION);
 
     return () => clearTimeout(timer);
   }, [isError]);

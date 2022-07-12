@@ -6,9 +6,11 @@ import tools from "../../../constants/tools";
 import { changeCanvasName } from "../../../features/canvas/canvasSlice";
 import {
   selectCurrentWorkingCanvasIndex,
+  selectIsDraggingShape,
   selectSelectedShapeIndexes,
   setInputFieldBlurred,
   setInputFieldFocused,
+  setWorkingCanvasIndex,
 } from "../../../features/utility/utilitySlice";
 import useDragCanvas from "../../../hooks/useDragCanvas";
 import useDrawShape from "../../../hooks/useDrawShape";
@@ -17,12 +19,15 @@ import ShapeText from "../ShapeText";
 import EditPointer from "../EditPointer";
 import cn from "./Canvas.module.scss";
 import computeSelectionBox from "../../../utilities/computeSelectionBox";
+import { CANVAS_NAME_STYLES } from "../../../constants/styles";
+import useDragMultipleShapes from "../../../hooks/useDragMultipleShapes";
 
-function Canvas({ canvasIndex, ...canvas }) {
+function Canvas({ artBoardRef, canvasIndex, ...canvas }) {
   const dispatch = useDispatch();
 
   const workingCanvasIndex = useSelector(selectCurrentWorkingCanvasIndex);
   const selectedShapeIndexes = useSelector(selectSelectedShapeIndexes);
+  const isDraggingShape = useSelector(selectIsDraggingShape);
 
   const canvasRef = useRef();
   const inputRef = useRef();
@@ -32,7 +37,15 @@ function Canvas({ canvasIndex, ...canvas }) {
 
   useDrawShape(canvasRef, canvasIndex, canvas.children);
 
-  useDragCanvas(canvasRef, nameRef, canvasIndex, !isDoubleClicked);
+  useDragCanvas(canvasRef, nameRef, artBoardRef, canvasIndex, !isDoubleClicked);
+
+  useDragMultipleShapes(canvasRef, canvasIndex);
+
+  const handleInputBlur = () => {
+    setIsDoubleClicked(false);
+    dispatch(setInputFieldBlurred());
+    dispatch(changeCanvasName({ name: inputRef.current.value, canvasIndex }));
+  };
 
   return (
     <>
@@ -48,13 +61,7 @@ function Canvas({ canvasIndex, ...canvas }) {
           defaultValue={canvas.canvasName}
           autoFocus
           onFocus={() => dispatch(setInputFieldFocused())}
-          onBlur={() => {
-            setIsDoubleClicked(false);
-            dispatch(setInputFieldBlurred());
-            dispatch(
-              changeCanvasName({ name: inputRef.current.value, canvasIndex })
-            );
-          }}
+          onBlur={handleInputBlur}
         />
       ) : (
         <span
@@ -63,10 +70,14 @@ function Canvas({ canvasIndex, ...canvas }) {
           style={{
             top: canvas.top,
             left: canvas.left,
+            color:
+              workingCanvasIndex === canvasIndex &&
+              CANVAS_NAME_STYLES.HIGHLIGHTED_COLOR,
           }}
           onDoubleClick={() => {
             setIsDoubleClicked(true);
           }}
+          onClick={() => dispatch(setWorkingCanvasIndex(canvasIndex))}
         >
           {canvas.canvasName}
         </span>
@@ -91,7 +102,9 @@ function Canvas({ canvasIndex, ...canvas }) {
             />
           )
         )}
-        {workingCanvasIndex === canvasIndex && selectedShapeIndexes.length
+        {workingCanvasIndex === canvasIndex &&
+        selectedShapeIndexes.length &&
+        !isDraggingShape
           ? Object.values(directions).map((direction) => (
               <EditPointer
                 direction={direction}

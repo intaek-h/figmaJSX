@@ -14,6 +14,7 @@ import {
   selectCurrentWorkingCanvasIndex,
   selectHoveredShape,
   setHoveredShape,
+  setInputFieldBlurred,
   setInputFieldFocused,
   setWorkingCanvasIndex,
 } from "../../../features/utility/utilitySlice";
@@ -38,6 +39,55 @@ function ShapeText({
 
   const [isDoubleClicked, setIsDoubleClicked] = useState(false);
   const [isMouseHovered, setIsMouseHovered] = useState(false);
+
+  const handleBlur = (e) => {
+    const newText = {
+      text: inputRef.current.textContent,
+      color: globalColor,
+      fontSize: globalFontSize,
+      height: e.target.clientHeight,
+      width: e.target.clientWidth,
+      canvasIndex: currentCanvasIndex,
+      shapeIndex: currentShapeIndex,
+    };
+
+    setIsDoubleClicked(false);
+    setIsMouseHovered(false);
+    dispatch(modifyShape(newText));
+    dispatch(activateSelector());
+    dispatch(setInputFieldBlurred());
+  };
+
+  const handleMouseEnter = () => {
+    dispatch(deactivateSelector());
+    dispatch(
+      setHoveredShape({
+        canvasIndex: currentCanvasIndex,
+        shapeIndex: currentShapeIndex,
+      })
+    );
+    setIsMouseHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    dispatch(activateSelector());
+    dispatch(
+      setHoveredShape({
+        canvasIndex: null,
+        shapeIndex: null,
+      })
+    );
+    setIsMouseHovered(false);
+  };
+
+  const handleClick = () => {
+    if (workingCanvasIndex === currentCanvasIndex) {
+      return dispatch(replaceSelectedShapeIndexes(currentShapeIndex));
+    }
+
+    dispatch(setWorkingCanvasIndex(currentCanvasIndex));
+    dispatch(replaceSelectedShapeIndexes(currentShapeIndex));
+  };
 
   useDragShape(
     shapeRef,
@@ -93,22 +143,7 @@ function ShapeText({
           suppressContentEditableWarning
           spellCheck={false}
           onFocus={() => dispatch(setInputFieldFocused())}
-          onBlur={(e) => {
-            const newText = {
-              text: inputRef.current.textContent,
-              color: globalColor,
-              fontSize: globalFontSize,
-              height: e.target.clientHeight,
-              width: e.target.clientWidth,
-              canvasIndex: currentCanvasIndex,
-              shapeIndex: currentShapeIndex,
-            };
-
-            setIsDoubleClicked(false);
-            setIsMouseHovered(false);
-            dispatch(modifyShape(newText));
-            dispatch(activateSelector());
-          }}
+          onBlur={handleBlur}
         >
           {canvas.text}
         </div>
@@ -127,36 +162,11 @@ function ShapeText({
           color: canvas.color,
           borderBottom: isMouseHovered && SHAPE_TEXT_STYLES.BORDER,
         }}
-        onMouseEnter={() => {
-          dispatch(deactivateSelector());
-          dispatch(
-            setHoveredShape({
-              canvasIndex: currentCanvasIndex,
-              shapeIndex: currentShapeIndex,
-            })
-          );
-          setIsMouseHovered(true);
-        }}
-        onMouseLeave={() => {
-          dispatch(activateSelector());
-          dispatch(
-            setHoveredShape({
-              canvasIndex: null,
-              shapeIndex: null,
-            })
-          );
-          setIsMouseHovered(false);
-        }}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onClick={handleClick}
         onDoubleClick={() => {
           setIsDoubleClicked(true);
-        }}
-        onClick={() => {
-          if (workingCanvasIndex === currentCanvasIndex) {
-            return dispatch(replaceSelectedShapeIndexes(currentShapeIndex));
-          }
-
-          dispatch(setWorkingCanvasIndex(currentCanvasIndex));
-          dispatch(replaceSelectedShapeIndexes(currentShapeIndex));
         }}
       >
         {canvas.text}

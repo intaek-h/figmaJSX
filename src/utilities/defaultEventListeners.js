@@ -1,7 +1,7 @@
 window.oncontextmenu = () => false;
 
-document.addEventListener("dragover", function (e) {
+window.onbeforeunload = () => "";
+
+document.addEventListener("dragover", (e) => {
   e.preventDefault();
 });
-
-window.onbeforeunload = () => "";

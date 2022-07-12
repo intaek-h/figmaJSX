@@ -28,6 +28,24 @@ function FontSizeInputField() {
 
   const [value, setValue] = useState(globalFontSize);
 
+  const handleChange = (e) => {
+    setValue(e.target.value);
+    if (selectedShapeIndexes.length === 1) {
+      dispatch(
+        changeTextProperty({
+          canvasIndex: workingCanvasIndex,
+          shapeIndex: selectedShapeIndexes[0],
+          fontSize: Number(e.target.value),
+        })
+      );
+    }
+  };
+
+  const handleBlur = () => {
+    dispatch(setGlobalFontSize(Number(value)));
+    dispatch(setInputFieldBlurred());
+  };
+
   useEffect(() => {
     if (
       selectedShapeIndexes.length === 1 &&
@@ -48,24 +66,10 @@ function FontSizeInputField() {
       className={styles.input}
       value={value}
       onFocus={() => dispatch(setInputFieldFocused())}
-      onChange={(e) => {
-        setValue(e.target.value);
-        if (selectedShapeIndexes.length === 1) {
-          dispatch(
-            changeTextProperty({
-              canvasIndex: workingCanvasIndex,
-              shapeIndex: selectedShapeIndexes[0],
-              fontSize: Number(e.target.value),
-            })
-          );
-        }
-      }}
+      onChange={handleChange}
+      onBlur={handleBlur}
       onKeyDown={(e) => {
         e.key === "Enter" && e.target.blur();
-      }}
-      onBlur={() => {
-        dispatch(setGlobalFontSize(Number(value)));
-        dispatch(setInputFieldBlurred());
       }}
     />
   );

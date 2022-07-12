@@ -6,6 +6,7 @@ const initialState = {
   projectTitle: "untitled_project",
   isSelectorActivated: true,
   isDragScrolling: false,
+  isDraggingShape: false,
   isInputFieldFocused: false,
   workingCanvasIndex: 0,
   selectedShapeIndexes: [],
@@ -54,6 +55,12 @@ const utilitySlice = createSlice({
     finishDragScroll: (state) => {
       state.isDragScrolling = false;
     },
+    startDraggingShape: (state) => {
+      state.isDraggingShape = true;
+    },
+    finishDraggingShape: (state) => {
+      state.isDraggingShape = false;
+    },
     setInputFieldFocused: (state) => {
       state.isInputFieldFocused = true;
     },
@@ -92,6 +99,8 @@ export const selectCurrentTool = (state) => state.utility.currentTool;
 
 export const selectIsDragScrolling = (state) => state.utility.isDragScrolling;
 
+export const selectIsDraggingShape = (state) => state.utility.isDraggingShape;
+
 export const selectHoveredShape = (state) => state.utility.hoveredShape;
 
 export const selectCurrentWorkingCanvasIndex = (state) =>
@@ -123,6 +132,8 @@ export const {
   replaceSelectedShapeIndexes,
   loadUtility,
   resetUtility,
+  finishDraggingShape,
+  startDraggingShape,
 } = utilitySlice.actions;
 
 export const utilitySliceName = utilitySlice.name;
