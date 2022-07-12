@@ -312,6 +312,7 @@ function useDrawShape(elementRef, canvasIndex, shapes) {
       const startTop = (e.clientY - elementTop) / currentScale;
       const startLeft = (e.clientX - elementLeft) / currentScale;
 
+      previewText.spellcheck = false;
       previewText.contentEditable = TEXT_PREVIEW_STYLES.CONTENT_EDITABLE;
       previewText.style.minWidth = TEXT_PREVIEW_STYLES.MIN_WIDTH;
       previewText.style.left = startLeft + "px";

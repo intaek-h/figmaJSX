@@ -48,7 +48,7 @@ function ColorPicker() {
   const handleChange = (e) => {
     setValue(e.target.value);
     if (selectedShapeIndexes.length > 0) {
-      selectedShapeIndexes.forEach((i) => {
+      selectedShapeIndexes.forEach((_, i) => {
         dispatch(
           changeShapeColor({
             canvasIndex: workingCanvasIndex,
