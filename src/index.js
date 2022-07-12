@@ -4,7 +4,7 @@ import { ActionCreators } from "redux-undo";
 
 import "./styles.scss";
 import App from "./App";
-import store, { workbenchReducerName } from "./store/configureStore";
+import store, { WORKBENCH_REDUCER_NAME } from "./store/configureStore";
 import "./utilities/defaultEventListeners";
 import LOCAL_STORAGE_KEY from "./constants/localStorage";
 import { loadUtility, utilitySliceName } from "./features/utility/utilitySlice";
@@ -21,7 +21,7 @@ if (lastSavedWork) {
     const data = JSON.parse(lastSavedWork);
 
     if (
-      !Object.prototype.hasOwnProperty.call(data, workbenchReducerName) ||
+      !Object.prototype.hasOwnProperty.call(data, WORKBENCH_REDUCER_NAME) ||
       !Object.prototype.hasOwnProperty.call(data, utilitySliceName)
     )
       throw INVALID_FILE;

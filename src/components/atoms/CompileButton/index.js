@@ -7,9 +7,6 @@ import {
 } from "../../../features/utility/utilitySlice";
 import styles from "./CompileButton.module.scss";
 import CompileModal from "../CompileModal";
-import compileHtmlToJsx from "../../../utilities/compileHtmlToJsx";
-import prettifyCode from "../../../utilities/prettifyCode";
-import wait from "../../../utilities/wait";
 
 function CompileButton() {
   const dispatch = useDispatch();
@@ -21,7 +18,12 @@ function CompileButton() {
   const compiler = async () => {
     dispatch(emptySelectedShapeIndexes());
 
-    await wait(0.2);
+    const { default: compileHtmlToJsx } = await import(
+      "../../../utilities/compileHtmlToJsx"
+    );
+    const { default: prettifyCode } = await import(
+      "../../../utilities/prettifyCode"
+    );
 
     const canvasNodeIndex = workingCanvasIndex * 2 + 1;
     const canvasNode =
