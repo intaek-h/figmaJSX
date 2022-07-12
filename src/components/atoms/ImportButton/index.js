@@ -10,7 +10,7 @@ import {
 } from "../../../features/utility/utilitySlice";
 import { INVALID_FILE } from "../../../constants/errors";
 import styles from "./ImportButton.module.scss";
-import { workbenchReducerName } from "../../../store/configureStore";
+import { WORKBENCH_REDUCER_NAME } from "../../../store/configureStore";
 
 const ERROR_DURATION = 2000;
 
@@ -31,7 +31,7 @@ function ImportButton() {
         file = JSON.parse(e.target.result);
 
         if (
-          !Object.prototype.hasOwnProperty.call(file, workbenchReducerName) ||
+          !Object.prototype.hasOwnProperty.call(file, WORKBENCH_REDUCER_NAME) ||
           !Object.prototype.hasOwnProperty.call(file, utilitySliceName)
         )
           throw INVALID_FILE;
