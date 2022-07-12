@@ -42,6 +42,17 @@ function FigureInput({ figure }) {
     workingCanvasIndex,
   ]);
 
+  const handleBlur = () => {
+    dispatch(setInputFieldBlurred());
+    dispatch(
+      modifyShape({
+        [style]: Number(value),
+        canvasIndex: workingCanvasIndex,
+        shapeIndex: selectedShapeIndexes[0],
+      })
+    );
+  };
+
   if (!isSingleShapeSelected)
     return (
       <div className={styles.wrapper}>
@@ -74,16 +85,7 @@ function FigureInput({ figure }) {
         onKeyDown={(e) => {
           e.key === "Enter" && e.target.blur();
         }}
-        onBlur={() => {
-          dispatch(setInputFieldBlurred());
-          dispatch(
-            modifyShape({
-              [style]: Number(value),
-              canvasIndex: workingCanvasIndex,
-              shapeIndex: selectedShapeIndexes[0],
-            })
-          );
-        }}
+        onBlur={handleBlur}
       />
     </div>
   );

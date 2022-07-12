@@ -45,6 +45,26 @@ function ColorPicker() {
     }
   }, [canvases, selectedShapeIndexes, workingCanvasIndex]);
 
+  const handleChange = (e) => {
+    setValue(e.target.value);
+    if (selectedShapeIndexes.length > 0) {
+      selectedShapeIndexes.forEach((i) => {
+        dispatch(
+          changeShapeColor({
+            canvasIndex: workingCanvasIndex,
+            shapeIndex: selectedShapeIndexes[i],
+            color: e.target.value,
+          })
+        );
+      });
+    }
+  };
+
+  const handleBlur = () => {
+    dispatch(setGlobalColor(value));
+    dispatch(setInputFieldBlurred());
+  };
+
   return (
     <div className={styles["picker-wrapper"]}>
       <input
@@ -52,24 +72,8 @@ function ColorPicker() {
         className={styles.picker}
         value={value}
         onFocus={() => dispatch(setInputFieldFocused())}
-        onChange={(e) => {
-          setValue(e.target.value);
-          if (selectedShapeIndexes.length > 0) {
-            selectedShapeIndexes.forEach((i) => {
-              dispatch(
-                changeShapeColor({
-                  canvasIndex: workingCanvasIndex,
-                  shapeIndex: selectedShapeIndexes[i],
-                  color: e.target.value,
-                })
-              );
-            });
-          }
-        }}
-        onBlur={() => {
-          dispatch(setGlobalColor(value));
-          dispatch(setInputFieldBlurred());
-        }}
+        onChange={handleChange}
+        onBlur={handleBlur}
       />
       <span>{value}</span>
     </div>

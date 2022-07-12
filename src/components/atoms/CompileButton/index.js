@@ -42,8 +42,8 @@ function CompileButton() {
       node.style.position = "absolute";
     });
 
-    const usableHTML = compileHtmlToJsx(clone.outerHTML);
-    const prettyCode = prettifyCode(usableHTML);
+    const jsxDesign = compileHtmlToJsx(clone.outerHTML);
+    const prettyCode = prettifyCode(jsxDesign);
 
     setIsModalOpen(true);
     setCode(prettyCode);

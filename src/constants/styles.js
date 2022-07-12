@@ -4,6 +4,7 @@ export const EDIT_POINTER_STYLES = {
   BG_COLOR: "#ffffff",
   POSITION: "absolute",
   BORDER: "1px solid #1673ff",
+  BOX_SIZING: "border-box",
 };
 
 export const SHAPE_STYLES = {

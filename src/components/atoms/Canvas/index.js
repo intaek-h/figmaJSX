@@ -41,6 +41,12 @@ function Canvas({ artBoardRef, canvasIndex, ...canvas }) {
 
   useDragMultipleShapes(canvasRef, canvasIndex);
 
+  const handleInputBlur = () => {
+    setIsDoubleClicked(false);
+    dispatch(setInputFieldBlurred());
+    dispatch(changeCanvasName({ name: inputRef.current.value, canvasIndex }));
+  };
+
   return (
     <>
       {isDoubleClicked ? (
@@ -55,13 +61,7 @@ function Canvas({ artBoardRef, canvasIndex, ...canvas }) {
           defaultValue={canvas.canvasName}
           autoFocus
           onFocus={() => dispatch(setInputFieldFocused())}
-          onBlur={() => {
-            setIsDoubleClicked(false);
-            dispatch(setInputFieldBlurred());
-            dispatch(
-              changeCanvasName({ name: inputRef.current.value, canvasIndex })
-            );
-          }}
+          onBlur={handleInputBlur}
         />
       ) : (
         <span
