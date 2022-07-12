@@ -54,14 +54,16 @@ function ColorPicker() {
         onFocus={() => dispatch(setInputFieldFocused())}
         onChange={(e) => {
           setValue(e.target.value);
-          if (selectedShapeIndexes.length === 1) {
-            dispatch(
-              changeShapeColor({
-                canvasIndex: workingCanvasIndex,
-                shapeIndex: selectedShapeIndexes[0],
-                color: e.target.value,
-              })
-            );
+          if (selectedShapeIndexes.length > 0) {
+            selectedShapeIndexes.forEach((i) => {
+              dispatch(
+                changeShapeColor({
+                  canvasIndex: workingCanvasIndex,
+                  shapeIndex: selectedShapeIndexes[i],
+                  color: e.target.value,
+                })
+              );
+            });
           }
         }}
         onBlur={() => {
