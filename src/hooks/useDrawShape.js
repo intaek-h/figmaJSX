@@ -326,6 +326,7 @@ function useDrawShape(elementRef, canvasIndex, shapes) {
       previewText.style.border = TEXT_PREVIEW_STYLES.BORDER;
       previewText.style.borderBottom = TEXT_PREVIEW_STYLES.BORDER_BOTTOM;
       previewText.style.outline = TEXT_PREVIEW_STYLES.OUTLINE;
+      previewText.dataset.testid = "previewText";
 
       form.appendChild(previewText);
       element.appendChild(form);

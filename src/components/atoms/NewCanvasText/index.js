@@ -17,6 +17,7 @@ function NewCanvasText({ text }) {
       className={currentTool === tools.CANVAS ? styles.selected : styles.idle}
       onClick={() => dispatch(setCurrentTool(tools.CANVAS))}
       title={`${text} (${shortcuts.CANVAS_TOOL})`}
+      data-testid="new-canvas"
     >
       {text}
     </span>
