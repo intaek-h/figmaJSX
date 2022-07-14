@@ -25,7 +25,7 @@ function ShapeText({
   canvasRef,
   currentCanvasIndex,
   currentShapeIndex,
-  ...canvas
+  ...shape
 }) {
   const dispatch = useDispatch();
 
@@ -115,7 +115,7 @@ function ShapeText({
 
   useEffect(() => {
     if (!shapeRef.current) return;
-    if (canvas.height !== shapeRef.current.clientHeight) {
+    if (shape.height !== shapeRef.current.clientHeight) {
       dispatch(
         modifyShape({
           canvasIndex: currentCanvasIndex,
@@ -125,7 +125,7 @@ function ShapeText({
         })
       );
     }
-  }, [canvas, currentCanvasIndex, currentShapeIndex, dispatch]);
+  }, [shape, currentCanvasIndex, currentShapeIndex, dispatch]);
 
   if (isDoubleClicked)
     return (
@@ -134,8 +134,8 @@ function ShapeText({
           ref={inputRef}
           className={style.input}
           style={{
-            top: canvas.top,
-            left: canvas.left,
+            top: shape.top,
+            left: shape.left,
             fontSize: globalFontSize,
             color: globalColor,
           }}
@@ -145,7 +145,7 @@ function ShapeText({
           onFocus={() => dispatch(setInputFieldFocused())}
           onBlur={handleBlur}
         >
-          {canvas.text}
+          {shape.text}
         </div>
       </form>
     );
@@ -156,10 +156,10 @@ function ShapeText({
         ref={shapeRef}
         className={style.idle}
         style={{
-          top: canvas.top,
-          left: canvas.left,
-          fontSize: canvas.fontSize,
-          color: canvas.color,
+          top: shape.top,
+          left: shape.left,
+          fontSize: shape.fontSize,
+          color: shape.color,
           borderBottom: isMouseHovered && SHAPE_TEXT_STYLES.BORDER,
         }}
         onMouseEnter={handleMouseEnter}
@@ -169,7 +169,7 @@ function ShapeText({
           setIsDoubleClicked(true);
         }}
       >
-        {canvas.text}
+        {shape.text}
       </div>
     </>
   );

@@ -13,7 +13,7 @@ const workbench = combineReducers({
   canvas: canvasSlice,
 });
 
-const undoableWorkBench = undoable(workbench, {
+export const undoableWorkBench = undoable(workbench, {
   groupBy: batchGroupBy.init(changeShapeColor.type),
   limit: MAXIMUM_UNDO_COUNT,
 });
