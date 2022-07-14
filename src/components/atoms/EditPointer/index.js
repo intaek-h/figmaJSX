@@ -67,7 +67,14 @@ function EditPointer({ direction, ...shape }) {
     boxSizing: EDIT_POINTER_STYLES.BOX_SIZING,
   };
 
-  return <div ref={pointerRef} style={pointerStyle} draggable={false}></div>;
+  return (
+    <div
+      ref={pointerRef}
+      style={pointerStyle}
+      draggable={false}
+      data-testid="edit-pointer"
+    ></div>
+  );
 }
 
 export default EditPointer;

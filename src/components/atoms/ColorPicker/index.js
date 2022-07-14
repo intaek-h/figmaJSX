@@ -70,6 +70,7 @@ function ColorPicker() {
       <input
         type="color"
         className={styles.picker}
+        data-testid="color-picker"
         value={value}
         onFocus={() => dispatch(setInputFieldFocused())}
         onChange={handleChange}
