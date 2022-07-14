@@ -53,7 +53,7 @@ function CompileButton() {
 
   return (
     <>
-      <div className={styles.button} onClick={compiler}>
+      <div className={styles.button} onClick={compiler} data-testid="compiler">
         Compile to JSX
       </div>
       {isModalOpen && (

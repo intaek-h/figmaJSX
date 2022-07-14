@@ -106,6 +106,7 @@ function ShapeLayer({ name, currentCanvasIndex, currentShapeIndex }) {
       className={className}
       ref={layerRef}
       data-position={currentShapeIndex}
+      data-testid="shape-layer"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       draggable={currentTool === tools.SELECTOR ? "true" : "false"}
