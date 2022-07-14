@@ -71,6 +71,7 @@ function Shape({ canvasRef, currentCanvasIndex, currentShapeIndex, ...shape }) {
   return (
     <div
       ref={shapeRef}
+      data-testid="shape"
       className={styles.shape}
       style={{ ...shape, border: isMouseHovered && SHAPE_STYLES.BORDER }}
       draggable={false}

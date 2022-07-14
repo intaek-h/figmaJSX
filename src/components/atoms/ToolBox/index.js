@@ -35,13 +35,14 @@ function ToolBox({ tool }) {
 
   return (
     <div
+      onClick={() => dispatch(setCurrentTool(tool))}
+      title={`${tool} (${shortcut})`}
+      data-testid="toolbox"
       className={`${
         tool === currentTool
           ? `${styles[`box-${tool}`]} ${styles.selected}`
           : styles[`box-${tool}`]
       }`}
-      onClick={() => dispatch(setCurrentTool(tool))}
-      title={`${tool} (${shortcut})`}
     ></div>
   );
 }

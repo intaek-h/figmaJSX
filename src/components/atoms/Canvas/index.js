@@ -82,7 +82,12 @@ function Canvas({ artBoardRef, canvasIndex, ...canvas }) {
           {canvas.canvasName}
         </span>
       )}
-      <div ref={canvasRef} className={cn.canvas} style={{ ...canvas }}>
+      <div
+        ref={canvasRef}
+        className={cn.canvas}
+        style={{ ...canvas }}
+        data-testid="canvas"
+      >
         {canvas.children.map((shape, i) =>
           shape.type === tools.TEXT ? (
             <ShapeText

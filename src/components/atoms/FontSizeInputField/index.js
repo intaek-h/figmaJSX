@@ -63,6 +63,7 @@ function FontSizeInputField() {
   return (
     <input
       type="number"
+      data-testid="font-size-input"
       className={styles.input}
       value={value}
       onFocus={() => dispatch(setInputFieldFocused())}

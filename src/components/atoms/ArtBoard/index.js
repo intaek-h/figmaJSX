@@ -54,8 +54,16 @@ function ArtBoard() {
   }, [dispatch]);
 
   return (
-    <div ref={boardRef} className={styles["artboard-wrapper"]}>
-      <div ref={innerBoardRef} className={styles.artboard}>
+    <div
+      ref={boardRef}
+      className={styles["artboard-wrapper"]}
+      data-testid="outer-board"
+    >
+      <div
+        ref={innerBoardRef}
+        className={styles.artboard}
+        data-testid="inner-board"
+      >
         {canvases.map((canvas, i) => (
           <Canvas
             {...canvas}

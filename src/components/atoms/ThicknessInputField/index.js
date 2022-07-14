@@ -62,6 +62,7 @@ function ThicknessInputField() {
   return (
     <input
       type="number"
+      data-testid="thickness-input"
       className={styles.input}
       value={value}
       onFocus={() => dispatch(setInputFieldFocused())}

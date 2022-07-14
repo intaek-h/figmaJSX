@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import {
   modifyShape,
   selectAllCanvas,
@@ -62,6 +63,7 @@ function FigureInput({ figure }) {
         <input
           type="number"
           name={figure}
+          data-testid="disabled-figure-input"
           className={styles.disabled}
           value={value}
           onChange={(e) => setValue(e.target.value)}
@@ -78,6 +80,7 @@ function FigureInput({ figure }) {
       <input
         type="number"
         name={figure}
+        data-testid="figure-input"
         className={styles.input}
         value={value}
         onFocus={() => dispatch(setInputFieldFocused())}
