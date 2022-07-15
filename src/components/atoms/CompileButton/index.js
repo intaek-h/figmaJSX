@@ -33,6 +33,7 @@ function CompileButton() {
     const clone = canvasNode.cloneNode(true);
 
     clone.removeAttribute("class");
+    clone.removeAttribute("data-testid");
     clone.style.position = "relative";
     clone.style.removeProperty("top");
     clone.style.removeProperty("left");
@@ -40,6 +41,7 @@ function CompileButton() {
 
     clone.childNodes.forEach((node) => {
       node.removeAttribute("class");
+      node.removeAttribute("data-testid");
       node.removeAttribute("draggable");
       node.style.position = "absolute";
     });
