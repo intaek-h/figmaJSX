@@ -21,7 +21,7 @@ import computeSnapPosition from "../utilities/computeSnapPosition";
 
 const GRAVITY = 5;
 
-function useDragMultipleShapes(canvasRef) {
+function useDragMultipleShapes(canvasRef, canvasIndex) {
   const dispatch = useDispatch();
 
   const canvases = useSelector(selectAllCanvas);
@@ -34,7 +34,8 @@ function useDragMultipleShapes(canvasRef) {
     if (
       !canvasRef.current ||
       currentTool !== tools.SELECTOR ||
-      selectedShapeIndexes.length < 2
+      selectedShapeIndexes.length < 2 ||
+      canvasIndex !== workingCanvasIndex
     )
       return;
 
@@ -389,6 +390,7 @@ function useDragMultipleShapes(canvasRef) {
     currentTool,
     dispatch,
     selectedShapeIndexes,
+    canvasIndex,
   ]);
 }
 
