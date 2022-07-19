@@ -12,6 +12,7 @@ import {
   finishDraggingShape,
   selectCurrentScale,
   selectCurrentTool,
+  selectCurrentWorkingCanvasIndex,
   selectSelectedShapeIndexes,
   startDraggingShape,
 } from "../features/utility/utilitySlice";
@@ -20,11 +21,12 @@ import computeSnapPosition from "../utilities/computeSnapPosition";
 
 const GRAVITY = 5;
 
-function useDragMultipleShapes(canvasRef, canvasIndex) {
+function useDragMultipleShapes(canvasRef) {
   const dispatch = useDispatch();
 
   const canvases = useSelector(selectAllCanvas);
   const selectedShapeIndexes = useSelector(selectSelectedShapeIndexes);
+  const workingCanvasIndex = useSelector(selectCurrentWorkingCanvasIndex);
   const currentTool = useSelector(selectCurrentTool);
   const currentScale = useSelector(selectCurrentScale);
 
@@ -36,10 +38,13 @@ function useDragMultipleShapes(canvasRef, canvasIndex) {
     )
       return;
 
-    const canvas = canvasRef.current;
+    const canvasNodeIndex = workingCanvasIndex * 2 + 1;
+    const canvas =
+      document.querySelector("#root").childNodes[1].childNodes[1].firstChild
+        .childNodes[canvasNodeIndex];
 
     const selectionWrapper = computeSelectionBox(
-      canvases[canvasIndex].children,
+      canvases[workingCanvasIndex].children,
       selectedShapeIndexes
     );
 
@@ -72,7 +77,7 @@ function useDragMultipleShapes(canvasRef, canvasIndex) {
       const originalMousePositionLeft = e.clientX;
       const allShapes = e.currentTarget.parentNode.childNodes;
 
-      const shapeList = canvases[canvasIndex].children.slice();
+      const shapeList = canvases[workingCanvasIndex].children.slice();
       const filteredXAxisSnapPoints = [];
       const filteredYAxisSnapPoints = [];
       const selectedShapes = [];
@@ -256,7 +261,7 @@ function useDragMultipleShapes(canvasRef, canvasIndex) {
                     nearestPossibleSnapAtY + selectedShapePositions[i].verGap,
                   left:
                     nearestPossibleSnapAtX + selectedShapePositions[i].horGap,
-                  canvasIndex,
+                  canvasIndex: workingCanvasIndex,
                   shapeIndex: selectedShapePositions[i].shapeIndex,
                 })
               );
@@ -269,7 +274,7 @@ function useDragMultipleShapes(canvasRef, canvasIndex) {
                     originalElHeight,
                   left:
                     nearestPossibleSnapAtX + selectedShapePositions[i].horGap,
-                  canvasIndex,
+                  canvasIndex: workingCanvasIndex,
                   shapeIndex: selectedShapePositions[i].shapeIndex,
                 })
               );
@@ -282,7 +287,7 @@ function useDragMultipleShapes(canvasRef, canvasIndex) {
                     nearestPossibleSnapAtX +
                     selectedShapePositions[i].horGap -
                     originalElWidth,
-                  canvasIndex,
+                  canvasIndex: workingCanvasIndex,
                   shapeIndex: selectedShapePositions[i].shapeIndex,
                 })
               );
@@ -297,7 +302,7 @@ function useDragMultipleShapes(canvasRef, canvasIndex) {
                     nearestPossibleSnapAtX +
                     selectedShapePositions[i].horGap -
                     originalElWidth,
-                  canvasIndex,
+                  canvasIndex: workingCanvasIndex,
                   shapeIndex: selectedShapePositions[i].shapeIndex,
                 })
               );
@@ -307,7 +312,7 @@ function useDragMultipleShapes(canvasRef, canvasIndex) {
                   top: newShapeTop + selectedShapePositions[i].verGap,
                   left:
                     nearestPossibleSnapAtX + selectedShapePositions[i].horGap,
-                  canvasIndex,
+                  canvasIndex: workingCanvasIndex,
                   shapeIndex: selectedShapePositions[i].shapeIndex,
                 })
               );
@@ -319,7 +324,7 @@ function useDragMultipleShapes(canvasRef, canvasIndex) {
                     nearestPossibleSnapAtX +
                     selectedShapePositions[i].horGap -
                     originalElWidth,
-                  canvasIndex,
+                  canvasIndex: workingCanvasIndex,
                   shapeIndex: selectedShapePositions[i].shapeIndex,
                 })
               );
@@ -329,7 +334,7 @@ function useDragMultipleShapes(canvasRef, canvasIndex) {
                   top:
                     nearestPossibleSnapAtY + selectedShapePositions[i].verGap,
                   left: newShapeLeft + selectedShapePositions[i].horGap,
-                  canvasIndex,
+                  canvasIndex: workingCanvasIndex,
                   shapeIndex: selectedShapePositions[i].shapeIndex,
                 })
               );
@@ -341,7 +346,7 @@ function useDragMultipleShapes(canvasRef, canvasIndex) {
                     selectedShapePositions[i].verGap -
                     originalElHeight,
                   left: newShapeLeft + selectedShapePositions[i].horGap,
-                  canvasIndex,
+                  canvasIndex: workingCanvasIndex,
                   shapeIndex: selectedShapePositions[i].shapeIndex,
                 })
               );
@@ -350,7 +355,7 @@ function useDragMultipleShapes(canvasRef, canvasIndex) {
                 modifyShape({
                   top: newShapeTop + selectedShapePositions[i].verGap,
                   left: newShapeLeft + selectedShapePositions[i].horGap,
-                  canvasIndex,
+                  canvasIndex: workingCanvasIndex,
                   shapeIndex: selectedShapePositions[i].shapeIndex,
                 })
               );
@@ -377,7 +382,7 @@ function useDragMultipleShapes(canvasRef, canvasIndex) {
       ghostContainer.remove();
     };
   }, [
-    canvasIndex,
+    workingCanvasIndex,
     canvasRef,
     canvases,
     currentScale,
