@@ -39,7 +39,7 @@ function Canvas({ artBoardRef, canvasIndex, ...canvas }) {
 
   useDragCanvas(canvasRef, nameRef, artBoardRef, canvasIndex, !isDoubleClicked);
 
-  useDragMultipleShapes(canvasRef);
+  useDragMultipleShapes(canvasRef, canvasIndex);
 
   const handleInputBlur = () => {
     setIsDoubleClicked(false);
