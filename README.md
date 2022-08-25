@@ -2,7 +2,12 @@
 
 본 프로젝트는 UI/UX 디자인 툴 Figma 에서 영감을 받아 시작되었습니다.
 
-바닐라코딩에 들어오기 전, 취미로 Adobe XD 를 사용해 여러 UI 를 디자인 해왔기 때문에 웹에서 구동되는 Figma 를 색다른 방법으로 재구성 해보고 싶은 마음이 들었습니다.
+### 이 프로젝트를 선택한 이유
+
+리덕스 라는 상태 관리 툴을 공부할 때, 리덕스가 전혀 필요하지 않은 프로젝트에 억지로 적용하며 학습했던 것이 못내 아쉬웠습니다. 저는 Dan Abramov 가 말한 것 처럼, 정말 리덕스가 필요한 순간을 
+만나보고 싶었습니다. State 가 복잡하게 얽히고 섥힌 프로젝트에 리덕스를 적용해 상태를 유연하게 관리해 보며, 리덕스가 언제 빛날 수 있는지, 또 리덕스로도 해결하지 못하는 부분은 어떤 것인지 제 눈으로 직접 확인하고 싶었습니다.
+
+<hr/>
 
 [**프로젝트 소개 유튜브 영상**](https://www.youtube.com/watch?v=ySjtZ0s1pm4&ab_channel=%08Intaekh.)
 [![유튜브 링크](https://user-images.githubusercontent.com/108341074/180984352-74fe2f57-e183-4f10-9d74-a273e8382f93.png)](https://www.youtube.com/watch?v=ySjtZ0s1pm4&ab_channel=%08Intaekh.)
